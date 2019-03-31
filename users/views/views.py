@@ -18,7 +18,6 @@ User = get_user_model()
 class AuthAPIView(APIView):
     permission_classes = [AnonPermissionOnly]
     def post(self,request,*args,**kwargs):
-        # print(request.user)
         if request.user.is_authenticated:
             return Response({'detail':'You are alreday authenticated'}, status=400)
         data = request.data
