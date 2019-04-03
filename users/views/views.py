@@ -5,9 +5,9 @@ from django.db.models import Q
 from rest_framework.response import Response 
 from django.contrib.auth import authenticate,get_user_model
 from rest_framework_jwt.settings import api_settings
-from ..serializers.serializers import UserRegisterSerializer
+from ..serializers.serializers import UserRegisterSerializer,UserEditSerializer
 from ..utils import jwt_response_payload_handler
-from ..permissions import AnonPermissionOnly
+from ..permissions import AnonPermissionOnly,UserIsOwnerOrReadOnly
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -48,3 +48,12 @@ class RegisterAPIView(generics.CreateAPIView):
 
     def get_serializer_context(self,*args,**kwargs):
         return {'request':self.request}
+
+class EditAPIView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserEditSerializer
+    lookup_field = 'username'
+    permission_classes = (
+        permissions.IsAuthenticated,
+        UserIsOwnerOrReadOnly,
+    )

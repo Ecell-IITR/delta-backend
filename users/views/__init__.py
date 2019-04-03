@@ -1,1 +1,1 @@
-from .views import AuthAPIView, RegisterAPIView
+from .views import AuthAPIView, RegisterAPIView , EditAPIView

@@ -67,7 +67,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         pw = data.get('password')
         pw2 = data.get('password2')
         if pw!=pw2:
-            raise serializers.ValidationError("Passwords mist match")
+            raise serializers.ValidationError("Passwords must match")
         return data
 
     def get_expires(self,obj):
@@ -80,3 +80,27 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user_obj.set_password(validated_data.get('password'))
         user_obj.save()
         return user_obj
+
+class UserEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email',
+        ]
+        read_only_fields = [
+            'username',
+        ]
+
+    def validate_email(self,value):
+        qs = User.objects.filter(email__iexact=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError('User email already registered ')
+        return value
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+        return instance
