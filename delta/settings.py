@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
+    #Docs
+    'rest_framework_swagger',
+
     #Apps
     'company',
     'users',
