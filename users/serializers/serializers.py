@@ -1,12 +1,14 @@
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
-from ..utils import jwt_response_payload_handler
-from rest_framework_jwt.settings import api_settings
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 import datetime
 from django.utils import timezone
-jwt_response_payload_handler = api_settings.JWT_RESPONSE_PAYLOAD_HANDLER
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from users.utils import jwt_response_payload_handler
+from rest_framework_jwt.settings import api_settings
+
+
+JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
+JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
+JWT_RESPONSE_PAYLOAD_HANDLER = api_settings.JWT_RESPONSE_PAYLOAD_HANDLER
 
 User = get_user_model()
 expire_delta = api_settings.JWT_REFRESH_EXPIRATION_DELTA
@@ -40,40 +42,42 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {'password':{'write_only':True}}
 
-    
-    def get_message(self,obj):
-        user = obj
+
+    def get_message(self):
+        '''
+        Return the successful registeration message
+        '''
         return 'Thank You for registering pls verify your email'
 
-    def validate_email(self,value):
+    def validate_email(self, value):
         qs = User.objects.filter(email__iexact=value)
         if qs.exists():
             raise serializers.ValidationError('User email already registered ')
         return value
     
-    def validate_username(self,value):
+    def validate_username(self, value):
         qs = User.objects.filter(username__iexact=value)
         if qs.exists():
             raise serializers.ValidationError('Username already registered ')
         return value
             
-    def get_token(self,obj):
+    def get_token(self, obj):
         user = obj
-        payload = jwt_payload_handler(user)
-        token = jwt_encode_handler(payload)
+        payload = JWT_PAYLOAD_HANDLER(user)
+        token = JWT_ENCODE_HANDLER(payload)
         return token
 
-    def validate(self,data):
+    def validate(self, data):
         pw = data.get('password')
         pw2 = data.get('password2')
         if pw!=pw2:
             raise serializers.ValidationError("Passwords must match")
         return data
 
-    def get_expires(self,obj):
+    def get_expires(self, obj):
         return timezone.now() + expire_delta - datetime.timedelta(seconds=200)
 
-    def create(self,validated_data):
+    def create(self, validated_data):
         user_obj = User.objects.create(
                                         username=validated_data.get('username'),
                                         email=validated_data.get('email'))
