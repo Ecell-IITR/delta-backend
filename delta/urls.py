@@ -22,5 +22,7 @@ schema_view = get_swagger_view(title='Delta API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('users.urls')),
+    path('api/post', include('post.urls')),
     path('docs', schema_view),
 ]
+
