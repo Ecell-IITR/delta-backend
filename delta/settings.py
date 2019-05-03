@@ -25,7 +25,7 @@ SECRET_KEY = '*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','https://delta-backend.herokuapp.com/']
+ALLOWED_HOSTS = ['localhost','https://delta-backend.herokuapp.com']
 
 
 # Application definition
