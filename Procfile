@@ -1,1 +1,1 @@
-web: python myApp.py runserver 0.0.0.0:8000
+web: gunicorn delta.wsgi
