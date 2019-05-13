@@ -90,20 +90,22 @@ WSGI_APPLICATION = 'delta.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-import dj_database_url 
-prod_db  =  dj_database_url.config(conn_max_age=500)
-DATABASES={
-    'default':{
+# import dj_database_url 
 
-    }
-}
-DATABASES['default'].update(prod_db)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+# prod_db  =  dj_database_url.config(conn_max_age=500)
+
+# DATABASES={
+#     'default':{
 #     }
 # }
+
+# DATABASES['default'].update(prod_db)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 
 # Password validation
@@ -157,6 +159,8 @@ STATIC_URL = '/static/'
 #         'rest_framework.authentication.TokenAuthentication',
 #     ),
 # }
+
+AUTH_USER_MODEL = 'users.User'
 
 from .restconf.main import *
 

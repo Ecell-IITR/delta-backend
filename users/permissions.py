@@ -6,13 +6,13 @@ from rest_framework import permissions
 #         blacklisted = Blacklist.objects.filter(ip_addr=ip_addr).exists()
 #         return not blacklisted
 
-class AnonPermissionOnly(permissions.BasePermission):
-    '''
-    Non-Authenticated Users Only
-    '''
-    message = 'You are already authentciated pls log out and try again'
-    def has_permission(self, request, view):
-        return not request.user.is_authenticated
+# class AnonPermissionOnly(permissions.BasePermission):
+#     '''
+#     Non-Authenticated Users Only
+#     '''
+#     message = 'You are already authentciated pls log out and try again'
+#     def has_permission(self, request, view):
+#         return not request.user.is_authenticated
 
 
 
