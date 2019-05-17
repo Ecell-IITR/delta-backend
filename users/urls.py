@@ -6,6 +6,6 @@ urlpatterns = [
     path('login', LoginAPIView.as_view(), name="login"),
     path('register', RegisterAPIView.as_view()),
     path('update/<username>/', EditAPIView.as_view()),
-    path('jwt/', obtain_jwt_token),
+    path('jwt', obtain_jwt_token),
     path('jwt/refresh', refresh_jwt_token)
 ]
