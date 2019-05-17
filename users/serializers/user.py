@@ -108,7 +108,7 @@ class EditSerializer(serializers.ModelSerializer):
         if self.instance:
             email = email.exclude(pk=self.instance.pk)
         if email.exists():
-            raise serializers.ValidationError('User email already registered ')
+            raise serializers.ValidationError('User email already registered')
         return value
 
     def update(self, instance, validated_data):
@@ -138,7 +138,6 @@ class LoginSerializer(serializers.Serializer):
             )
 
         user = authenticate(username=email, password=password)
-
         if user is None:
             raise serializers.ValidationError(
                 'A user with this email and password was not found.'
@@ -152,6 +151,7 @@ class LoginSerializer(serializers.Serializer):
         payload = JWT_PAYLOAD_HANDLER(user)
         token = JWT_ENCODE_HANDLER(payload)
         return {
+            'id':user.id,
             'email': user.email,
             'username': user.username,
             'token': token

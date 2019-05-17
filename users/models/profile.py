@@ -1,16 +1,21 @@
 from django.db import models
+from users.models.user import User
+
+
+class ProfileManager(models.Manager):
+    pass
 
 
 class Profile(models.Model):
     USER_TYPE = (
-        ('Company'),
-        ('Student')
+        ('Company', 'Company'),
+        ('Student', 'Student')
     )
 
     user = models.OneToOneField(
-        'users.models.user', on_delete=models.CASCADE
+        User, on_delete=models.CASCADE
     )
-    
+
     user_type = models.CharField(
         max_length=20, choices=USER_TYPE, default='Student', verbose_name='User type')
     branch = models.CharField(
@@ -29,6 +34,8 @@ class Profile(models.Model):
         verbose_name='Last Updated', auto_now=True, null=True)
     created_at = models.DateTimeField(
         verbose_name='Date Joined', auto_now_add=True)
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user.username
