@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+from delta.restconf.main import *
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,22 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    #Installed packages
+
+    # Installed packages
     'rest_framework',
     'corsheaders',
 
-    #Docs
+    # Docs
     'rest_framework_swagger',
 
-    #Apps
+    # Apps
     'company',
     'users',
     'post',
     'student'
 ]
 
-#CORS Settings
+# CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
@@ -132,6 +133,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -152,7 +154,10 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
 
-from delta.restconf.main import *
 
 #  Add configuration for static files storage using whitenoise
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

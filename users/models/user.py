@@ -1,9 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager as AbstractUserManager
 
-class UserManager(models.Manager):
+
+class UserManager(AbstractUserManager):
     def get_by_natural_key(self, email):
         return self.get(email=email)
+
 
 class User(AbstractUser):
     username = models.CharField(db_index=True, max_length=50, unique=True)

@@ -29,7 +29,8 @@ class Profile(models.Model):
     interest = models.TextField(blank=True, verbose_name='Interest')
     bio = models.TextField(verbose_name='Bio', blank=True)
     achievements = models.TextField(verbose_name='Achievements', blank=True)
-    profile_image = models.URLField(verbose_name='Profile image', blank=True)
+    profile_image = models.ImageField(
+        upload_to="profile_image/", default="null")
     updated_at = models.DateTimeField(
         verbose_name='Last Updated', auto_now=True, null=True)
     created_at = models.DateTimeField(
