@@ -6,6 +6,7 @@ from users.models.profile import Profile
 from users.models.user import User
 from users.serializers.profile import ProfileViewSerializer, ProfileUpdateSerializer
 from users.permissions import UserIsOwnerOrReadOnly
+from rest_framework.generics import RetrieveAPIView
 
 
 # class ProfileView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin):
@@ -19,7 +20,7 @@ from users.permissions import UserIsOwnerOrReadOnly
 #         except Profile.DoesNotExist:
 #             raise NotFound('A profile with this username does not exist.')
 #         return self.retrieve(request, )
-        
+
 
 #     def post(self, request):
 #         return self.create(request)
@@ -36,14 +37,10 @@ class ProfileView(APIView):
         except:
             return Response({"error": "Given User object not found."}, status=404)
 
-    def get(self, request, username):
-        instance = self.get_object(username)
-        data = Profile.objects.get(user=instance)
-        serializer = ProfileViewSerializer(data)
-        return Response(serializer.data, status=200)
-
-    def post(self, request):
+    def post(self, request, username):
         data = request.data
+        user = self.get_object(username)
+        data['user'] = user.id
         serializer = ProfileViewSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -51,9 +48,8 @@ class ProfileView(APIView):
         return Response(serializer.errors, status=400)
 
 
-
 class UpdateProfile(APIView):
-    permission_classes=[IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
 
     def get_object(self, username):
         try:
@@ -69,3 +65,21 @@ class UpdateProfile(APIView):
             serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+
+
+class ProfileRetrieveAPIView(RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Profile.objects.select_related('user')
+    serializer_class = ProfileViewSerializer
+
+    def retrieve(self, request, username, *args, **kwargs):
+        try:
+            profile = self.queryset.get(user__username=username)
+        except Profile.DoesNotExist:
+            return Response({"error": "Given User object not found."}, status=404)
+
+        serializer = self.serializer_class(profile, context={
+            'request': request
+        })
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

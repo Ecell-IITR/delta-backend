@@ -40,6 +40,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'username',
             'email',
             'password',
@@ -58,7 +59,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         email = User.objects.filter(email__iexact=value)
         if email.exists():
-            raise serializers.ValidationError('User email already registered ')
+            raise serializers.ValidationError('User email already registered')
         return value
 
     def validate_username(self, value):
