@@ -1,12 +1,13 @@
 from django.db import models
 from users.models.user import User
+from users.models.time_stamped import TimestampedModel
 
 
 class ProfileManager(models.Manager):
     pass
 
 
-class Profile(models.Model):
+class Profile(TimestampedModel):
     USER_TYPE = (
         ('Company', 'Company'),
         ('Student', 'Student')
@@ -31,10 +32,6 @@ class Profile(models.Model):
     achievements = models.TextField(verbose_name='Achievements', blank=True)
     profile_image = models.ImageField(
         upload_to="profile_image/", default="null")
-    updated_at = models.DateTimeField(
-        verbose_name='Last Updated', auto_now=True, null=True)
-    created_at = models.DateTimeField(
-        verbose_name='Date Joined', auto_now_add=True)
 
     objects = ProfileManager()
 

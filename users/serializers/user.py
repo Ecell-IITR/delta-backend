@@ -119,6 +119,7 @@ class EditSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     email = serializers.CharField(max_length=255)
     username = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
@@ -148,7 +149,6 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'This user has been deactivated.'
             )
-
         payload = JWT_PAYLOAD_HANDLER(user)
         token = JWT_ENCODE_HANDLER(payload)
         return {

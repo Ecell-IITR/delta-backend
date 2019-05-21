@@ -16,7 +16,7 @@ class Postserializer(serializers.ModelSerializer):
             'createdAt',
             'slug',
             'updatedAt',
-            'company_name'
+            'company_name',
             'company_domain',
             'description',
             'work_location',
