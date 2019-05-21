@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from post.serializers.post import Postserializer
 from post.models.post import Post
+from users.models.user import User
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import (
@@ -16,7 +17,7 @@ class PostViewSet(mixins.CreateModelMixin,
 
     lookup_field = 'slug'
     queryset = Post.objects.select_related('author', 'author__user')
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = Postserializer
 
     def create(self, request):
@@ -24,6 +25,7 @@ class PostViewSet(mixins.CreateModelMixin,
             'author': request.user.profile,
             'request': request
         }
+
         serializer_data = request.data
 
         serializer = self.serializer_class(
@@ -36,15 +38,18 @@ class PostViewSet(mixins.CreateModelMixin,
 
     def list(self, request):
         serializer_context = {'request': request}
+        serializer_instance = Post.objects.filter(author=request.user.profile)
 
         serializer = self.serializer_class(
+            serializer_instance,
             context=serializer_context,
             many=True
         )
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, slug):
+        print("djabsdjka",slug)
         serializer_context = {'request': request}
 
         try:

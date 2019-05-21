@@ -9,16 +9,14 @@ class ProfileManager(models.Manager):
 
 class Profile(TimestampedModel):
     USER_TYPE = (
-        ('Company', 'Company'),
-        ('Student', 'Student')
+        ("Company", "Company"),
+        ("Student", "Student")
     )
-
     user = models.OneToOneField(
         User, on_delete=models.CASCADE
     )
-
-    user_type = models.CharField(
-        max_length=20, choices=USER_TYPE, default='Student', verbose_name='User type')
+    user_type = models.CharField(max_length=20,
+                                 choices=USER_TYPE, default="Student", verbose_name="User Type")
     branch = models.CharField(
         max_length=55, blank=True, verbose_name='Branch')
     enrollment_number = models.CharField(
@@ -31,7 +29,14 @@ class Profile(TimestampedModel):
     bio = models.TextField(verbose_name='Bio', blank=True)
     achievements = models.TextField(verbose_name='Achievements', blank=True)
     profile_image = models.ImageField(
-        upload_to="profile_image/", default="null")
+        upload_to="profile_image/", default="null", help_text="If you are company,enter company icon.")
+    secondary_email = models.CharField(
+        blank=True, db_index=True, max_length=50, verbose_name='Secondary Email')
+    category_of_company = models.CharField(
+        blank=True, max_length=50, verbose_name='Category of Company')
+    team_size = models.CharField(
+        blank=True, max_length=100, verbose_name='Team size')
+    address = models.TextField(blank=True, verbose_name='Address')
 
     objects = ProfileManager()
 

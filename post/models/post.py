@@ -1,5 +1,5 @@
 from django.db import models
-from users.models.profile import Profile
+from users.models.profile import Profile 
 from users.models.time_stamped import TimestampedModel
 from django.db.models.signals import pre_save
 from post.utils import unique_slug_generator
@@ -17,10 +17,6 @@ class Post(TimestampedModel):
         Profile, on_delete=models.CASCADE, related_name='post')
     title = models.CharField(default="title",
         max_length=100, verbose_name="Tiltle")
-    company_name = models.CharField(
-        max_length=100, verbose_name="Company name")
-    company_domain = models.CharField(
-        max_length=255, verbose_name="Company domain")
     description = models.TextField(blank=True, verbose_name="Description")
     work_location = models.CharField(blank=True,
                                      max_length=100, verbose_name="Work location")
@@ -46,7 +42,7 @@ class Post(TimestampedModel):
     is_verified = models.BooleanField(default=False, verbose_name ="Verified")
 
     def __str__(self):
-        return self.company_name
+        return self.title
 
 
 def pre_save_receiver(sender, instance, *args, **kwargs): 

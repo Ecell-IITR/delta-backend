@@ -8,8 +8,12 @@ class UserManager(AbstractUserManager):
 
 
 class User(AbstractUser):
-    username = models.CharField(db_index=True, max_length=50, unique=True)
-    email = models.CharField(db_index=True, max_length=50, unique=True)
+    username = models.CharField(db_index=True, max_length=50,verbose_name="Username/Company Name",
+                                unique=True, help_text="If you are company,enter Company name.")
+    email = models.CharField(db_index=True, max_length=50, unique=True,verbose_name="Email/Company email",
+                             help_text="If you are company,enter Company email.")
+    company_domain = models.CharField(
+        db_index=True, blank=True, verbose_name="Company domain", max_length=200)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

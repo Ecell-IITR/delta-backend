@@ -47,7 +47,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password2',
             'token',
             'expires',
-            'message'
+            'message',
+            'company_domain'
         ]
 
     def get_message(self, *args, **kwargs):
@@ -85,7 +86,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return timezone.now() + expire_delta - datetime.timedelta(seconds=200)
 
     def create(self, validated_data):
-        user = User.objects.create(
+        if validated_data.get('company_domain') is not None:
+            user = User.objects.create(
+            username=validated_data.get('username'),
+            email=validated_data.get('email'),
+            company_domain=validated_data.get('company_domain')
+            )
+        else:
+            user = User.objects.create(
             username=validated_data.get('username'),
             email=validated_data.get('email'))
         user.set_password(validated_data.get('password'))
