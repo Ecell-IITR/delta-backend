@@ -1,8 +1,8 @@
 from django.db import models
 from users.models.profile import Profile
 from users.models.time_stamped import TimestampedModel
-
-
+from django.db.models.signals import pre_save
+from post.utils import unique_slug_generator
 class Post(TimestampedModel):
     COMPETITION_TYPE = (
         ('online', 'online'),
@@ -47,3 +47,11 @@ class Post(TimestampedModel):
 
     def __str__(self):
         return self.company_name
+
+
+def pre_save_receiver(sender, instance, *args, **kwargs): 
+   if not instance.slug: 
+       instance.slug = unique_slug_generator(instance) 
+  
+  
+pre_save.connect(pre_save_receiver, sender = Post)

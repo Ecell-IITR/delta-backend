@@ -29,7 +29,8 @@ class Postserializer(serializers.ModelSerializer):
             'work_description',
             'stipend',
             'required_skill',
-            'product_detail'
+            'product_detail',
+            'title'
         )
 
     def create(self, validated_data):
