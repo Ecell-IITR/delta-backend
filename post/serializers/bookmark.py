@@ -1,42 +1,31 @@
 from rest_framework import serializers
-from post.models.post import Post
+from post.models.bookmark import Bookmark
 from users.serializers.profile import ProfileViewSerializer
+from post.serializers.post import Postserializer
 
 
-class Postserializer(serializers.ModelSerializer):
+class Bookmarkserializer(serializers.ModelSerializer):
     author = ProfileViewSerializer(read_only=True)
-    slug = serializers.SlugField(required=False)
+    post = Postserializer(read_only=True)
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
 
     class Meta:
-        model = Post
+        model = Bookmark
         fields = (
-            'id',
             'author',
             'createdAt',
-            'slug',
+            'post',
             'updatedAt',
-            'description',
-            'work_location',
-            'start_date',
-            'completition_date',
-            'post_expiry_date',
-            'appicant_numbers',
-            'competition_type',
-            'work_type',
-            'work_description',
-            'stipend',
-            'required_skill',
-            'product_detail',
-            'title'
         )
 
     def create(self, validated_data):
         author = self.context.get('author', None)
-        post = Post.objects.create(author=author, **validated_data)
+        post = self.context.get('post', None)
+        bookmark = Bookmark.objects.create(
+            author=author, post=post, **validated_data)
 
-        return post
+        return bookmark
 
     def get_created_at(self, instance):
         return instance.created_at.isoformat()
