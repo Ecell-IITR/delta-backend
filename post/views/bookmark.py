@@ -12,19 +12,19 @@ from rest_framework.permissions import (
 
 
 class BookmarkViewSet(mixins.CreateModelMixin,
-                  mixins.ListModelMixin,
-                  viewsets.GenericViewSet):
+                      mixins.ListModelMixin,
+                      viewsets.GenericViewSet):
 
     queryset = Bookmark.objects.select_related('author', 'author__user')
     permission_classes = (IsAuthenticated,)
     serializer_class = Bookmarkserializer
 
     def create(self, request):
-        post_obj = Post.objects.get(id=request.data['p_id'])
+        post_obj = Post.objects.get(id=request.data['post_id'])
         serializer_context = {
             'author': request.user.profile,
             'request': request,
-            'post':post_obj
+            'post': post_obj
         }
         serializer_data = request.data
         serializer = self.serializer_class(
@@ -37,12 +37,29 @@ class BookmarkViewSet(mixins.CreateModelMixin,
 
     def list(self, request):
         serializer_context = {'request': request}
-        serializer_instance = Bookmark.objects.filter(author=request.user.profile)
+        serializer_instance = Bookmark.objects.filter(
+            author=request.user.profile)
 
         serializer = self.serializer_class(
             serializer_instance,
             context=serializer_context,
             many=True
         )
-        
+
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookmarkDestroyAPIView(generics.DestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Bookmark.objects.all()
+
+    def destroy(self, request):
+        post_obj = Post.objects.get(id=request.data['post_id'])
+        try:
+            bookmark = Bookmark.objects.get(
+                author=request.user.profile, post=post_obj)
+        except Bookmark.DoesNotExist:
+            raise NotFound('A comment with this ID does not exist.')
+
+        bookmark.delete()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)

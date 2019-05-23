@@ -1,5 +1,5 @@
 from post.views.post import PostViewSet
-from post.views.bookmark import BookmarkViewSet
+from post.views.bookmark import BookmarkViewSet, BookmarkDestroyAPIView
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import path
 
@@ -22,4 +22,5 @@ urlpatterns = format_suffix_patterns([
     path('', post_list, name='post-list'),
     path('<slug>/', post_detail, name='post-detail'),
     path('bookmark',bookmark_list,name='bookmark-list'),
+    path('remove/bookmark',BookmarkDestroyAPIView.as_view())
 ])
