@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from post.models.post import Post
+from post.models.bookmark import Bookmark
 from users.serializers.profile import ProfileViewSerializer
 
 
@@ -8,7 +9,6 @@ class Postserializer(serializers.ModelSerializer):
     slug = serializers.SlugField(required=False)
     createdAt = serializers.SerializerMethodField(method_name='get_created_at')
     updatedAt = serializers.SerializerMethodField(method_name='get_updated_at')
-
     class Meta:
         model = Post
         fields = (
@@ -29,7 +29,7 @@ class Postserializer(serializers.ModelSerializer):
             'stipend',
             'required_skill',
             'product_detail',
-            'title'
+            'title',
         )
 
     def create(self, validated_data):

@@ -45,12 +45,11 @@ class PostViewSet(mixins.CreateModelMixin,
             context=serializer_context,
             many=True
         )
-        
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, slug):
-        print("djabsdjka",slug)
-        serializer_context = {'request': request}
+        serializer_context = {'request': request, 'slug': slug}
 
         try:
             serializer_instance = self.queryset.get(slug=slug)
@@ -65,7 +64,7 @@ class PostViewSet(mixins.CreateModelMixin,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, slug):
-        serializer_context = {'request': request}
+        serializer_context = {'request': request, 'slug': slug}
 
         try:
             serializer_instance = self.queryset.get(slug=slug)
