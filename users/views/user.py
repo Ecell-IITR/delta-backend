@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from users.models.user import User
-from users.serializers.user import RegisterSerializer, EditSerializer, LoginSerializer
+from users.serializers.user import RegisterSerializer, EditSerializer, LoginSerializer, PublicSerializer
 from users.permissions import UserIsOwnerOrReadOnly
 
 
@@ -36,3 +36,14 @@ class EditAPIView(generics.RetrieveUpdateAPIView):
         IsAuthenticated,
         UserIsOwnerOrReadOnly,
     ]
+
+
+class UserInfo(APIView):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = PublicSerializer
+
+    def get(self, request):
+        user = request.user
+        queryset = User.objects.get(username=user)
+        serializer = PublicSerializer(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)

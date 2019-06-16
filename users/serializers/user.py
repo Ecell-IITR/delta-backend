@@ -21,7 +21,9 @@ class PublicSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id',
-            'username'
+            'username',
+            'email',
+            'company_domain'
         ]
 
 
@@ -88,14 +90,14 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         if validated_data.get('company_domain') is not None:
             user = User.objects.create(
-            username=validated_data.get('username'),
-            email=validated_data.get('email'),
-            company_domain=validated_data.get('company_domain')
+                username=validated_data.get('username'),
+                email=validated_data.get('email'),
+                company_domain=validated_data.get('company_domain')
             )
         else:
             user = User.objects.create(
-            username=validated_data.get('username'),
-            email=validated_data.get('email'))
+                username=validated_data.get('username'),
+                email=validated_data.get('email'))
         user.set_password(validated_data.get('password'))
         user.save()
         return user
@@ -160,7 +162,7 @@ class LoginSerializer(serializers.Serializer):
         payload = JWT_PAYLOAD_HANDLER(user)
         token = JWT_ENCODE_HANDLER(payload)
         return {
-            'id':user.id,
+            'id': user.id,
             'email': user.email,
             'username': user.username,
             'token': token
