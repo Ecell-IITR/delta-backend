@@ -4,27 +4,101 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 
 from users.serializers import (
+    StudentSerializer,
+    CompanySerializer,
     PersonSerializer
 )
 
+from users.models import (
+    Student,
+    Person,
+    Company
+)
 
-class WhoAmI(viewsets.ModelViewSet):
+
+class WhoAmIViewSet(viewsets.ModelViewSet):
     """
-    This view shows some personal information of the currently logged in user
+    This view shows some personal information of the currently logged in person
     """
 
     permission_classes = [IsAuthenticated, ]
-    serializer_class = PersonSerializer
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         """
-        View to serve GET requests
-        :param request: the request that is to be responded to
-        :param args: arguments
-        :param kwargs: keyword arguments
-        :return: the response for request
+        This function decides the queryset according to the type of
+        user
+        :return: the queryset
+        """
+        user = self.request.user
+
+        if self.request.user.is_student:
+            queryset = Student.objects.filter(
+                person=user
+            ).first()
+
+        elif self.request.user.is_company:
+            queryset = Company.objects.filter(
+                person=user
+            ).first()
+
+        else:
+            queryset = Person.objects.filter(
+                username=user.username
+            ).first()
+
+        return queryset
+
+    def get_serializer_class(self):
+        """
+        This function decides the serializer class according to the type of
+        user
+        :return: the serializer class
         """
 
-        person = request.person
-        serializer = self.get_serializer_class()(person)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if self.request.user.is_student:
+            return StudentSerializer
+
+        elif self.request.user.is_company:
+            return CompanySerializer
+
+        else:
+            return PersonSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        serializer = self.get_serializer_class()(
+            queryset,
+            many=True
+        )
+
+        if serializer.is_valid:
+            return Response(
+                serializer.data
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def update(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        serializer = self.get_serializer_class()(
+            queryset,
+            data=request.data,
+        )
+
+        serializer.is_valid(
+            raise_exception=True
+        )
+
+        self.perform_update(
+            serializer
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )

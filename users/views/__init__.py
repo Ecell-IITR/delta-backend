@@ -1,5 +1,5 @@
 from users.views.auth import (
-    LoginViewSet,
-    RegisterViewSet
+    LoginAPIView,
+    RegisterAPIView
 )
-from users.views.person import PersonSerializer
+from users.views.person import WhoAmIViewSet

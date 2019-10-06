@@ -1,2 +1,2 @@
-from users.views.auth.login import LoginViewSet
-from users.views.auth.register import RegisterViewSet
+from users.views.auth.login import LoginAPIView
+from users.views.auth.register import RegisterAPIView

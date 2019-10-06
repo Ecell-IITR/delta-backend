@@ -5,3 +5,8 @@ from users.serializers.auth import (
 from users.serializers.person import (
     PersonSerializer
 )
+
+from users.serializers.roles import (
+    StudentSerializer,
+    CompanySerializer
+)
