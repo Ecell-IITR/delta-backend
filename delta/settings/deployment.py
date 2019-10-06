@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+import dj_database_url
+from delta.restconf.main import *
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,22 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    #Installed packages
+
+    # Installed packages
     'rest_framework',
     'corsheaders',
 
-    #Docs
+    # Docs
     'rest_framework_swagger',
 
-    #Apps
-    'company',
-    'users',
+    # Apps
     'post',
-    'student'
+    'users'
 ]
 
-#CORS Settings
+# CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
@@ -90,12 +90,11 @@ WSGI_APPLICATION = 'delta.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-import dj_database_url 
 
-prod_db  =  dj_database_url.config(conn_max_age=500)
+prod_db = dj_database_url.config(conn_max_age=500)
 
-DATABASES={
-    'default':{
+DATABASES = {
+    'default': {
     }
 }
 
@@ -156,7 +155,6 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
 
-from delta.restconf.main import *
 
 #  Add configuration for static files storage using whitenoise
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

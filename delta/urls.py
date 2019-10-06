@@ -24,6 +24,6 @@ schema_view = get_swagger_view(title='Delta API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('users.urls')),
-    path('api/v1/post/', include('post.urls')),
+    path('api/v1/post', include('post.urls')),
     path('docs', schema_view),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

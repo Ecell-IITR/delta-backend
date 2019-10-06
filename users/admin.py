@@ -1,6 +1,15 @@
 from django.contrib import admin
-from users.models.user import User
-from users.models.profile import Profile
+from users.models.roles import Student, Company
+from users.models.person import Person
+# from users.models.custom_user import User
 
-admin.site.register(User)
-admin.site.register(Profile)
+
+models = [
+    # User,
+    Person,
+    Company,
+    Student,
+]
+
+for model in models:
+    admin.site.register(model)

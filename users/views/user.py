@@ -2,9 +2,15 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import viewsets
 
-from users.models.user import User
-from users.serializers.user import RegisterSerializer, EditSerializer, LoginSerializer, PublicSerializer
+from users.models.person import Person
+from users.serializers.user import (
+    RegisterSerializer,
+    EditSerializer,
+    LoginSerializer,
+    PublicSerializer
+)
 from users.permissions import UserIsOwnerOrReadOnly
 
 
@@ -19,8 +25,7 @@ class LoginAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class RegisterAPIView(generics.CreateAPIView):
-    queryset = User.objects.all()
+class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny, ]
 
@@ -29,7 +34,7 @@ class RegisterAPIView(generics.CreateAPIView):
 
 
 class EditAPIView(generics.RetrieveUpdateAPIView):
-    queryset = User.objects.all()
+    queryset = Person.objects.all()
     serializer_class = EditSerializer
     lookup_field = 'username'
     permission_classes = [
@@ -44,6 +49,6 @@ class UserInfo(APIView):
 
     def get(self, request):
         user = request.user
-        queryset = User.objects.get(username=user)
+        queryset = Person.objects.get(username=user)
         serializer = PublicSerializer(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
