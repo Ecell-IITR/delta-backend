@@ -26,7 +26,9 @@ class AbstractPerson(AbstractBaseUser, TimestampedModel):
         help_text="If you are company,enter Company email."
     )
 
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(
+        default=True
+    )
     is_staff = models.BooleanField(
         default=False
     )
@@ -43,10 +45,10 @@ class AbstractPerson(AbstractBaseUser, TimestampedModel):
         verbose_name='Secondary Email'
     )
 
-    starred_posts = models.ManyToManyField(
-        to='post.Post',
-        related_name='starred_post_set',
-        blank=True
+    profile_image = models.ImageField(
+        upload_to="profile_image/",
+        default="null",
+        help_text="If you are company,enter company icon."
     )
 
     is_company = models.BooleanField(default=False)

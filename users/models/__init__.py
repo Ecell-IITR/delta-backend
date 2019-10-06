@@ -1,1 +1,5 @@
-# from users.models.custom_user import User
+from users.models.person import Person
+from users.models.roles import (
+    Company,
+    Student
+)
