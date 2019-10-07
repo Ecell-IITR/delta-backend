@@ -6,14 +6,7 @@ class UserManager(auth_models.BaseUserManager):
     This is the manager for objects of class AuthUser
     """
 
-    def _create_instance(
-        self,
-        username,
-        email,
-        password,
-        is_student,
-        is_company,
-    ):
+    def _create_instance(self, username, email, password, is_admin):
         """
         Create a user with the given password
         Both standard and administrative users are identical at this level
@@ -27,21 +20,13 @@ class UserManager(auth_models.BaseUserManager):
         user = self.model(
             username=username,
             email=email,
-            is_student=is_student,
-            is_company=is_company
+            is_admin=is_admin,
         )
         user.set_password(password)
         user.save()
         return user
 
-    def create_user(
-        self,
-        username='',
-        email='',
-        password=None,
-        is_student=False,
-        is_company=False
-    ):
+    def create_user(self, username='', email='', password=None):
         """
         Create a standard user with the given password
         :param username: the username for the standard user
@@ -53,6 +38,20 @@ class UserManager(auth_models.BaseUserManager):
             username=username,
             email=email,
             password=password,
-            is_student=is_student,
-            is_company=is_company,
+            is_admin=False
+        )
+
+    def create_superuser(self, username='', email='', password=None):
+        """
+        Create an administrative user with the given password
+        :param username: the username that will be ignored
+        :param password: the password for the administrative user
+        :return: the newly created administrative user
+        """
+
+        return self._create_instance(
+            username=username,
+            email=email,
+            password=password,
+            is_admin=True
         )

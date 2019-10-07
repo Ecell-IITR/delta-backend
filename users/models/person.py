@@ -29,7 +29,8 @@ class AbstractPerson(AbstractBaseUser, TimestampedModel):
     is_active = models.BooleanField(
         default=True
     )
-    is_staff = models.BooleanField(
+
+    is_admin = models.BooleanField(
         default=False
     )
 
@@ -67,9 +68,27 @@ class AbstractPerson(AbstractBaseUser, TimestampedModel):
         Return the string representation of the model
         :return: the string representation of the model
         """
+
         username = self.username
         email = self.email
         return f'{username}-{email}'
+
+    def has_perm(self, perm, obj=None):
+        """
+        Add an alternative check to the default check for permissions
+        :param perm: the permission to check for
+        :param obj: the object on which to check permissions instead of self
+        :return: True if the user is an administrative IMGian, false otherwise
+        """
+
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
 class Person(AbstractPerson):
