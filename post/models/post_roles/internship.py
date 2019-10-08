@@ -1,6 +1,6 @@
 from django.db import models
-from users.models.time_stamped import TimestampedModel
-from post.models.post import Post
+
+from post.models.post import AbstractPost
 
 WORK_TYPE = {
     (
@@ -12,15 +12,10 @@ WORK_TYPE = {
 }
 
 
-class AbstractInternship(models.Model):
+class AbstractInternship(AbstractPost):
     """
     This model holds information pertaining to a Internship
     """
-
-    post = models.OneToOneField(
-        to=Post,
-        on_delete=models.CASCADE,
-    )
 
     stipend = models.CharField(
         max_length=55,
@@ -53,6 +48,12 @@ class AbstractInternship(models.Model):
         verbose_name="Type of Work"
     )
 
+    # bookmarks = models.ManyToManyField(
+    #     to='users.Student',
+    #     related_name='bookmark_internship',
+    #     blank=True
+    # )
+
     class Meta:
         """
         Meta class for AbstractInternship
@@ -66,8 +67,9 @@ class AbstractInternship(models.Model):
         :return: the string representation of the model
         """
 
-        post = self.post
-        return f'{post}'
+        slug = self.slug
+        user = self.user
+        return f'{slug} ({user.username})'
 
 
 class Internship(AbstractInternship):

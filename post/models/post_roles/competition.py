@@ -1,27 +1,33 @@
 from django.db import models
-from post.models.post import Post
+
+from post.models.post import AbstractPost
 
 COMPETITION_TYPE = (
-    ('online', 'online'),
-    ('onspot', 'onspot')
+    (
+        'Online', 'Online'
+    ),
+    (
+        'Onspot', 'Onspot'
+    )
 )
 
 
-class AbstractCompetition(models.Model):
+class AbstractCompetition(AbstractPost):
     """
     This model holds information pertaining to a Competition
     """
-
-    post = models.OneToOneField(
-        to=Post,
-        on_delete=models.CASCADE,
-    )
 
     competition_type = models.CharField(
         max_length=255,
         choices=COMPETITION_TYPE,
         default='onspot',
         verbose_name="Competition type"
+    )
+
+    bookmarks = models.ManyToManyField(
+        to='users.Student',
+        related_name='bookmark_competition',
+        blank=True
     )
 
     competition_file = models.FileField(
@@ -45,8 +51,9 @@ class AbstractCompetition(models.Model):
         :return: the string representation of the model
         """
 
-        post = self.post
-        return f'{post}'
+        slug = self.slug
+        user = self.user
+        return f'{slug} ({user.username})'
 
 
 class Competition(AbstractCompetition):

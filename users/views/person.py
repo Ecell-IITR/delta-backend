@@ -29,22 +29,15 @@ class WhoAmIViewSet(viewsets.ModelViewSet):
         user
         :return: the queryset
         """
-        user = self.request.user
 
         if self.request.user.is_student:
-            queryset = Student.objects.filter(
-                person=user
-            ).first()
+            queryset = Student.objects.all()
 
         elif self.request.user.is_company:
-            queryset = Company.objects.filter(
-                person=user
-            ).first()
+            queryset = Company.objects.all()
 
         else:
-            queryset = Person.objects.filter(
-                username=user.username
-            ).first()
+            queryset = Person.objects.all()
 
         return queryset
 
@@ -65,7 +58,7 @@ class WhoAmIViewSet(viewsets.ModelViewSet):
             return PersonSerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.get_queryset().filter(person=request.user)
 
         serializer = self.get_serializer_class()(
             queryset,
@@ -83,7 +76,7 @@ class WhoAmIViewSet(viewsets.ModelViewSet):
         )
 
     def update(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.get_queryset().filter(person=request.user).first()
 
         serializer = self.get_serializer_class()(
             queryset,

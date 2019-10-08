@@ -1,5 +1,9 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import pre_save
+
+from post.utils import unique_slug_generator
+
 from users.models.time_stamped import TimestampedModel
 from users.models.person import Person
 
@@ -17,8 +21,7 @@ class AbstractPost(TimestampedModel):
 
     user = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE,
-        related_name='post'
+        on_delete=models.CASCADE
     )
 
     title = models.CharField(
@@ -47,6 +50,7 @@ class AbstractPost(TimestampedModel):
         default=False,
         verbose_name="Published"
     )
+
     is_verified = models.BooleanField(
         default=False,
         verbose_name="Verified"
@@ -66,16 +70,3 @@ class AbstractPost(TimestampedModel):
         """
 
         return self.user
-
-
-class Post(AbstractPost):
-    """
-    This class implements AbstractPerson
-    """
-
-    class Meta:
-        """
-        Meta class for Person
-        """
-
-        verbose_name_plural = 'Post'

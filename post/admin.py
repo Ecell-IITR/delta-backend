@@ -1,5 +1,4 @@
 from django.contrib import admin
-from post.models.post import Post
 from post.models.post_roles import (
     Competition,
     Internship,
@@ -7,7 +6,6 @@ from post.models.post_roles import (
 )
 
 models = [
-    Post,
     Competition,
     Internship,
     Project,

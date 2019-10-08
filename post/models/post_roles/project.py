@@ -1,16 +1,12 @@
 from django.db import models
-from post.models.post import Post
-from users.models.person import Person
+
+from post.models.post import AbstractPost
 
 
-class AbstractProject(models.Model):
+class AbstractProject(AbstractPost):
     """
     This model holds information pertaining to a Project
     """
-    post = models.OneToOneField(
-        to=Post,
-        on_delete=models.CASCADE,
-    )
 
     stipend = models.CharField(
         max_length=55,
@@ -28,6 +24,12 @@ class AbstractProject(models.Model):
         verbose_name='Approximate Duration'
     )
 
+    bookmarks = models.ManyToManyField(
+        to='users.Student',
+        related_name='bookmark_project',
+        blank=True
+    )
+
     class Meta:
         """
         Meta class for AbstractProject
@@ -41,8 +43,9 @@ class AbstractProject(models.Model):
         :return: the string representation of the model
         """
 
-        post = self.post
-        return f'{post}'
+        slug = self.slug
+        user = self.user
+        return f'{slug} ({user.username})'
 
 
 class Project(AbstractProject):

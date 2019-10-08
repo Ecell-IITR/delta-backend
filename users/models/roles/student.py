@@ -42,12 +42,6 @@ class AbstractStudent(models.Model):
         verbose_name='Social links'
     )
 
-    starred_posts = models.ManyToManyField(
-        to='post.Post',
-        related_name='starred_post_set',
-        blank=True
-    )
-
     skills = models.TextField(
         blank=True,
         verbose_name='Skills'
