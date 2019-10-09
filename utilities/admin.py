@@ -2,12 +2,14 @@ from django.contrib import admin
 
 from utilities.models import (
     Skill,
-    Branch
+    Branch,
+    Location
 )
 
 models = [
     Skill,
-    Branch
+    Branch,
+    Location
 ]
 
 for model in models:
