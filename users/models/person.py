@@ -1,5 +1,5 @@
 from django.db import models
-from users.models.time_stamped import TimestampedModel
+from utilities.models import TimestampedModel
 from django.contrib.auth.models import (
     AbstractBaseUser
 )
@@ -52,9 +52,13 @@ class AbstractPerson(AbstractBaseUser, TimestampedModel):
         help_text="If you are company,enter company icon."
     )
 
-    is_company = models.BooleanField(default=False)
+    is_company = models.BooleanField(
+        default=False
+    )
 
-    is_student = models.BooleanField(default=False)
+    is_student = models.BooleanField(
+        default=False
+    )
 
     class Meta:
         """

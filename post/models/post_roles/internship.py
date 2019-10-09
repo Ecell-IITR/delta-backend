@@ -48,11 +48,11 @@ class AbstractInternship(AbstractPost):
         verbose_name="Type of Work"
     )
 
-    # bookmarks = models.ManyToManyField(
-    #     to='users.Student',
-    #     related_name='bookmark_internship',
-    #     blank=True
-    # )
+    bookmarks = models.ManyToManyField(
+        to='users.Student',
+        related_name='bookmark_internship',
+        blank=True
+    )
 
     class Meta:
         """

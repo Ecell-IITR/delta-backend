@@ -48,7 +48,8 @@ INSTALLED_APPS = [
 
     # Apps
     'users',
-    'post'
+    'post',
+    'utilities'
 ]
 
 # CORS Settings

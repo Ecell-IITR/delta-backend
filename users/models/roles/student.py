@@ -13,10 +13,12 @@ class AbstractStudent(models.Model):
         related_name='student'
     )
 
-    branch = models.CharField(
-        max_length=55,
+    branch = models.OneToOneField(
+        to='utilities.Branch',
+        related_name='student_branch',
+        on_delete=models.CASCADE,
         blank=True,
-        verbose_name='Branch'
+        null=True
     )
 
     enrollment_number = models.CharField(
@@ -42,9 +44,10 @@ class AbstractStudent(models.Model):
         verbose_name='Social links'
     )
 
-    skills = models.TextField(
-        blank=True,
-        verbose_name='Skills'
+    skills = models.ManyToManyField(
+        to='utilities.Skill',
+        related_name='student_skill',
+        blank=True
     )
 
     interest = models.TextField(

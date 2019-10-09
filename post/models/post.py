@@ -4,7 +4,7 @@ from django.db.models.signals import pre_save
 
 from post.utils import unique_slug_generator
 
-from users.models.time_stamped import TimestampedModel
+from utilities.models import TimestampedModel
 from users.models.person import Person
 
 
