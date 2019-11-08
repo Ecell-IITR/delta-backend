@@ -58,6 +58,7 @@ class WhoAmIViewSet(viewsets.ModelViewSet):
             return PersonSerializer
 
     def list(self, request, *args, **kwargs):
+
         queryset = self.get_queryset().filter(person=request.user)
 
         serializer = self.get_serializer_class()(
@@ -76,6 +77,7 @@ class WhoAmIViewSet(viewsets.ModelViewSet):
         )
 
     def update(self, request, *args, **kwargs):
+
         queryset = self.get_queryset().filter(person=request.user).first()
 
         serializer = self.get_serializer_class()(

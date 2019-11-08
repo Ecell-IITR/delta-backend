@@ -10,7 +10,7 @@ from users.models.person import Person
 
 class AbstractPost(TimestampedModel):
     """
-    This model describes a Post who uses Omniport
+    This model describes a Post who uses Delta
     """
 
     slug = models.SlugField(

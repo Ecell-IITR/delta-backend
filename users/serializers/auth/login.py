@@ -18,17 +18,16 @@ expire_delta = api_settings.JWT_REFRESH_EXPIRATION_DELTA
 
 
 class LoginSerializer(serializers.Serializer):
+
     id = serializers.IntegerField(
         read_only=True
     )
 
     username = serializers.CharField(
-        max_length=255,
+        max_length=255
     )
 
-    email = serializers.CharField(
-        read_only=True
-    )
+    email = serializers.CharField()
 
     password = serializers.CharField(
         max_length=128,
@@ -41,6 +40,7 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, data):
+
         user = authenticate(
             username=data.get('username'),
             password=data.get('password')
@@ -48,13 +48,13 @@ class LoginSerializer(serializers.Serializer):
 
         if user is None:
             raise serializers.ValidationError(
-                'A user with this email and password was not found.'
+                'A user with this username and password was not found.'
             )
 
-        if not user.is_active:
-            raise serializers.ValidationError(
-                'This user has been deactivated.'
-            )
+        # if not user.is_active:
+        #     raise serializers.ValidationError(
+        #         'This user has been deactivated.'
+        #     )
         payload = JWT_PAYLOAD_HANDLER(user)
         token = JWT_ENCODE_HANDLER(payload)
         return {

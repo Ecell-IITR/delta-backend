@@ -80,8 +80,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate(self, data):
         password = data.get('password')
         password2 = data.get('password2')
+
+        check = data.get('is_student') or data.get('is_company') or False
+
+        if check is not True:
+            raise serializers.ValidationError("Role must be defined!")
+
         if password != password2:
             raise serializers.ValidationError("Passwords must match")
+
         return data
 
     def get_expires(self, obj):
@@ -104,6 +111,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                 person=person
             )
             company.save()
+
         person.set_password(validated_data.get('password'))
         person.save()
         return person

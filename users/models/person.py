@@ -8,7 +8,7 @@ from users.managers import user
 
 class AbstractPerson(AbstractBaseUser, TimestampedModel):
     """
-    This model describes a person who uses Omniport
+    This model describes a person who uses Delta
     """
     username = models.CharField(
         db_index=True,

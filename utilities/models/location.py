@@ -26,8 +26,7 @@ class AbstractLocation(TimestampedModel):
 
     pin_code = models.IntegerField(
         unique=True,
-        verbose_name='Pincode',
-        max_length=15
+        verbose_name='Pincode'
     )
 
     def __str__(self):
