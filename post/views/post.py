@@ -102,16 +102,19 @@ class PostViewSet(viewsets.ModelViewSet):
 
         internship_serializer = InternshipSerializer(
             Internship.objects.all(),
+            context={'request': request},
             many=True
         )
 
         project_serializer = ProjectSerializer(
             Project.objects.all(),
+            context={'request': request},
             many=True
         )
 
         competition_serializer = CompetitionSerializer(
             Competition.objects.all(),
+            context={'request': request},
             many=True
         )
 

@@ -11,9 +11,17 @@ class CompetitionSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    bookmark = serializers.SerializerMethodField('is_bookmark')
+
     class Meta:
         model = Competition
-        fields = '__all__'
+        exclude = ['bookmarks']
+
+    def is_bookmark(self, obj):
+        person = self.context['request'].user
+        starred_posts = obj.bookmarks.all()
+
+        return starred_posts.filter(person=person).exists()
 
     def create(self, validated_data):
 
