@@ -1,12 +1,12 @@
 from django.db import models
 from utilities.models import TimestampedModel
 from django.contrib.auth.models import (
-    AbstractBaseUser
+    AbstractUser
 )
 from users.managers import user
 
 
-class AbstractPerson(AbstractBaseUser, TimestampedModel):
+class AbstractPerson(AbstractUser, TimestampedModel):
     """
     This model describes a person who uses Delta
     """
