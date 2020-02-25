@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from users.models.person import Person
 
 
@@ -8,31 +9,25 @@ class AbstractCompany(models.Model):
     """
 
     person = models.OneToOneField(
-        to=Person,
-        on_delete=models.CASCADE,
-        related_name='company'
+        to=Person, on_delete=models.CASCADE, related_name="company"
     )
 
     company_domain = models.CharField(
-        max_length=55,
-        blank=True,
-        verbose_name='Company Domain'
+        max_length=55, blank=True, verbose_name="Company Domain"
     )
-
+    phone_number = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        validators=[
+            RegexValidator(regex="^[6-9]\d{9}$", message="Phone Number Not Valid",)
+        ],
+    )
     category_of_company = models.CharField(
-        blank=True,
-        max_length=50,
-        verbose_name='Category of Company'
+        blank=True, max_length=50, verbose_name="Category of Company"
     )
-    team_size = models.CharField(
-        blank=True,
-        max_length=100,
-        verbose_name='Team size'
-    )
-    address = models.TextField(
-        blank=True,
-        verbose_name='Address'
-    )
+    team_size = models.CharField(blank=True, max_length=100, verbose_name="Team size")
+    address = models.TextField(blank=True, verbose_name="Address")
 
     class Meta:
         """
@@ -48,7 +43,7 @@ class AbstractCompany(models.Model):
         """
 
         person = self.person
-        return f'{person}'
+        return f"{person}"
 
 
 class Company(AbstractCompany):
@@ -60,4 +55,5 @@ class Company(AbstractCompany):
         """
         Meta class for Company
         """
-        verbose_name_plural = 'Company'
+        verbose_name_plural = "Company"
+
