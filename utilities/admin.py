@@ -3,13 +3,15 @@ from django.contrib import admin
 from utilities.models import (
     Skill,
     Branch,
-    Location
+    Location,
+    WebsiteModel
 )
 
 models = [
     Skill,
     Branch,
-    Location
+    Location,
+    WebsiteModel
 ]
 
 for model in models:
