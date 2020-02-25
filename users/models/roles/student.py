@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from users.models.person import Person
 from users.models.social_link import SocialLink
 
@@ -19,7 +20,14 @@ class AbstractStudent(models.Model):
         blank=True,
         null=True,
     )
-
+    phone_number = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        validators=[
+            RegexValidator(regex="^[6-9]\d{9}$", message="Phone Number Not Valid",)
+        ],
+    )
     enrollment_number = models.CharField(
         max_length=20, blank=True, verbose_name="Enrollment number"
     )
@@ -28,9 +36,7 @@ class AbstractStudent(models.Model):
 
     year = models.CharField(max_length=55, blank=True, verbose_name="Year")
 
-    social_links = models.ManyToManyField(
-        to=SocialLink,  related_name="social_links"
-    )
+    social_links = models.ManyToManyField(to=SocialLink, related_name="social_links")
 
     skills = models.ManyToManyField(
         to="utilities.Skill", related_name="student_skill", blank=True
