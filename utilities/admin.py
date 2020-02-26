@@ -1,18 +1,8 @@
 from django.contrib import admin
 
-from utilities.models import (
-    Skill,
-    Branch,
-    Location,
-    WebsiteModel
-)
+from utilities.models import Skill, Branch, Location, Website
 
-models = [
-    Skill,
-    Branch,
-    Location,
-    WebsiteModel
-]
+models = [Skill, Branch, Location, Website]
 
 for model in models:
     admin.site.register(model)
