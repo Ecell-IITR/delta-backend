@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from utilities.models import WebsiteModel
+from utilities.models import Website
 
 
 class SocialLink(models.Model):
@@ -10,11 +10,11 @@ class SocialLink(models.Model):
         if image_size > max_size * 1024:
             raise ValidationError("Max Image Size is %sKB" % str(max_size))
 
-    website = models.OneToOneField(WebsiteModel, on_delete=models.CASCADE)
+    website = models.OneToOneField(Website, on_delete=models.CASCADE)
     website_logo = models.ImageField(
         upload_to="social_link_logo/", default="null", validators=[validate_image]
     )
 
     def __str__(self):
-        return self.website.website_name
+        return self.website.name
 
