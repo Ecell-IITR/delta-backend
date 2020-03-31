@@ -1,6 +1,6 @@
 from django.db import models
 
-from utilities.models import TimestampedModel
+from utilities.models import TimestampedModel, Country, State
 
 
 class AbstractLocation(TimestampedModel):
@@ -11,17 +11,12 @@ class AbstractLocation(TimestampedModel):
         help_text="Type the Location name to be added.."
     )
 
-    state = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="State"
+    state = models.OneToOneField(
+        to=State, on_delete=models.CASCADE
     )
 
-    country = models.CharField(
-        default='India',
-        max_length=255,
-        verbose_name='Country'
+    country = models.OneToOneField(
+        to=Country, on_delete=models.CASCADE
     )
 
     pin_code = models.IntegerField(
