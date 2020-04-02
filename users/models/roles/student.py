@@ -14,7 +14,7 @@ class AbstractStudent(models.Model):
         to=Person, on_delete=models.CASCADE, related_name="student"
     )
 
-    branch = models.OneToOneField(
+    branch = models.ForeignKey(
         to="utilities.Branch",
         related_name="student_branch",
         on_delete=models.CASCADE,
@@ -52,6 +52,12 @@ class AbstractStudent(models.Model):
     achievements = models.TextField(verbose_name="Achievements", blank=True)
     resume = models.FileField(verbose_name="Resume", validators=[
                               FileExtensionValidator(allowed_extensions=['pdf'])])
+
+    # def save(self, *args, **kwargs):
+    #     gzip_middleware = GZipMiddleware()
+    #     compressed_resume = gzip_middleware.process_response(self.resume)
+    #     self.resume = compressed_resume
+    #     super().save(*args, **kwargs)
 
     class Meta:
         """
