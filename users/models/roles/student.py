@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from users.models.person import Person
 from users.models.social_link import SocialLink
+from django.core.validators import FileExtensionValidator
 
 
 class AbstractStudent(models.Model):
@@ -25,7 +26,8 @@ class AbstractStudent(models.Model):
         blank=True,
         null=True,
         validators=[
-            RegexValidator(regex="^[6-9]\d{9}$", message="Phone Number Not Valid",)
+            RegexValidator(regex="^[6-9]\d{9}$",
+                           message="Phone Number Not Valid",)
         ],
     )
     enrollment_number = models.CharField(
@@ -36,7 +38,8 @@ class AbstractStudent(models.Model):
 
     year = models.CharField(max_length=55, blank=True, verbose_name="Year")
 
-    social_links = models.ManyToManyField(to=SocialLink, related_name="social_links")
+    social_links = models.ManyToManyField(
+        to=SocialLink, related_name="social_links")
 
     skills = models.ManyToManyField(
         to="utilities.Skill", related_name="student_skill", blank=True
@@ -47,6 +50,8 @@ class AbstractStudent(models.Model):
     bio = models.TextField(verbose_name="Bio", blank=True)
 
     achievements = models.TextField(verbose_name="Achievements", blank=True)
+    resume = models.FileField(verbose_name="Resume", validators=[
+                              FileExtensionValidator(allowed_extensions=['pdf'])])
 
     class Meta:
         """
@@ -76,4 +81,3 @@ class Student(AbstractStudent):
         """
 
         verbose_name_plural = "Student"
-
