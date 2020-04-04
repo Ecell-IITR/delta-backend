@@ -6,7 +6,7 @@ from utilities.models import Website
 
 class SocialLink(models.Model):
 
-    website = models.OneToOneField(Website, on_delete=models.CASCADE)
+    website = models.ForeignKey(Website, on_delete=models.CASCADE)
     profile_url = models.URLField(
         max_length=200, validators=[URLValidator],
     )

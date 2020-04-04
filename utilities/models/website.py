@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import URLValidator
 from utilities.models import TimestampedModel
+from django.core.exceptions import ValidationError
 
 
 def validate_image(image_obj):
