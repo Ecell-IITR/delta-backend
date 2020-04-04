@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from users.models.person import Person
 from users.models.social_link import SocialLink
 from django.core.validators import FileExtensionValidator
+import gzip
 
 
 class AbstractStudent(models.Model):
@@ -50,14 +51,12 @@ class AbstractStudent(models.Model):
     bio = models.TextField(verbose_name="Bio", blank=True)
 
     achievements = models.TextField(verbose_name="Achievements", blank=True)
-    resume = models.FileField(verbose_name="Resume", validators=[
+    resume = models.FileField(verbose_name="Resume", blank=True, validators=[
                               FileExtensionValidator(allowed_extensions=['pdf'])])
 
     # def save(self, *args, **kwargs):
-    #     gzip_middleware = GZipMiddleware()
-    #     compressed_resume = gzip_middleware.process_response(self.resume)
-    #     self.resume = compressed_resume
-    #     super().save(*args, **kwargs)
+    #     input_resume=open(resume,"wb")
+    #     s=input_resume.read()
 
     class Meta:
         """
