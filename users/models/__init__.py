@@ -4,3 +4,4 @@ from users.models.roles import (
     Student
 )
 from users.models.social_link import SocialLink
+from users.models.relation import UserRelationship
