@@ -5,4 +5,4 @@ from users.models.roles import (
     SocialLink
 )
 from users.models.social_link import SocialLink
-from users.models.relation import UserRelationship
+from users.models.relation import FollowUser
