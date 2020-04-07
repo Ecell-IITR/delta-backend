@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save
@@ -56,6 +58,14 @@ class AbstractPost(TimestampedModel):
         default=False,
         verbose_name="Verified"
     )
+
+    @property
+    def is_expired(self):
+        """
+        Return whether post has expired or not
+        True /False 
+        """
+        return datetime.date.today() > self.post_expiry_date
 
     class Meta:
         """
