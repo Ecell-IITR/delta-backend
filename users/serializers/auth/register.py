@@ -4,27 +4,16 @@ from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
+from rest_framework.authtoken.models import Token
 
 from users.models import (
     Student,
     Company,
     Person
 )
-from users.utils import jwt_response_payload_handler
-
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
-JWT_RESPONSE_PAYLOAD_HANDLER = api_settings.JWT_RESPONSE_PAYLOAD_HANDLER
-
-expire_delta = api_settings.JWT_REFRESH_EXPIRATION_DELTA
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-
-    # username = serializers.CharField()
-
-    # email = serializers.CharField()
-    # is_student = serializers.Boolea
 
     password = serializers.CharField(
         max_length=128,
@@ -73,8 +62,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         user = obj
-        payload = JWT_PAYLOAD_HANDLER(user)
-        token = JWT_ENCODE_HANDLER(payload)
+        token = Token.objects.create(user=user)
         return token
 
     def validate(self, data):

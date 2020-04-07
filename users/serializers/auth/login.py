@@ -6,15 +6,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-
-
-from users.utils import jwt_response_payload_handler
-
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
-JWT_RESPONSE_PAYLOAD_HANDLER = api_settings.JWT_RESPONSE_PAYLOAD_HANDLER
-
-expire_delta = api_settings.JWT_REFRESH_EXPIRATION_DELTA
+from rest_framework.authtoken.models import Token
 
 
 class LoginSerializer(serializers.Serializer):
@@ -26,8 +18,6 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(
         max_length=255
     )
-
-    email = serializers.CharField()
 
     password = serializers.CharField(
         max_length=128,
@@ -55,11 +45,9 @@ class LoginSerializer(serializers.Serializer):
         #     raise serializers.ValidationError(
         #         'This user has been deactivated.'
         #     )
-        payload = JWT_PAYLOAD_HANDLER(user)
-        token = JWT_ENCODE_HANDLER(payload)
+        token = Token.objects.create(user=user)
         return {
             'id': user.id,
             'username': user.username,
-            'email': user.email,
             'token': token
         }
