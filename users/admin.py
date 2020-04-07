@@ -6,7 +6,7 @@ from django.contrib.auth import admin as auth_admin
 from users.models.roles import Student, Company
 from users.models.person import Person
 from users.models.social_link import SocialLink
-from users.models.relation import UserRelationship
+from users.models.relation import FollowUser
 
 
 class PersonChangeForm(forms.ModelForm):
@@ -78,16 +78,14 @@ class PersonAdmin(auth_admin.UserAdmin):
 admin.site.register(Person, PersonAdmin)
 
 
-class UserRelationshipAdmin(admin.ModelAdmin):
+class FollowUserAdmin(admin.ModelAdmin):
     list_display = (
-        'user_from',
-        'rel_type',
-        'user_to'
+        'follower',
+        'following'
     )
-    list_filter = ('rel_type',)
 
 
-admin.site.register(UserRelationship, UserRelationshipAdmin)
+admin.site.register(FollowUser, FollowUserAdmin)
 
 models = [
     Company,
