@@ -7,6 +7,7 @@ from users.models.roles import Student, Company
 from users.models.person import Person
 from users.models.social_link import SocialLink
 
+
 class PersonChangeForm(forms.ModelForm):
     """
     Replicate the form shown when the user model supplied by Django is not
@@ -72,6 +73,12 @@ class PersonAdmin(auth_admin.UserAdmin):
 
     search_fields = ['id', 'email']
 
+
+PersonAdmin.add_fieldsets = (
+    (None, {
+        'fields': ('username', 'email', 'password1', 'password2',)
+    }),
+)
 
 admin.site.register(Person, PersonAdmin)
 

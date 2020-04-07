@@ -18,7 +18,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         help_text="If you are company,enter Company name."
     )
 
-    email = models.CharField(
+    email = models.EmailField(
         db_index=True,
         max_length=50,
         unique=True,
@@ -39,7 +39,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
 
     objects = user.UserManager()
 
-    secondary_email = models.CharField(
+    secondary_email = models.EmailField(
         blank=True,
         db_index=True,
         max_length=50,
