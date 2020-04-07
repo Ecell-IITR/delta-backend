@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.contrib.auth import authenticate
 
 from rest_framework import serializers
-from rest_framework_jwt.settings import api_settings
 from rest_framework.authtoken.models import Token
 
 
