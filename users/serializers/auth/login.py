@@ -44,7 +44,7 @@ class LoginSerializer(serializers.Serializer):
         #     raise serializers.ValidationError(
         #         'This user has been deactivated.'
         #     )
-        token = Token.objects.create(user=user)
+        token = Token.objects.get_or_create(user=user)
         return {
             'id': user.id,
             'username': user.username,
