@@ -20,11 +20,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
-    password2 = serializers.CharField(
-        style={'input_type': 'password'},
-        write_only=True
-    )
-
     token = serializers.SerializerMethodField(
         read_only=True
     )
@@ -65,16 +60,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         return token
 
     def validate(self, data):
-        password = data.get('password')
-        password2 = data.get('password2')
-
         check = data.get('is_student') or data.get('is_company') or False
 
         if check is not True:
             raise serializers.ValidationError("Role must be defined!")
-
-        if password != password2:
-            raise serializers.ValidationError("Passwords must match")
 
         return data
 
@@ -87,13 +76,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data.get('email'),
         )
         if validated_data.get('is_student'):
-            person.is_student = True
+            person.role = 'Student'
             student = Student.objects.create(
                 person=person
             )
             student.save()
         elif validated_data.get('is_company'):
-            person.is_company = True
+            person.role = 'Company'
             company = Company.objects.create(
                 person=person
             )

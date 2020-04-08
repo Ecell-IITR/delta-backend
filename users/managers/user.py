@@ -1,5 +1,7 @@
 from django.contrib.auth import models as auth_models
 
+from users.constants import GET_ROLE_TYPE
+
 
 class UserManager(auth_models.BaseUserManager):
     """
@@ -21,7 +23,7 @@ class UserManager(auth_models.BaseUserManager):
             username=username,
             email=email,
             is_admin=is_admin,
-        )
+            role_type=GET_ROLE_TYPE.ADMIN)
         user.set_password(password)
         user.save()
         return user

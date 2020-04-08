@@ -1,10 +1,11 @@
 from users.serializers.auth import (
-    LoginSerializer,
     RegisterSerializer,
 )
 from users.serializers.person import (
     PersonSerializer
 )
+
+from users.serializers.social_link import SocialLinkSerializer
 
 from users.serializers.roles import (
     StudentSerializer,

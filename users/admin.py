@@ -7,11 +7,14 @@ from users.models.roles import Student, Company
 from users.models.person import Person
 from users.models.social_link import SocialLink
 
+
 class PersonChangeForm(forms.ModelForm):
+
     """
     Replicate the form shown when the user model supplied by Django is not
     replaced with our own by copying most of the code
     """
+
     password = auth_forms.ReadOnlyPasswordHashField(
         help_text="Raw passwords are not stored, so there is no way to see "
                   "this user's password, but you can change the password "
@@ -59,18 +62,25 @@ class PersonAdmin(auth_admin.UserAdmin):
                 'user_permissions',
             )
         }),
+        ('Information', {
+            'fields': (
+                'role_type',
+                'secondary_email',
+                'profile_image'
+            )
+        }),
     )
 
     list_display = (
         'username',
         'email',
         'last_login',
-        'is_company',
-        'is_student'
+        'role_type',
     )
+    readonly_fields = ('role_type', )
     list_filter = tuple()
 
-    search_fields = ['id', 'email']
+    search_fields = ['id', 'email', 'username']
 
 
 admin.site.register(Person, PersonAdmin)

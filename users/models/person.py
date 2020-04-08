@@ -3,7 +3,9 @@ from utilities.models import TimestampedModel
 from django.contrib.auth.models import (
     AbstractUser
 )
+
 from users.managers import user
+from users.constants import GET_ROLE_TYPE
 
 
 class AbstractPerson(AbstractUser, TimestampedModel):
@@ -49,15 +51,14 @@ class AbstractPerson(AbstractUser, TimestampedModel):
     profile_image = models.ImageField(
         upload_to="profile_image/",
         default="null",
-        help_text="If you are company,enter company icon."
+        help_text="If you are company,enter company icon.",
+        blank=True
     )
 
-    is_company = models.BooleanField(
-        default=False
-    )
-
-    is_student = models.BooleanField(
-        default=False
+    role_type = models.CharField(
+        max_length=255,
+        default=GET_ROLE_TYPE.STUDENT,
+        verbose_name="User role"
     )
 
     class Meta:
