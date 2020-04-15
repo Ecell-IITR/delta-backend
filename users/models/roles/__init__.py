@@ -8,3 +8,7 @@ from users.models.roles.student import (
 
     Student
 )
+
+from users.models.roles.social_link import (
+    SocialLink
+)

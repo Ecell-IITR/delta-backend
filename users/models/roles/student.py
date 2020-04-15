@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from users.models.person import Person
-from users.models.social_link import SocialLink
+from users.models.roles.social_link import SocialLink
 from django.core.validators import FileExtensionValidator
 import gzip
 
@@ -40,7 +40,8 @@ class AbstractStudent(models.Model):
     year = models.CharField(max_length=55, blank=True, verbose_name="Year")
 
     social_links = models.ManyToManyField(
-        to=SocialLink, related_name="social_links")
+        to=SocialLink, related_name="social_links", blank=True
+    )
 
     skills = models.ManyToManyField(
         to="utilities.Skill", related_name="student_skill", blank=True

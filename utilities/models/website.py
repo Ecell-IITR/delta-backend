@@ -18,7 +18,7 @@ class Website(TimestampedModel):
         max_length=200, null=True, blank=True, validators=[URLValidator],
     )
     website_logo = models.ImageField(
-        upload_to="social_link_logo/", default="null", validators=[validate_image]
+        upload_to="social_link_logo/", default="null", validators=[validate_image], blank=True
     )
 
     def __str__(self):

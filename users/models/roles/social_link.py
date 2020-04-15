@@ -11,5 +11,9 @@ class SocialLink(models.Model):
         max_length=200, validators=[URLValidator],
     )
 
-    def __str__(self):
-        return self.website.name
+    class Meta:
+        """
+        Meta class for Student
+        """
+
+        verbose_name_plural = "Socila Links"

@@ -3,9 +3,8 @@ from django import forms
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import admin as auth_admin
 
-from users.models.roles import Student, Company
+from users.models.roles import Student, Company, SocialLink
 from users.models.person import Person
-from users.models.social_link import SocialLink
 
 
 class PersonChangeForm(forms.ModelForm):
@@ -88,7 +87,7 @@ admin.site.register(Person, PersonAdmin)
 models = [
     Company,
     Student,
-    SocialLink,
+    SocialLink
 ]
 
 for model in models:
