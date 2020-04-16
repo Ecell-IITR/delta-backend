@@ -1,9 +1,12 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from post.models.post import AbstractPost
+from post.utils import unique_slug_generator
 
 
-class AbstractProject(AbstractPost):
+class Project(AbstractPost):
     """
     This model holds information pertaining to a Project
     """
@@ -15,7 +18,8 @@ class AbstractProject(AbstractPost):
     )
 
     project_file = models.FileField(
-        verbose_name='Project file'
+        verbose_name='Project file',
+        blank=True
     )
 
     approx_duration = models.CharField(
@@ -30,31 +34,19 @@ class AbstractProject(AbstractPost):
         blank=True
     )
 
-    class Meta:
-        """
-        Meta class for AbstractProject
-        """
-
-        abstract = True
-
     def __str__(self):
         """
         Return the string representation of the model
         :return: the string representation of the model
         """
 
-        slug = self.slug
+        title = self.title
         user = self.user
-        return f'{slug} ({user.username})'
+        return f'{title} - {user.username}'
 
 
-class Project(AbstractProject):
-    """
-    This class implements AbstractProject
-    """
-
-    class Meta:
-        """
-        Meta class for Project
-        """
-        verbose_name_plural = 'Project'
+@receiver(post_save, sender=Project)
+def create_project(sender, instance=None, created=False, **kwargs):
+    if created or instance.slug is None:
+        instance.slug = unique_slug_generator(instance)
+        instance.save()

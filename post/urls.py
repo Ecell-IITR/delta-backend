@@ -2,12 +2,12 @@ from django.urls import path, include
 
 from post.views import (
     PostViewSet,
-    BookmarkView
+    BookmarkView,
+    CreatePost
 )
 
 Post = PostViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
+    'get': 'list'
 })
 
 IndividualPost = PostViewSet.as_view({
@@ -16,7 +16,8 @@ IndividualPost = PostViewSet.as_view({
 })
 
 urlpatterns = [
-    path('', Post),
+    path(r'create/', CreatePost.as_view()),
+    path(r'', Post),
     path(r'<slug:slug>/', IndividualPost),
     path(r'bookmark/<slug:slug>/', BookmarkView.as_view())
 ]

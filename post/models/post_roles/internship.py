@@ -1,6 +1,10 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from post.models.post import AbstractPost
+from post.utils import unique_slug_generator
+
 
 WORK_TYPE = {
     (
@@ -12,7 +16,7 @@ WORK_TYPE = {
 }
 
 
-class AbstractInternship(AbstractPost):
+class Internship(AbstractPost):
     """
     This model holds information pertaining to a Internship
     """
@@ -54,31 +58,18 @@ class AbstractInternship(AbstractPost):
         blank=True
     )
 
-    class Meta:
-        """
-        Meta class for AbstractInternship
-        """
-
-        abstract = True
-
     def __str__(self):
         """
         Return the string representation of the model
         :return: the string representation of the model
         """
-
-        slug = self.slug
+        title = self.title
         user = self.user
-        return f'{slug} ({user.username})'
+        return f'{title} - {user.username}'
 
 
-class Internship(AbstractInternship):
-    """
-    This class implements AbstractInternship
-    """
-
-    class Meta:
-        """
-        Meta class for Internship
-        """
-        verbose_name_plural = 'Internship'
+@receiver(post_save, sender=Internship)
+def create_internship(sender, instance=None, created=False, **kwargs):
+    if created or instance.slug is None:
+        instance.slug = unique_slug_generator(instance)
+        instance.save()

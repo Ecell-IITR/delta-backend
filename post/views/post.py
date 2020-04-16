@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework import generics
 
 from post.serializers import (
     CompetitionSerializer,
@@ -83,21 +84,6 @@ class PostViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        elif self.action in ['create']:
-            data = self.request.data
-
-            if data['internship']:
-                return InternshipSerializer
-
-            elif data['project']:
-                return ProjectSerializer
-
-            elif data['competition']:
-                return CompetitionSerializer
-
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-
     def list(self, request, *args, **kwargs):
 
         internship_serializer = InternshipSerializer(
@@ -127,25 +113,36 @@ class PostViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    def create(self, request, *args, **kwargs):
 
-        data = request.data
+class CreatePost(generics.CreateAPIView):
 
-        serializer_context = {
-            'user': request.user,
-            'request': request
-        }
+    permission_classes = [IsAuthenticated, ]
 
-        serializer = self.get_serializer_class()(
-            data=data,
-            context=serializer_context
-        )
+    def get_serializer_context(self):
+        return {"user": self.request.user}
 
-        serializer.is_valid(
-            raise_exception=True
-        )
+    def get_serializer_class(self):
+        post_type = self.request.data.get('post_type')
 
-        serializer.save()
+        if post_type == 'internship':
+            return InternshipSerializer
+        elif post_type == 'project':
+            return ProjectSerializer
+        elif post_type == 'competition':
+            return CompetitionSerializer
+
+        return None
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.data.get('post_type'):
+            return Response('post_type field required', status=status.HTTP_400_BAD_REQUEST)
+
+        if not self.request.data.get('post_type') in ['internship', 'project', 'competition']:
+            return Response({'msg': 'post_type field value is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=self.request.user)
 
         return Response(
             serializer.data,

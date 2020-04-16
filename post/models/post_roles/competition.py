@@ -1,6 +1,9 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from post.models.post import AbstractPost
+from post.utils import unique_slug_generator
 
 COMPETITION_TYPE = (
     (
@@ -12,7 +15,7 @@ COMPETITION_TYPE = (
 )
 
 
-class AbstractCompetition(AbstractPost):
+class Competition(AbstractPost):
     """
     This model holds information pertaining to a Competition
     """
@@ -38,31 +41,19 @@ class AbstractCompetition(AbstractPost):
         verbose_name='Link to apply fro competition'
     )
 
-    class Meta:
-        """
-        Meta class for AbstractCompetition
-        """
-
-        abstract = True
-
     def __str__(self):
         """
         Return the string representation of the model
         :return: the string representation of the model
         """
 
-        slug = self.slug
+        title = self.title
         user = self.user
-        return f'{slug} ({user.username})'
+        return f'{title} - {user.username}'
 
 
-class Competition(AbstractCompetition):
-    """
-    This class implements AbstractCompetition
-    """
-
-    class Meta:
-        """
-        Meta class for Competition
-        """
-        verbose_name_plural = 'Competition'
+@receiver(post_save, sender=Competition)
+def create_competition(sender, instance=None, created=False, **kwargs):
+    if created or instance.slug is None:
+        instance.slug = unique_slug_generator(instance)
+        instance.save()

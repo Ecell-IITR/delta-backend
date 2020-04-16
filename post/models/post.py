@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save
-
-from post.utils import unique_slug_generator
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from utilities.models import TimestampedModel
 from users.models.person import Person
@@ -15,8 +15,9 @@ class AbstractPost(TimestampedModel):
 
     slug = models.SlugField(
         db_index=True,
-        unique=True,
-        max_length=255
+        max_length=255,
+        null=True,
+        blank=True
     )
 
     user = models.ForeignKey(
@@ -46,7 +47,7 @@ class AbstractPost(TimestampedModel):
         verbose_name="Required skill Set"
     )
 
-    is_public = models.BooleanField(
+    is_published = models.BooleanField(
         default=False,
         verbose_name="Published"
     )
@@ -70,3 +71,16 @@ class AbstractPost(TimestampedModel):
         """
 
         return self.user
+
+    def clean(self, *args, **kwargs):
+        errors = {}
+        now = timezone.now()
+        if hasattr(self, 'post_expiry_date') and self.post_expiry_date:
+            if self.post_expiry_date < now:
+                errors.setdefault('post_expiry_date', []).append(
+                    'Post expiry date cannot be less than current time.')
+
+        if len(errors) > 0:
+            raise ValidationError(errors)
+
+        super(AbstractPost, self).clean(*args, **kwargs)
