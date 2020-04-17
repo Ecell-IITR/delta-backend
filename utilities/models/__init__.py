@@ -5,3 +5,4 @@ from utilities.models.website import Website
 from utilities.models.country import Country
 from utilities.models.state import State
 from utilities.models.location import Location
+from utilities.models.tags import Tag
