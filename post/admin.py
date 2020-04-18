@@ -4,6 +4,7 @@ from post.models import (
     Competition,
     Internship,
     Project,
+    AppliedPostEntries
 )
 
 
@@ -33,7 +34,7 @@ class InternshipAdminForm(forms.ModelForm):
 
 class InternshipAdmin(admin.ModelAdmin):
     form = InternshipAdminForm
-    list_display = ('title', 'is_verified', 'is_published')
+    list_display = ('title', 'description', 'is_verified', 'is_published')
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
     def get_changelist_form(self, request, **kwargs):
@@ -81,7 +82,7 @@ class ProjectAdminForm(forms.ModelForm):
 
 class ProjectAdmin(admin.ModelAdmin):
     form = ProjectAdminForm
-    list_display = ('title', 'is_verified', 'is_published')
+    list_display = ('title', 'description', 'is_verified', 'is_published')
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
     def get_changelist_form(self, request, **kwargs):
@@ -129,7 +130,7 @@ class CompetitionAdminForm(forms.ModelForm):
 
 class CompetitionAdmin(admin.ModelAdmin):
     form = CompetitionAdminForm
-    list_display = ('title', 'is_verified', 'is_published')
+    list_display = ('title', 'description', 'is_verified', 'is_published')
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
     def get_changelist_form(self, request, **kwargs):
@@ -149,3 +150,11 @@ class CompetitionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Competition, CompetitionAdmin)
+
+
+class AppliedPostEntriesAdmin(admin.ModelAdmin):
+    list_display = ('user', 'post', 'created_at')
+    readonly_fields = ('created_at', 'updated_at')
+
+
+admin.site.register(AppliedPostEntries, AppliedPostEntriesAdmin)

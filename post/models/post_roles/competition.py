@@ -2,17 +2,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from common.field_choices import POST_FIELD_CHOICES
 from post.models.post import AbstractPost
 from post.utils import unique_slug_generator
-
-COMPETITION_TYPE = (
-    (
-        'Online', 'Online'
-    ),
-    (
-        'Onspot', 'Onspot'
-    )
-)
 
 
 class Competition(AbstractPost):
@@ -22,7 +14,7 @@ class Competition(AbstractPost):
 
     competition_type = models.CharField(
         max_length=255,
-        choices=COMPETITION_TYPE,
+        choices=POST_FIELD_CHOICES.COMPETITION_TYPE,
         default='onspot',
         verbose_name="Competition type"
     )

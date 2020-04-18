@@ -3,3 +3,5 @@ from post.models.post_roles import (
     Competition,
     Project
 )
+
+from post.models.applied_post_entries import AppliedPostEntries

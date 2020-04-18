@@ -20,49 +20,31 @@ class BookmarkView(generics.GenericAPIView):
 
     permission_classes = [IsAuthenticated, IsStudent]
 
+    @staticmethod
+    def check_post_object(slug):
+        if Internship.objects.filter(slug=slug).exists():
+            return Internship.objects.get(slug=slug)
+
+        elif Project.objects.filter(slug=slug).exists():
+            return Project.objects.get(slug=slug)
+
+        elif Competition.objects.filter(slug=slug).exists():
+            return Competition.objects.get(slug=slug)
+
+        return None
+
     def post(self, request, slug=None):
-        """
-        This view marks posts as starred or unstarred
-        We recieve the following data:
-        slug: slug
-        keyword: str  (star, unstar)
-        """
-
-        data = request.data
-
         student = Student.objects.get(person=request.user)
-
-        keyword = data['keyword']
-
+        keyword = request.data.get('keyword')
         slug = self.kwargs['slug']
 
-        if Internship.objects.get(slug=slug):
-            post = Internship.objects.get(
-                slug=slug
-            )
+        post = self.check_post_object(slug)
 
-        elif Project.objects.get(slug=slug):
-            post = Project.objects.get(
-                slug=slug
-            )
-
-        elif Competition.objects.get(slug=slug):
-            post = Competition.objects.get(
-                slug=slug
-            )
-
-        else:
-            return Response(
-                {
-                    "error_message": 'Slug doesn\'t exists'
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        if post is None:
+            return Response({"msg": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
         if keyword not in ['star', 'unstar']:
-            return Response(
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if keyword == 'star':
             post.bookmarks.add(student)
@@ -72,9 +54,4 @@ class BookmarkView(generics.GenericAPIView):
 
         post.save()
 
-        return Response(
-            {
-                'success': "Successfully starred!"
-            },
-            status=status.HTTP_200_OK
-        )
+        return Response({'msg': "Success"}, status=status.HTTP_201_CREATED)
