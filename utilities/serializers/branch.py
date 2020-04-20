@@ -6,4 +6,4 @@ from utilities.models import Branch
 class BranchSerializer (serializers.ModelSerializer):
     class Meta:
         model = Branch
-        fields = '__all__'
+        exclude = ('created_at', 'updated_at')

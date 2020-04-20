@@ -7,14 +7,10 @@ import gzip
 
 
 class AbstractStudent(models.Model):
-    """
-    This model holds information pertaining to a student
-    """
 
-    person = models.OneToOneField(
-        to=Person, on_delete=models.CASCADE, related_name="student"
-    )
-
+    person = models.OneToOneField(to=Person, on_delete=models.CASCADE, related_name="student")
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     branch = models.ForeignKey(
         to="utilities.Branch",
         related_name="student_branch",
@@ -31,26 +27,13 @@ class AbstractStudent(models.Model):
                            message="Phone Number Not Valid",)
         ],
     )
-    enrollment_number = models.CharField(
-        max_length=20, blank=True, verbose_name="Enrollment number"
-    )
-
+    enrollment_number = models.CharField(max_length=20, blank=True, verbose_name="Enrollment number")
     course = models.CharField(max_length=55, blank=True, verbose_name="Course")
-
     year = models.CharField(max_length=55, blank=True, verbose_name="Year")
-
-    social_links = models.ManyToManyField(
-        to=SocialLink, related_name="social_links", blank=True
-    )
-
-    skills = models.ManyToManyField(
-        to="utilities.Skill", related_name="student_skill", blank=True
-    )
-
+    social_links = models.ManyToManyField(to=SocialLink, related_name="social_links", blank=True)
+    skills = models.ManyToManyField(to="utilities.Skill", related_name="student_skill", blank=True)
     interest = models.TextField(blank=True, verbose_name="Interest")
-
     bio = models.TextField(verbose_name="Bio", blank=True)
-
     achievements = models.TextField(verbose_name="Achievements", blank=True)
     resume = models.FileField(verbose_name="Resume", blank=True, validators=[
                               FileExtensionValidator(allowed_extensions=['pdf'])])
@@ -67,19 +50,11 @@ class AbstractStudent(models.Model):
         abstract = True
 
     def __str__(self):
-        """
-        Return the string representation of the model
-        :return: the string representation of the model
-        """
-
         person = self.person
         return f"{person}"
 
 
 class Student(AbstractStudent):
-    """
-    This class implements AbstractStudent
-    """
 
     class Meta:
         """
