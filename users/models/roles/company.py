@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from users.models.person import Person
 
+from users.models.person import Person
+from users.constants import GET_ROLE_TYPE
 
 class AbstractCompany(models.Model):
     """
@@ -44,6 +45,19 @@ class AbstractCompany(models.Model):
 
         person = self.person
         return f"{person}"
+
+    def clean(self, *args, **kwargs):
+        errors = {}
+        if hasattr(self, 'person') and self.person:
+            if self.person.role_type != GET_ROLE_TYPE.COMPANY:
+                errors.setdefault('person', []).append(
+                    'Person object has role_type equal to company.')
+
+        if len(errors) > 0:
+            raise ValidationError(errors)
+
+        super(AbstractPost, self).clean(*args, **kwargs)
+
 
 
 class Company(AbstractCompany):

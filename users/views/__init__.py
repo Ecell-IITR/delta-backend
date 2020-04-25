@@ -3,3 +3,4 @@ from users.views.auth import (
     RegisterAPIView
 )
 from users.views.person import SelfProfile, BasicUser
+from users.views.organization import OrganizationList

@@ -1,6 +1,7 @@
 import datetime
 
 from django.utils import timezone
+from django.contrib.auth.models import update_last_login
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
@@ -10,6 +11,7 @@ from users.models import (
     Company,
     Person
 )
+from users.constants import GET_ROLE_TYPE
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -24,23 +26,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    expires = serializers.SerializerMethodField(
-        read_only=True
-    )
-
-    message = serializers.SerializerMethodField(
-        read_only=True
-    )
-
     class Meta:
         model = Person
-        fields = '__all__'
-
-    def get_message(self, *args, **kwargs):
-        '''
-        Return the successful registeration message
-        '''
-        return 'Thank You for registering pls verify your email'
+        exclude = ('last_login', 'is_superuser', 'date_joined', 'created_at', 'updated_at', 'is_active', 'is_admin',
+                    'groups', 'user_permissions',)
 
     def validate_email(self, value):
         email = Person.objects.filter(email__iexact=value)
@@ -57,32 +46,32 @@ class RegisterSerializer(serializers.ModelSerializer):
     def get_token(self, obj):
         user = obj
         token = Token.objects.create(user=user)
-        return token
+        return token.key
 
     def validate(self, data):
-        check = data.get('is_student') or data.get('is_company') or False
-
-        if check is not True:
+        check = data.get('role_type') or None
+        if check is None:
             raise serializers.ValidationError("Role must be defined!")
-
         return data
 
-    def get_expires(self, obj):
-        return timezone.now() + expire_delta - datetime.timedelta(seconds=200)
-
     def create(self, validated_data):
-        person = Person.objects.create(
-            username=validated_data.get('username'),
-            email=validated_data.get('email'),
-        )
-        if validated_data.get('is_student'):
-            person.role = 'Student'
+ 
+        if validated_data.get('role_type') == GET_ROLE_TYPE.STUDENT:
+            person = Person.objects.create(
+                username=validated_data.get('username'),
+                email=validated_data.get('email'),
+                role_type=GET_ROLE_TYPE.STUDENT
+            )
             student = Student.objects.create(
                 person=person
             )
             student.save()
-        elif validated_data.get('is_company'):
-            person.role = 'Company'
+        elif validated_data.get('role_type') == GET_ROLE_TYPE.COMPANY:
+            person = Person.objects.create(
+                username=validated_data.get('username'),
+                email=validated_data.get('email'),
+                role_type=GET_ROLE_TYPE.COMPANY
+            )
             company = Company.objects.create(
                 person=person
             )
@@ -90,4 +79,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         person.set_password(validated_data.get('password'))
         person.save()
+
+        update_last_login(None, person)
         return person
