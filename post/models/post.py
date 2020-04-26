@@ -39,7 +39,6 @@ class AbstractPost(TimestampedModel):
     )
 
     post_expiry_date = models.DateTimeField(
-        auto_now_add=True,
         blank=True,
         verbose_name="Post expiry date"
     )

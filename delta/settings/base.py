@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # Docs
     "rest_framework_swagger",
     # Apps
+    "dal",
+    "dal_select2",
     "users",
     "post",
     "utilities",

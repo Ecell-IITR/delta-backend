@@ -6,6 +6,7 @@ from post.models import (
     Project,
     AppliedPostEntries
 )
+from utilities.models import Tag
 
 
 class InternshipAdminForm(forms.ModelForm):
