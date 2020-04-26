@@ -3,6 +3,7 @@ from rest_framework import serializers
 from users.serializers import PersonSerializer
 
 from post.models import Competition
+from utilities.serializers import TagSerializer
 
 
 class CompetitionSerializer(serializers.ModelSerializer):
@@ -10,7 +11,7 @@ class CompetitionSerializer(serializers.ModelSerializer):
     user = PersonSerializer(
         read_only=True
     )
-
+    tags = TagSerializer(many=True)
     # bookmark = serializers.SerializerMethodField('is_bookmark')
 
     class Meta:
