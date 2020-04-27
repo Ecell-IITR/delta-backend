@@ -15,4 +15,4 @@ class SocialLink(models.Model):
         verbose_name_plural = "Socila Links"
     
     def __str__(self):
-        return self.website
+        return self.website.name

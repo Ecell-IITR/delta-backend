@@ -83,14 +83,25 @@ class PersonAdmin(auth_admin.UserAdmin):
     readonly_fields = ('role_type', )
     list_filter = tuple()
 
-    search_fields = ['id', 'email', 'username', 'first_name', 'last_name']
+    search_fields = ['id', 'email', 'username']
 
 
 admin.site.register(Person, PersonAdmin)
 
+
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'availability_status')
+
+admin.site.register(Student, StudentAdmin)
+
+
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('company_domain', 'phone_number')
+
+admin.site.register(Company, CompanyAdmin)
+
+
 models = [
-    Company,
-    Student,
     SocialLink
 ]
 

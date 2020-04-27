@@ -37,6 +37,7 @@ class AbstractStudent(models.Model):
     achievements = models.TextField(verbose_name="Achievements", blank=True)
     resume = models.FileField(verbose_name="Resume", blank=True, validators=[
                               FileExtensionValidator(allowed_extensions=['pdf'])])
+    availability_status = models.BooleanField(default=True)
 
     # def save(self, *args, **kwargs):
     #     input_resume=open(resume,"wb")
