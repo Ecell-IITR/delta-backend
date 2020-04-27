@@ -7,6 +7,7 @@ from users.serializers.person import (
 
 from users.serializers.social_link import SocialLinkSerializer
 
+from users.serializers.relation import FollowUserSerializer
 from users.serializers.roles import (
     StudentSerializer,
     CompanySerializer
