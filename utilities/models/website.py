@@ -3,6 +3,8 @@ from django.core.validators import URLValidator
 from utilities.models import TimestampedModel
 from django.core.exceptions import ValidationError
 
+from common.get_file_path import get_website_logo_image_path
+
 
 def validate_image(image_obj):
     image_size = image_obj.file.size
@@ -18,7 +20,7 @@ class Website(TimestampedModel):
         max_length=200, null=True, blank=True, validators=[URLValidator],
     )
     website_logo = models.ImageField(
-        upload_to="social_link_logo/", validators=[validate_image], blank=True, null=True
+        upload_to=get_website_logo_image_path, validators=[validate_image], blank=True, null=True
     )
 
     class Meta:

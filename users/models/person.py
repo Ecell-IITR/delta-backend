@@ -4,6 +4,8 @@ from django.contrib.auth.models import (
     AbstractUser
 )
 
+from common.get_file_path import get_profile_image_path
+
 from users.managers import user
 from users.constants import GET_ROLE_TYPE
 
@@ -49,7 +51,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
     )
 
     profile_image = models.ImageField(
-        upload_to="profile_image/",
+        upload_to=get_profile_image_path,
         help_text="If you are company,enter company icon.",
         blank=True,
         null=True

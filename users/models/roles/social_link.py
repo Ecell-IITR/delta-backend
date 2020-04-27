@@ -3,7 +3,6 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from utilities.models import Website
 
-
 class SocialLink(models.Model):
 
     website = models.ForeignKey(Website, on_delete=models.CASCADE)

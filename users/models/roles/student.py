@@ -3,8 +3,6 @@ from django.core.validators import RegexValidator
 from users.models.person import Person
 from users.models.roles.social_link import SocialLink
 from django.core.validators import FileExtensionValidator
-import gzip
-
 
 class AbstractStudent(models.Model):
 

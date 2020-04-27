@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+from rest_framework.exceptions import ValidationError 
+
 from users.models.person import Person
 from users.constants import GET_ROLE_TYPE
 
@@ -56,7 +58,7 @@ class AbstractCompany(models.Model):
         if len(errors) > 0:
             raise ValidationError(errors)
 
-        super(AbstractPost, self).clean(*args, **kwargs)
+        super(AbstractCompany, self).clean(*args, **kwargs)
 
 
 
