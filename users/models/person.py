@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
 from users.managers import user
 from users.constants import GET_ROLE_TYPE
 
+
 class AbstractPerson(AbstractUser, TimestampedModel):
     """
     This model describes a person who uses Delta
@@ -49,9 +50,9 @@ class AbstractPerson(AbstractUser, TimestampedModel):
 
     profile_image = models.ImageField(
         upload_to="profile_image/",
-        default="null",
         help_text="If you are company,enter company icon.",
-        blank=True
+        blank=True,
+        null=True
     )
 
     role_type = models.CharField(
@@ -76,19 +77,6 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         username = self.username
         email = self.email
         return f'{username}-{email}'
-
-    def has_perm(self, perm, obj=None):
-        """
-        Add an alternative check to the default check for permissions
-        :param perm: the permission to check for
-        :param obj: the object on which to check permissions instead of self
-        :return: True if the user is an administrative IMGian, false otherwise
-        """
-
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
 
     @property
     def is_staff(self):

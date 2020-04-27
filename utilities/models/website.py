@@ -18,11 +18,11 @@ class Website(TimestampedModel):
         max_length=200, null=True, blank=True, validators=[URLValidator],
     )
     website_logo = models.ImageField(
-        upload_to="social_link_logo/", default="null", validators=[validate_image], blank=True
+        upload_to="social_link_logo/", validators=[validate_image], blank=True, null=True
     )
+
+    class Meta:
+        verbose_name_plural = "Websites"
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name_plural = "websites"

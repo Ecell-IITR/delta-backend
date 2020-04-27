@@ -9,11 +9,10 @@ class SocialLink(models.Model):
     website = models.ForeignKey(Website, on_delete=models.CASCADE)
     profile_url = models.URLField(
         max_length=200, validators=[URLValidator],
-    )
+    )    
 
     class Meta:
-        """
-        Meta class for Student
-        """
-
         verbose_name_plural = "Socila Links"
+    
+    def __str__(self):
+        return self.website
