@@ -74,8 +74,6 @@ class PersonAdmin(auth_admin.UserAdmin):
 
     list_display = (
         'username',
-        'first_name',
-        'last_name',
         'email',
         'last_login',
         'role_type',
