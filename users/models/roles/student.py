@@ -8,7 +8,7 @@ import gzip
 
 class AbstractStudent(models.Model):
 
-    person = models.OneToOneField(to=Person, on_delete=models.CASCADE, related_name="student")
+    person = models.OneToOneField(to=Person, on_delete=models.CASCADE, related_name="student_profile")
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     branch = models.ForeignKey(

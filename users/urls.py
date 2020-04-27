@@ -17,6 +17,6 @@ urlpatterns = [
     path('auth/login/', LoginAPIView.as_view(), name="login"),
     path('user/', BasicUser.as_view(), name='basic-user'),
     path('profile/', SelfProfile.as_view(), name='self-profile'),
-    path('organization-list/', OrganizationList.as_view(), name='organization-list')
+    path('organization-list/', OrganizationList.as_view(), name='organization-list'),
     # path('update/<username>/', EditAPIView.as_view()),
 ]

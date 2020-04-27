@@ -63,6 +63,8 @@ class PersonAdmin(auth_admin.UserAdmin):
         }),
         ('Information', {
             'fields': (
+                'first_name',
+                'last_name',
                 'role_type',
                 'secondary_email',
                 'profile_image'
@@ -72,6 +74,8 @@ class PersonAdmin(auth_admin.UserAdmin):
 
     list_display = (
         'username',
+        'first_name',
+        'last_name',
         'email',
         'last_login',
         'role_type',
@@ -79,7 +83,7 @@ class PersonAdmin(auth_admin.UserAdmin):
     readonly_fields = ('role_type', )
     list_filter = tuple()
 
-    search_fields = ['id', 'email', 'username']
+    search_fields = ['id', 'email', 'username', 'first_name', 'last_name']
 
 
 admin.site.register(Person, PersonAdmin)

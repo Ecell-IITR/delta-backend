@@ -7,7 +7,6 @@ from django.contrib.auth.models import (
 from users.managers import user
 from users.constants import GET_ROLE_TYPE
 
-
 class AbstractPerson(AbstractUser, TimestampedModel):
     """
     This model describes a person who uses Delta

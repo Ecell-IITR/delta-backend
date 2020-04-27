@@ -10,7 +10,7 @@ class AbstractCompany(models.Model):
     """
 
     person = models.OneToOneField(
-        to=Person, on_delete=models.CASCADE, related_name="company"
+        to=Person, on_delete=models.CASCADE, related_name="company_profile"
     )
 
     company_domain = models.CharField(
