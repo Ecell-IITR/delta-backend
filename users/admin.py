@@ -5,7 +5,6 @@ from django.contrib.auth import admin as auth_admin
 
 from users.models.roles import Student, Company, SocialLink
 from users.models.person import Person
-from users.models.social_link import SocialLink
 from users.models.relation import FollowUser
 
 
@@ -103,13 +102,6 @@ admin.site.register(Company, CompanyAdmin)
 
 # models = [
 #     SocialLink
-class UserRelationshipAdmin(admin.ModelAdmin):
-    list_display = (
-        'user_from',
-        'rel_type',
-        'user_to'
-    )
-    list_filter = ('rel_type',)
 
 
 class FollowUserAdmin(admin.ModelAdmin):
@@ -122,8 +114,7 @@ class FollowUserAdmin(admin.ModelAdmin):
 admin.site.register(FollowUser, FollowUserAdmin)
 
 models = [
-    Company,
-    Student,
+
     SocialLink,
 
 ]
