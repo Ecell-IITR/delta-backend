@@ -63,8 +63,6 @@ class PersonAdmin(auth_admin.UserAdmin):
         }),
         ('Information', {
             'fields': (
-                'first_name',
-                'last_name',
                 'role_type',
                 'secondary_email',
                 'profile_image'
