@@ -4,7 +4,5 @@ from users.views.auth import (
 )
 from users.views.person import SelfProfile, BasicUser
 from users.views.organization import OrganizationList
-from users.views.relation import (FollowUserView,
-                                  FollowersView,
-                                  DeleteFollow,
-                                  FollowingView)
+from users.views.action_user_relation import ActionView
+from users.views.list_followers_following import FollowersList, FollowingList

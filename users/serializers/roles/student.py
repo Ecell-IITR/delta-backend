@@ -14,3 +14,10 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
+
+class StudentMinimumSerializer(serializers.ModelSerializer):
+    person = PersonSerializer()
+
+    class Meta:
+        model = Student
+        fields = ('person', 'first_name', 'last_name', 'enrollment_number', )

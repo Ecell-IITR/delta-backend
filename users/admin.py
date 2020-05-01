@@ -5,7 +5,7 @@ from django.contrib.auth import admin as auth_admin
 
 from users.models.roles import Student, Company, SocialLink
 from users.models.person import Person
-from users.models.relation import FollowUser
+from users.models.action_user_relation import ActionUserRelation
 
 
 class PersonChangeForm(forms.ModelForm):
@@ -104,20 +104,14 @@ admin.site.register(Company, CompanyAdmin)
 #     SocialLink
 
 
-class FollowUserAdmin(admin.ModelAdmin):
-    list_display = (
-        'follower',
-        'following'
-    )
+class ActionUserRelationAdmin(admin.ModelAdmin):
+    list_display = ('action_by_person', 'action', 'action_on_person',)
+    readonly_fields = ('created_at',)
 
 
-admin.site.register(FollowUser, FollowUserAdmin)
+admin.site.register(ActionUserRelation, ActionUserRelationAdmin)
 
-models = [
-
-    SocialLink,
-
-]
+models = [SocialLink, ]
 
 for model in models:
     admin.site.register(model)

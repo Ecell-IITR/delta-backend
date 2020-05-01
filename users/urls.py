@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from users.views import (
     LoginAPIView,
     RegisterAPIView,
@@ -6,8 +6,7 @@ from users.views import (
     SelfProfile,
     OrganizationList
 )
-from users.views import (FollowUserView, FollowersView,
-                         FollowingView, DeleteFollow)
+from users.views import ActionView, FollowersList, FollowingList
 
 # User = WhoAmIViewSet.as_view({
 #     'get': 'list',
@@ -22,10 +21,8 @@ urlpatterns = [
     path('profile/', SelfProfile.as_view(), name='self-profile'),
     path('organization-list/', OrganizationList.as_view(), name='organization-list'),
     # path('update/<username>/', EditAPIView.as_view()),
-    path('follows/', FollowUserView.as_view(), name="follow"),
-    path('follows/<int:id1>/<int:id2>',
-         DeleteFollow.as_view(), name="delete_follow"),
-    path('followers/<int:pk>', FollowersView.as_view(), name="followers"),
-    path('following/<int:pk>', FollowingView.as_view(), name="followers")
+    re_path(r'action/(?P<action_key>[0-9]+)/(?P<username>[0-9a-zA-Z]+)/', ActionView.as_view(), name="follow-user"),
+    path('followers-list/', FollowersList.as_view(), name="followers-list"),
+    path('following-list/', FollowingList.as_view(), name="following-list")
 
 ]

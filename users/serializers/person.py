@@ -12,4 +12,5 @@ class PersonSerializer(serializers.ModelSerializer):
             'email',
             'profile_image',
             'secondary_email',
+            'role_type'
         ]
