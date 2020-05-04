@@ -11,3 +11,13 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
+
+
+class CompanyMinimumSerializer(serializers.ModelSerializer):
+    person = PersonSerializer(
+        read_only=True
+    )
+
+    class Meta:
+        model = Company
+        fields = ('person', 'company_domain', 'phone_number', )

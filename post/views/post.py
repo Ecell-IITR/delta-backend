@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import generics
 
+from post.constants import POST_TYPE
 from post.serializers import (
     CompetitionSerializer,
     InternshipSerializer,
@@ -18,52 +19,30 @@ from post.models import (
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    """
-    This view shows some personal information of the currently logged in person
-    """
 
     permission_classes = [IsAuthenticated, ]
     lookup_field = 'slug'
 
     def get_queryset(self):
-        """
-        This function decides the queryset according to the type of
-        post
-        :return: the queryset
-        """
         slug = self.kwargs['slug']
 
         if self.action in ['retrieve', 'update']:
-
             if Internship.objects.filter(slug=slug):
                 return Internship.objects.filter(
                     slug=slug
                 )
-
             if Project.objects.filter(slug=slug):
                 return Project.objects.filter(
                     slug=slug
                 )
-
             if Competition.objects.filter(slug=slug):
                 return Competition.objects.filter(
                     slug=slug
                 )
 
-            return Response(
-                {
-                    "error_message": 'Slug doesn\'t exists'
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({ "error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_serializer_class(self):
-        """
-        This function decides the serializer class according to the type of
-        post
-        :return: the serializer class
-        """
-
         slug = self.kwargs['slug']
 
         if self.action in ['retrieve', 'update']:
@@ -85,33 +64,33 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
     def list(self, request, *args, **kwargs):
+        post_type = int(request.GET.get('post_type'))
+        data = []
 
-        internship_serializer = InternshipSerializer(
-            Internship.objects.all(),
-            context={'request': request},
-            many=True
-        )
+        if post_type:
+            if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
+                data = InternshipSerializer(
+                    Internship.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
+                    context={'request': request},
+                    many=True
+                ).data
 
-        project_serializer = ProjectSerializer(
-            Project.objects.all(),
-            context={'request': request},
-            many=True
-        )
+            elif post_type == POST_TYPE.PROJECT_POST_TYPE:
+                data = ProjectSerializer(
+                    Project.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
+                    context={'request': request},
+                    many=True
+                ).data
 
-        competition_serializer = CompetitionSerializer(
-            Competition.objects.all(),
-            context={'request': request},
-            many=True
-        )
+            elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+                data = CompetitionSerializer(
+                    Competition.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
+                    context={'request': request},
+                    many=True
+                ).data
 
-        return Response(
-            {
-                'internship': internship_serializer.data,
-                'competition': competition_serializer.data,
-                'project': project_serializer.data
-            },
-            status=status.HTTP_200_OK
-        )
+            return Response(data, status=status.HTTP_200_OK)
+        return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreatePost(generics.CreateAPIView):
@@ -135,10 +114,10 @@ class CreatePost(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if not self.request.data.get('post_type'):
-            return Response('post_type field required', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error_message':'post_type field required'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not self.request.data.get('post_type') in ['internship', 'project', 'competition']:
-            return Response({'msg': 'post_type field value is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error_message': 'post_type field value is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)

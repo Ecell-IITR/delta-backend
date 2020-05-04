@@ -79,7 +79,7 @@ class SelfProfile(generics.RetrieveUpdateAPIView):
             enrollment_number = data.get('enrollment_number') or None
             course = data.get('course') or None
             year = data.get('year') or None
-            social_link = data.get('social_link') or None
+            social_links = data.get('social_links') or None
             interest = data.get('interest') or None
             bio = data.get('bio') or None
             achievements = data.get('achievements') or None
@@ -116,22 +116,17 @@ class SelfProfile(generics.RetrieveUpdateAPIView):
                 year = year.strip()
                 user_profile.year = year
             
-            if social_link:
-                try:
+            if social_links:
+                for social_link in social_links:
                     website = get_object_or_404(Website, name=social_link.get('website_name') or None)
-                except Website.DoesNotExist:
-                    return Response({'error_message': 'Website not found'}, status=status.HTTP_400_BAD_REQUEST)
-                
-                profile_url = social_link.get('profile_url') or None
-                
-                if profile_url:
-                    if user_profile.social_links.filter(profile_url=profile_url, website=website).exists():
-                        return Response({'error_message': 'Already profile added for this website'}, status=status.HTTP_400_BAD_REQUEST)
-                    
-                    user_profile.social_links.create(website=website, profile_url=profile_url)
-
-                else:
-                    return Response({'error_message': 'Profile url not found!'}, status=status.HTTP_400_BAD_REQUEST)
+                    profile_url = social_link.get('profile_url') or None
+                    if profile_url:
+                        if user_profile.social_links.filter(profile_url=profile_url, website=website).exists():
+                            return Response({'error_message': f'Already profile added for {website.name}'}, status=status.HTTP_400_BAD_REQUEST)
+                        
+                        user_profile.social_links.create(website=website, profile_url=profile_url)
+                    else:
+                        return Response({'error_message': f'Profile url not found for {website.name}!'}, status=status.HTTP_400_BAD_REQUEST)
 
             if interest:
                 interest = interest.strip()

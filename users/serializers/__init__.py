@@ -11,5 +11,6 @@ from users.serializers.action_user_relation import ActionUserRelationSerializer
 from users.serializers.roles import (
     StudentSerializer,
     CompanySerializer,
-    StudentMinimumSerializer
+    StudentMinimumSerializer,
+    CompanyMinimumSerializer
 )
