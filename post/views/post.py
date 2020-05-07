@@ -64,25 +64,25 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
     def list(self, request, *args, **kwargs):
-        post_type = int(request.GET.get('post_type'))
+        post_type = request.GET.get('post_type') or None
         data = []
 
         if post_type:
-            if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
+            if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 data = InternshipSerializer(
                     Internship.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
                     context={'request': request},
                     many=True
                 ).data
 
-            elif post_type == POST_TYPE.PROJECT_POST_TYPE:
+            elif int(post_type) == POST_TYPE.PROJECT_POST_TYPE:
                 data = ProjectSerializer(
                     Project.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
                     context={'request': request},
                     many=True
                 ).data
 
-            elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+            elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
                 data = CompetitionSerializer(
                     Competition.objects.filter(is_verified=True, is_published=True).order_by('-created_at'),
                     context={'request': request},

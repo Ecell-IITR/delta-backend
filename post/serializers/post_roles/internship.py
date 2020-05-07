@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from users.serializers import PersonSerializer, StudentMinimumSerializer, CompanyMinimumSerializer
 
-from post.models import Internship
+from post.models import Internship, AppliedPostEntries
 from post.constants import POST_TYPE
 
 from utilities.serializers import TagSerializer
@@ -14,6 +14,7 @@ class InternshipSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     post_type = serializers.SerializerMethodField()
     is_bookmark = serializers.SerializerMethodField()
+    applicants_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Internship
@@ -31,7 +32,6 @@ class InternshipSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_user_min_profile(obj):
         person = obj.user
-
         try:
             user_profile = person.student_profile
             return StudentMinimumSerializer(user_profile).data
@@ -45,3 +45,7 @@ class InternshipSerializer(serializers.ModelSerializer):
             pass
         
         return {}
+
+    @staticmethod    
+    def get_applicants_count(obj):
+        return obj.applied_post_entries.count()

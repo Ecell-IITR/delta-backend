@@ -2,11 +2,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from post.models import (
-    Internship,
-    Competition,
-    Project
-)
 from utilities.models import TimestampedModel
 
 
