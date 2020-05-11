@@ -57,7 +57,7 @@ class Location(AbstractLocation):
         verbose_name_plural = 'Location'
 
 
-@receiver(post_save, sender=AbstractLocation)
+@receiver(post_save, sender=Location)
 def create_location(sender, instance=None, created=False, **kwargs):
     if created or instance.slug is None:
         instance.slug = unique_slug_generator(instance, 'name')
