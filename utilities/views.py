@@ -7,8 +7,8 @@ from rest_framework.response import Response
 
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
-from utilities.serializers import SkillSerializer
-from utilities.models import Skill, Tag
+from utilities.serializers import SkillSerializer, LocationSerializer
+from utilities.models import Skill, Tag, Location
 
 
 class SkillBaseView(APIView):
@@ -100,3 +100,9 @@ class SkillRemoveAllAPI(SkillBaseView):
 #             qs = qs.filter(title__icontains=self.q)
 #         return qs
 
+
+class LocationsListAPI(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    pagination_class = None
+    serializer_class = LocationSerializer
+    queryset = Location.objects.all()
