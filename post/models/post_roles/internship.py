@@ -17,10 +17,10 @@ class Internship(AbstractPost):
     This model holds information pertaining to a Internship
     """
 
-    stipend = models.CharField(
-        max_length=55,
+    stipend = models.BigIntegerField(
         blank=True,
-        verbose_name='Stipend'
+        verbose_name='Stipend',
+        help_text="Stipend should be in rupees."
     )
 
     position = models.CharField(
@@ -29,10 +29,16 @@ class Internship(AbstractPost):
         verbose_name='Position'
     )
 
-    duration = models.CharField(
-        max_length=55,
+    duration_value = models.PositiveIntegerField(
         blank=True,
+        null=True,
         verbose_name='Duration'
+    )
+
+    duration_unit = models.PositiveIntegerField(
+        blank=True,
+        choices=POST_FIELD_CHOICES.DURATION_UNIT,
+        default=POST_FIELD_CHOICES.MONTH
     )
 
     product_details = models.CharField(
@@ -41,12 +47,13 @@ class Internship(AbstractPost):
         verbose_name='Product Details'
     )
 
-    work_type = models.CharField(
-        max_length=255,
-        choices=POST_FIELD_CHOICES.WORK_TYPE,
-        default='part time',
-        verbose_name="Type of Work"
-    )
+    # work_type = models.PositiveIntegerField(
+    #     max_length=255,
+    #     blank=True,
+    #     choices=POST_FIELD_CHOICES.WORK_TYPE,
+    #     default=POST_FIELD_CHOICES.PART_TIME,
+    #     verbose_name="Type of Work"
+    # )
 
     bookmarks = models.ManyToManyField(
         to='users.Student',
@@ -57,7 +64,14 @@ class Internship(AbstractPost):
     tags = models.ManyToManyField(Tag, related_name='internship_tags', blank=True)
 
     applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
-                    object_id_field='post_object_id',)
+                                                    object_id_field='post_object_id')
+
+    required_skills = models.ManyToManyField(
+        to='utilities.Skill',
+        related_name='required_skills_internships',
+        blank=True,
+        verbose_name='Required skill set'
+    )
 
     def __str__(self):
         """

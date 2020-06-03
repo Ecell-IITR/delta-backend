@@ -1,12 +1,10 @@
 import datetime
 
-from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from utilities.models import TimestampedModel
+from utilities.models import TimestampedModel, Location
 from users.models.person import Person
 
 
@@ -43,11 +41,6 @@ class AbstractPost(TimestampedModel):
         verbose_name="Post expiry date"
     )
 
-    required_skill = models.TextField(
-        blank=True,
-        verbose_name="Required skill Set"
-    )
-
     is_published = models.BooleanField(
         default=False,
         verbose_name="Published"
@@ -56,6 +49,13 @@ class AbstractPost(TimestampedModel):
     is_verified = models.BooleanField(
         default=False,
         verbose_name="Verified"
+    )
+
+    location = models.ForeignKey(
+        to=Location,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE
     )
 
     @property

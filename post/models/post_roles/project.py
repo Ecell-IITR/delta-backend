@@ -37,6 +37,13 @@ class Project(AbstractPost):
 
     tags = models.ManyToManyField(Tag, related_name='project_tags', blank=True)
 
+    required_skills = models.ManyToManyField(
+        to='utilities.Skill',
+        related_name='required_skills_project',
+        blank=True,
+        verbose_name='Required skill set'
+    )
+
     def __str__(self):
         """
         Return the string representation of the model

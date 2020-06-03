@@ -11,7 +11,9 @@ class AbstractSkill(TimestampedModel):
     slug = models.CharField(
         max_length=255,
         null=True,
-        blank=True
+        blank=True,
+        unique=True,
+        db_index=True
     )
 
     name = models.CharField(

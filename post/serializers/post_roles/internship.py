@@ -5,13 +5,14 @@ from users.serializers import PersonSerializer, StudentMinimumSerializer, Compan
 from post.models import Internship, AppliedPostEntries
 from post.constants import POST_TYPE
 
-from utilities.serializers import TagSerializer
+from utilities.serializers import TagSerializer, SkillSerializer
 
 
 class InternshipSerializer(serializers.ModelSerializer):
 
     user_min_profile = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
+    required_skills = SkillSerializer(many=True)
     post_type = serializers.SerializerMethodField()
     is_bookmark = serializers.SerializerMethodField()
     applicants_count = serializers.SerializerMethodField()

@@ -16,7 +16,7 @@ class Competition(AbstractPost):
     competition_type = models.CharField(
         max_length=255,
         choices=POST_FIELD_CHOICES.COMPETITION_TYPE,
-        default='onspot',
+        default=POST_FIELD_CHOICES.ONLINE,
         verbose_name="Competition type"
     )
 
@@ -35,6 +35,13 @@ class Competition(AbstractPost):
     )
 
     tags = models.ManyToManyField(Tag, related_name='competition_tags', blank=True)
+
+    required_skills = models.ManyToManyField(
+        to='utilities.Skill',
+        related_name='required_skills_competitions',
+        blank=True,
+        verbose_name='Required skill set'
+    )
 
     def __str__(self):
         """

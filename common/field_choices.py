@@ -1,21 +1,31 @@
 class POST_FIELD_CHOICES:
+    ONLINE = 1
+    ONSPOT = 2
+
     COMPETITION_TYPE = (
-        (
-            'Online', 'Online'
-        ),
-        (
-            'Onspot', 'Onspot'
-        )
+        (ONLINE, 'Online'),
+        (ONSPOT, 'Onspot'),
     )
 
-    WORK_TYPE = {
-        (
-            'Full time', 'Full time'
-        ),
-        (
-            'Part time', 'Part time'
-        )
-    }
+    FULL_TIME = 1
+    PART_TIME = 2
+
+    WORK_TYPE = [
+        (FULL_TIME, 'Full time'),
+        (PART_TIME, 'Part time'),
+    ]
+
+    DAY = 1
+    WEEK = 2
+    MONTH = 3
+    YEAR = 4
+
+    DURATION_UNIT = (
+        (DAY, 'Day'),
+        (WEEK, 'Week'),
+        (MONTH, 'Month'),
+        (YEAR, 'Year')
+    )
 
 
 class USER_FIELD_CHOICES:
