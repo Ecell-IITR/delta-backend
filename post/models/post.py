@@ -58,6 +58,10 @@ class AbstractPost(TimestampedModel):
         on_delete=models.CASCADE
     )
 
+    start_timestamp = models.DateTimeField(
+        auto_now=True
+    )
+
     @property
     def is_expired(self):
         """

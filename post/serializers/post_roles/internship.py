@@ -16,6 +16,7 @@ class InternshipSerializer(serializers.ModelSerializer):
     post_type = serializers.SerializerMethodField()
     is_bookmark = serializers.SerializerMethodField()
     applicants_count = serializers.SerializerMethodField()
+    is_applied = serializers.SerializerMethodField()
 
     class Meta:
         model = Internship
@@ -26,10 +27,16 @@ class InternshipSerializer(serializers.ModelSerializer):
         return POST_TYPE.INTERNSHIP_POST_TYPE
 
     def get_is_bookmark(self, obj):
-        person = self.context.get('user', None)
+        request = self.context.get('request', None)
+        person = request.user
         starred_posts = obj.bookmarks.all()
         return starred_posts.filter(person=person).exists()
-    
+
+    def get_is_applied(self, obj):
+        request = self.context.get('request', None)
+        person = request.user
+        return obj.applied_post_entries.filter(user_object_id=person.id).exists()
+
     @staticmethod
     def get_user_min_profile(obj):
         person = obj.user

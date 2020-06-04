@@ -16,7 +16,8 @@ from post.serializers import (
 from post.models import (
     Project,
     Competition,
-    Internship
+    Internship,
+    AppliedPostEntries
 )
 
 
@@ -67,13 +68,15 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         post_type = request.GET.get('post_type') or None
+        bookmark = request.GET.get('bookmark') or False
+        applied_posts = request.GET.get('applied_posts') or False
         duration_value = request.GET.get('duration_value') or None
         duration_unit = request.GET.get('duration_unit') or None
         stipend_ll = request.GET.get('stipend_ll') or None
         stipend_ul = request.GET.get('stipend_ul') or None
-        tag_hashes = request.GET.get('tag_hashes') or None
+        tag_hash = request.GET.getlist('tag_hash') or None
         location = request.GET.get('location') or None
-        skill_slugs = request.GET.get('skill_slugs') or None
+        skill_slug = request.GET.getlist('skill_slug') or None
         now = timezone.now()
 
         if (duration_unit and duration_value is None) or (duration_unit is None and duration_value):
@@ -86,6 +89,12 @@ class PostViewSet(viewsets.ModelViewSet):
                                                                  post_expiry_date__gte=now)\
                                                 .order_by('-created_at')
 
+                if bookmark:
+                    internships_queryset = internships_queryset.filter(bookmarks__person=request.user)
+                if applied_posts:
+                    post_ids = AppliedPostEntries.objects.filter(user_object_id=request.user.id)\
+                                        .values_list('post_object_id', flat=True).distinct()
+                    internships_queryset = internships_queryset.filter(id__in=post_ids)
                 if stipend_ll:
                     internships_queryset = internships_queryset.filter(stipend__gte=int(stipend_ll))
                 if stipend_ul:
@@ -95,10 +104,10 @@ class PostViewSet(viewsets.ModelViewSet):
                                                                        duration_value=duration_value)
                 if location:
                     internships_queryset = internships_queryset.filter(location__slug=location)
-                if tag_hashes:
-                    internships_queryset = internships_queryset.filter(tags__hash__in=tag_hashes)
-                if skill_slugs:
-                    internships_queryset = internships_queryset.filter(required_skills__slug__in=skill_slugs)
+                if tag_hash:
+                    internships_queryset = internships_queryset.filter(tags__hash__in=tag_hash)
+                if skill_slug:
+                    internships_queryset = internships_queryset.filter(required_skills__slug__in=skill_slug)
 
                 data = InternshipSerializer(
                     internships_queryset,
