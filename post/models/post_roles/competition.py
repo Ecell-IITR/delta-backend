@@ -3,9 +3,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from utilities.models import Tag
+
 from common.field_choices import POST_FIELD_CHOICES
+
 from post.models.post import AbstractPost
 from post.utils import unique_slug_generator
+from post.constants import POST_TYPE
 
 
 class Competition(AbstractPost):
@@ -52,6 +55,10 @@ class Competition(AbstractPost):
         title = self.title
         user = self.user
         return f'{title} - {user.username}'
+
+    @staticmethod
+    def get_post_type():
+        return POST_TYPE.COMPETITION_POST_TYPE
 
 
 @receiver(post_save, sender=Competition)

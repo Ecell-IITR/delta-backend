@@ -1,6 +1,7 @@
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
-from rest_framework import status
+from rest_framework import status, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -12,16 +13,29 @@ from post.serializers import (
     InternshipSerializer,
     ProjectSerializer
 )
-
 from post.models import (
     Project,
     Competition,
     Internship,
     AppliedPostEntries
 )
+from post.permissions import IsStudent
 
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostBaseView(views.APIView):
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        user = request.user
+
+        if user.student_profile:
+            user_profile = user.student_profile
+        elif user.company_profile:
+            user_profile = user.company_profile
+
+        request.user_profile = user_profile
+
+
+class PostViewSet(PostBaseView, viewsets.ModelViewSet):
 
     permission_classes = [IsAuthenticated, ]
     lookup_field = 'slug'
@@ -92,7 +106,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 if bookmark:
                     internships_queryset = internships_queryset.filter(bookmarks__person=request.user)
                 if applied_posts:
-                    post_ids = AppliedPostEntries.objects.filter(user_object_id=request.user.id)\
+                    post_ids = AppliedPostEntries.objects.filter(user_object_id=request.user_profile.id)\
                                         .values_list('post_object_id', flat=True).distinct()
                     internships_queryset = internships_queryset.filter(id__in=post_ids)
                 if stipend_ll:
@@ -169,3 +183,37 @@ class CreatePost(generics.CreateAPIView):
             serializer.data,
             status=status.HTTP_201_CREATED
         )
+
+
+class ApplyPostView(PostBaseView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    @staticmethod
+    def check_post_object(slug):
+        if Internship.objects.filter(slug=slug).exists():
+            return Internship.objects.get(slug=slug)
+
+        elif Project.objects.filter(slug=slug).exists():
+            return Project.objects.get(slug=slug)
+
+        elif Competition.objects.filter(slug=slug).exists():
+            return Competition.objects.get(slug=slug)
+
+        return None
+
+    def post(self, request, *args, **kwargs):
+        user_profile = request.user_profile
+        post_slug = self.kwargs['slug']
+
+        post = self.check_post_object(post_slug)
+
+        if post:
+            if post.applied_post_entries.filter(user_object_id=user_profile.id).exists():
+                return Response({"error_message": 'Already applied to the post!'}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                AppliedPostEntries.objects.create(user=user_profile, post=post)
+                return Response(status=status.HTTP_200_OK)
+            except:
+                return Response({"error_message": 'Unable to apply'}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)

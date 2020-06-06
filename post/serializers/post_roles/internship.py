@@ -35,7 +35,9 @@ class InternshipSerializer(serializers.ModelSerializer):
     def get_is_applied(self, obj):
         request = self.context.get('request', None)
         person = request.user
-        return obj.applied_post_entries.filter(user_object_id=person.id).exists()
+        if person.student_profile:
+            return obj.applied_post_entries.filter(user_object_id=person.student_profile.id).exists()
+        return False
 
     @staticmethod
     def get_user_min_profile(obj):

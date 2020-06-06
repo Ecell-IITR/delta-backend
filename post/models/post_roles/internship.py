@@ -10,6 +10,7 @@ from common.field_choices import POST_FIELD_CHOICES
 from post.models.post import AbstractPost
 from post.models.applied_post_entries import AppliedPostEntries
 from post.utils import unique_slug_generator
+from post.constants import POST_TYPE
 
 
 class Internship(AbstractPost):
@@ -81,6 +82,10 @@ class Internship(AbstractPost):
         title = self.title
         user = self.user
         return f'{title} - {user.username}'
+
+    @staticmethod
+    def get_post_type():
+        return POST_TYPE.INTERNSHIP_POST_TYPE
 
 
 @receiver(post_save, sender=Internship)
