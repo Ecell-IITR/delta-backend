@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 
+from users.models import Person
 
 class LoginAPIView(generics.GenericAPIView):
     permission_classes = [AllowAny, ]
@@ -21,12 +22,18 @@ class LoginAPIView(generics.GenericAPIView):
             return Response('Username cannot be empty!', status=status.HTTP_400_BAD_REQUEST)
         if not password:
             return Response('Password cannot be empty!', status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            user = authenticate(username=username, password=password)
-        except:
-            raise AuthenticationFailed
+            person = Person.objects.get(username=username)
+        except Person.DoesNotExist:
+            return Response({'error_msg: Username not found!'}, status=status.HTTP_404_NOT_FOUND)
 
-        token, created = Token.objects.get_or_create(user=user)
-        update_last_login(None, user)
+        
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            token, created = Token.objects.get_or_create(user=user)
+            update_last_login(None, user)
 
-        return Response({'token': token.key, 'role': user.role_type}, status=status.HTTP_200_OK)
+            return Response({'token': token.key, 'role': user.role_type}, status=status.HTTP_200_OK)
+        
+        return Response({'error_msg': 'Password does not match'}, status=status.HTTP_403_FORBIDDEN)
