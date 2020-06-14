@@ -82,6 +82,9 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         post_type = request.GET.get('post_type') or None
+        my_post = request.GET.get('my_post') or False
+        expired_post = request.GET.get('expired_post') or False
+        unpublished_post = request.GET.get('unpublished_post') or False
         bookmark = request.GET.get('bookmark') or False
         applied_posts = request.GET.get('applied_posts') or False
         duration_value = request.GET.get('duration_value') or None
@@ -102,7 +105,16 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now)\
                                                 .order_by('-created_at')
-
+                if my_post:
+                    internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
+                                                                     post_expiry_date__gte=now)\
+                                                .order_by('-created_at')
+                if expired_post:
+                    internships_queryset = Internship.objects.filter(post_expiry_date__lte=now)\
+                                                .order_by('-created_at')
+                if unpublished_post:
+                    internships_queryset = Internship.objects.filter(is_published=False, post_expiry_date__gte=now)\
+                                                .order_by('-created_at')
                 if bookmark:
                     internships_queryset = internships_queryset.filter(bookmarks__person=request.user)
                 if applied_posts:
