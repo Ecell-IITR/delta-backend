@@ -17,9 +17,8 @@ class AbstractPerson(AbstractUser, TimestampedModel):
     username = models.CharField(
         db_index=True,
         max_length=50,
-        verbose_name="Username/Company Name",
+        verbose_name="Username",
         unique=True,
-        help_text="If you are company,enter Company name."
     )
 
     email = models.CharField(

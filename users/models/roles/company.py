@@ -14,7 +14,9 @@ class AbstractCompany(models.Model):
     person = models.OneToOneField(
         to=Person, on_delete=models.CASCADE, related_name="company_profile"
     )
-
+    company_name = models.CharField(
+        max_length=255, blank=True, verbose_name="Company Name"
+    )
     company_domain = models.CharField(
         max_length=55, blank=True, verbose_name="Company Domain"
     )

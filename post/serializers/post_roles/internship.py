@@ -5,7 +5,7 @@ from users.serializers import PersonSerializer, StudentMinimumSerializer, Compan
 from post.models import Internship, AppliedPostEntries
 from post.constants import POST_TYPE
 
-from utilities.serializers import TagSerializer, SkillSerializer
+from utilities.serializers import TagSerializer, SkillSerializer, LocationSerializer
 
 
 class InternshipSerializer(serializers.ModelSerializer):
@@ -17,6 +17,7 @@ class InternshipSerializer(serializers.ModelSerializer):
     is_bookmark = serializers.SerializerMethodField()
     applicants_count = serializers.SerializerMethodField()
     is_applied = serializers.SerializerMethodField()
+    location = LocationSerializer()
 
     class Meta:
         model = Internship

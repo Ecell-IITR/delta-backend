@@ -6,13 +6,16 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 
 from users.constants import GET_ROLE_TYPE
-from users.serializers import CompanySerializer
+from users.serializers import OrganizationListSerializer
 from users.models import Company
 
 
 class OrganizationList(generics.ListAPIView):
     permission_classes = [IsAuthenticated, ]
-    serializer_class = CompanySerializer
+    serializer_class = OrganizationListSerializer
+
+    def get_serializer_context(self, *args, **kwargs):
+        return {'person': self.request.user}
 
     def get_queryset(self, *args, **kwargs):
         list_type = self.request.GET.get('list_type')
