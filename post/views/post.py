@@ -87,16 +87,17 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         unpublished_post = request.GET.get('unpublished_post') or False
         bookmark = request.GET.get('bookmark') or False
         applied_posts = request.GET.get('applied_posts') or False
-        duration_value = request.GET.get('duration_value') or None
-        duration_unit = request.GET.get('duration_unit') or None
+        duration_unit = request.GET.get('duration_unit') or 0
+        duration_value_ll = request.GET.get('duration_value_ll') or None
+        duration_value_ul = request.GET.get('duration_value_ul') or None
         stipend_ll = request.GET.get('stipend_ll') or None
         stipend_ul = request.GET.get('stipend_ul') or None
         tag_hash = request.GET.getlist('tag_hash') or None
         location = request.GET.get('location') or None
         skill_slug = request.GET.getlist('skill_slug') or None
         now = timezone.now()
-
-        if (duration_unit and duration_value is None) or (duration_unit is None and duration_value):
+        print(duration_unit, duration_value_ll, duration_value_ul)
+        if (duration_unit and duration_value_ll is None and duration_value_ul is None) or (duration_unit is None and (duration_value_ll or duration_value_ul)):
             return Response({"error_message": 'Duration param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
         data = []
 
@@ -125,9 +126,13 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     internships_queryset = internships_queryset.filter(stipend__gte=int(stipend_ll))
                 if stipend_ul:
                     internships_queryset = internships_queryset.filter(stipend__lte=int(stipend_ul))
-                if duration_value and duration_unit:
-                    internships_queryset = internships_queryset.filter(duration_unit=duration_unit,
-                                                                       duration_value=duration_value)
+                if duration_unit:
+                    if duration_value_ll:
+                        internships_queryset = internships_queryset.filter(duration_unit=duration_unit,
+                                                                       duration_value__gte=duration_value_ll)
+                    if duration_value_ul:
+                        internships_queryset = internships_queryset.filter(duration_unit=duration_unit,
+                                                                       duration_value__lte=duration_value_ul)
                 if location:
                     internships_queryset = internships_queryset.filter(location__slug=location)
                 if tag_hash:
