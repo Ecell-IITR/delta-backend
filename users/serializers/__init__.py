@@ -12,7 +12,8 @@ from users.serializers.roles import (
     StudentSerializer,
     CompanySerializer,
     StudentMinimumSerializer,
-    CompanyMinimumSerializer
+    CompanyMinimumSerializer,
+    StudentMinInfoSerializer
 )
 
 from users.serializers.all_list_serializers import OrganizationListSerializer

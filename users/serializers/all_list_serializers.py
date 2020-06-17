@@ -15,7 +15,7 @@ class OrganizationListSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
   def get_is_follow(self, obj):
-    person = self.context.get('user')
+    person = self.context.get('person') or None
     return obj.person.action_on_person.filter(
             action_by_person=person, action=USER_FIELD_CHOICES.FOLLOW).exists()
   

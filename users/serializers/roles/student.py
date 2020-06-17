@@ -21,3 +21,19 @@ class StudentMinimumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ('person', 'first_name', 'last_name', 'enrollment_number', )
+
+
+class StudentMinInfoSerializer(serializers.ModelSerializer):
+    is_follow = serializers.SerializerMethodField()
+    followers_count = serializers.SerializerMethodField()
+    class Meta:
+        model = Student
+        fields = ('person', 'first_name', 'last_name', 'enrollment_number', 'is_follow', 'followers_count')
+    
+    def get_is_follow(self, obj):
+        person = self.context.get('person') or None
+        return obj.person.action_on_person.filter(
+                action_by_person=person, action=USER_FIELD_CHOICES.FOLLOW).exists()
+  
+    def get_followers_count(self, obj):
+        return obj.person.action_on_person.filter(action=USER_FIELD_CHOICES.FOLLOW).count()
