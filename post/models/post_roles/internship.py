@@ -20,6 +20,7 @@ class Internship(AbstractPost):
 
     stipend = models.BigIntegerField(
         blank=True,
+        null=True,
         verbose_name='Stipend',
         help_text="Stipend should be in rupees."
     )
@@ -33,13 +34,7 @@ class Internship(AbstractPost):
     duration_value = models.PositiveIntegerField(
         blank=True,
         null=True,
-        verbose_name='Duration'
-    )
-
-    duration_unit = models.PositiveIntegerField(
-        blank=True,
-        choices=POST_FIELD_CHOICES.DURATION_UNIT,
-        default=POST_FIELD_CHOICES.MONTH
+        verbose_name='Duration value in days'
     )
 
     product_details = models.CharField(

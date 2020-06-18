@@ -37,6 +37,15 @@ class USER_FIELD_CHOICES:
         (UNFOLLOW, 'UnFollow')
     )
 
+def get_duration_value(duration_unit):
+    if int(duration_unit) == POST_FIELD_CHOICES.DAY:
+        return 1
+    elif int(duration_unit) == POST_FIELD_CHOICES.WEEK:
+        return 7
+    elif int(duration_unit) == POST_FIELD_CHOICES.MONTH:
+        return 30
+    elif int(duration_unit) == POST_FIELD_CHOICES.YEAR:
+        return 365
 
 def get_opposite_action(action):
     if int(action) == USER_FIELD_CHOICES.FOLLOW:

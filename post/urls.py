@@ -13,7 +13,8 @@ Post = PostViewSet.as_view({
 
 IndividualPost = PostViewSet.as_view({
     'get': 'retrieve',
-    'put': 'update'
+    'put': 'update',
+    'delete': 'destroy'
 })
 
 urlpatterns = [

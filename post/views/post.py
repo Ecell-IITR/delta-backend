@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import generics
 
+from common.field_choices import get_duration_value, POST_FIELD_CHOICES
 from post.constants import POST_TYPE
 from post.serializers import (
     CompetitionSerializer,
@@ -26,11 +27,28 @@ class PostBaseView(views.APIView):
     def initial(self, request, *args, **kwargs):
         super().initial(request, *args, **kwargs)
         user = request.user
+        post_slug = self.kwargs.get('slug') or None
 
         if user.student_profile:
             user_profile = user.student_profile
         elif user.company_profile:
             user_profile = user.company_profile
+        
+        if post_slug:
+            if Internship.objects.get(slug=post_slug):
+                request.post = Internship.objects.get(
+                    slug=post_slug
+                )
+            elif Project.objects.get(slug=post_slug):
+                request.post = Project.objects.get(
+                    slug=post_slug
+                )
+            elif Competition.objects.get(slug=post_slug):
+                request.post = Competition.objects.get(
+                    slug=post_slug
+                )
+            else:
+                request.post = None
 
         request.user_profile = user_profile
 
@@ -96,7 +114,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         location = request.GET.get('location') or None
         skill_slug = request.GET.getlist('skill_slug') or None
         now = timezone.now()
-        print(duration_unit, duration_value_ll, duration_value_ul)
+
         if (duration_unit and duration_value_ll is None and duration_value_ul is None) or (duration_unit is None and (duration_value_ll or duration_value_ul)):
             return Response({"error_message": 'Duration param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
         data = []
@@ -104,7 +122,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         if post_type:
             if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
-                                                                 post_expiry_date__gte=now)\
+                                                                 post_expiry_date__gte=now, ).exclude(user=request.user)\
                                                 .order_by('-created_at')
                 if my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
@@ -127,12 +145,11 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 if stipend_ul:
                     internships_queryset = internships_queryset.filter(stipend__lte=int(stipend_ul))
                 if duration_unit:
+                    value = get_duration_value(duration_unit)
                     if duration_value_ll:
-                        internships_queryset = internships_queryset.filter(duration_unit=duration_unit,
-                                                                       duration_value__gte=duration_value_ll)
+                        internships_queryset = internships_queryset.filter(duration_value__gte=int(duration_value_ll)*value)
                     if duration_value_ul:
-                        internships_queryset = internships_queryset.filter(duration_unit=duration_unit,
-                                                                       duration_value__lte=duration_value_ul)
+                        internships_queryset = internships_queryset.filter(duration_value__lte=int(duration_value_ul)*value)
                 if location:
                     internships_queryset = internships_queryset.filter(location__slug=location)
                 if tag_hash:
@@ -164,6 +181,20 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
 
             return Response(data, status=status.HTTP_200_OK)
         return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, slug=None):
+        user = request.user
+        post = request.post
+
+        if post is not None:
+            print(post.title)
+            if post.user == user:
+                post.delete()
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response({"error_message": 'Not allowed to delete this post!'}, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreatePost(generics.CreateAPIView):

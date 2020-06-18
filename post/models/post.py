@@ -22,6 +22,7 @@ class AbstractPost(TimestampedModel):
 
     user = models.ForeignKey(
         Person,
+        related_name='%(app_label)s_%(class)s',
         on_delete=models.CASCADE
     )
 
