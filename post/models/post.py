@@ -1,5 +1,7 @@
 import datetime
 
+from ckeditor_uploader.fields import RichTextUploadingField
+
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -32,9 +34,9 @@ class AbstractPost(TimestampedModel):
         verbose_name="Title"
     )
 
-    description = models.TextField(
+    description = RichTextUploadingField(
         blank=True,
-        verbose_name="Description"
+        null=True
     )
 
     post_expiry_date = models.DateTimeField(

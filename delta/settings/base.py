@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "corsheaders",
     # Docs
     "rest_framework_swagger",
+    "ckeditor",
+    "ckeditor_uploader",
     # Apps
     # "dal",
     # "dal_select2",
@@ -121,3 +123,9 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# CKEDITOR media path relative to media url
+CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
+CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'

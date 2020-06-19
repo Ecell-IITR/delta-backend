@@ -1,3 +1,5 @@
+import json
+
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
@@ -39,14 +41,17 @@ class PostBaseView(views.APIView):
                 request.post = Internship.objects.get(
                     slug=post_slug
                 )
+                request.post_type = POST_TYPE.INTERNSHIP_POST_TYPE
             elif Project.objects.get(slug=post_slug):
                 request.post = Project.objects.get(
                     slug=post_slug
                 )
+                request.post_type = POST_TYPE.COMPETITION_POST_TYPE
             elif Competition.objects.get(slug=post_slug):
                 request.post = Competition.objects.get(
                     slug=post_slug
                 )
+                request.post_type = POST_TYPE.PROJECT_POST_TYPE
             else:
                 request.post = None
 
@@ -182,12 +187,45 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
             return Response(data, status=status.HTTP_200_OK)
         return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, slug=None):
+        user=request.user
+        post=request.post
+        post_type = request.post_type
+        body= json.loads(request.body)
+        
+        if post is not None:
+            if post.user == user:
+                title = body.get('title') or None
+                stipend = body.get('stipend') or None
+                description = body.get('description') or None
+                data = {}
+                if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
+                    if title:
+                        post.title = title
+                    if stipend:
+                        post.stipend = stipend
+                    if description:
+                        post.description = description
+                    
+                    post.save()
+                    data = InternshipSerializer(post, context={'request': request},).data
+                elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+                    data = CompetitionSerializer(post, context={'request': request},).data
+                
+                elif post_type == POST_TYPE.PROJECT_POST_TYPE:
+                    data = ProjectSerializer(post, context={'request': request},).data
+
+                return Response( data ,status=status.HTTP_200_OK)
+            else:
+                return Response({"error_message": 'Not allowed to edit this post!'}, status=status.HTTP_403_FORBIDDEN)
+        else:
+            return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+
     def destroy(self, request, slug=None):
         user = request.user
         post = request.post
 
         if post is not None:
-            print(post.title)
             if post.user == user:
                 post.delete()
                 return Response(status=status.HTTP_200_OK)

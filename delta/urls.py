@@ -27,4 +27,5 @@ urlpatterns = [
     path('api/v1/post/', include('post.urls')),
     path('api/v1/utilities/', include('utilities.urls')),
     path('docs', schema_view),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
