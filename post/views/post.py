@@ -1,4 +1,4 @@
-import json
+import json, datetime
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import generics
 
-from common.field_choices import get_duration_value, POST_FIELD_CHOICES
+from common.field_choices import get_duration_value
 from post.constants import POST_TYPE
 from post.serializers import (
     CompetitionSerializer,
@@ -22,6 +22,7 @@ from post.models import (
     Internship,
     AppliedPostEntries
 )
+from utilities.models import Location, Skill, Tag
 from post.permissions import IsStudent
 
 
@@ -35,26 +36,27 @@ class PostBaseView(views.APIView):
             user_profile = user.student_profile
         elif user.company_profile:
             user_profile = user.company_profile
-        
-        if post_slug:
-            if Internship.objects.get(slug=post_slug):
-                request.post = Internship.objects.get(
-                    slug=post_slug
-                )
-                request.post_type = POST_TYPE.INTERNSHIP_POST_TYPE
-            elif Project.objects.get(slug=post_slug):
-                request.post = Project.objects.get(
-                    slug=post_slug
-                )
-                request.post_type = POST_TYPE.COMPETITION_POST_TYPE
-            elif Competition.objects.get(slug=post_slug):
-                request.post = Competition.objects.get(
-                    slug=post_slug
-                )
-                request.post_type = POST_TYPE.PROJECT_POST_TYPE
-            else:
-                request.post = None
 
+        request.post = None
+        if post_slug:
+            try:
+                request.post = Internship.objects.get(slug=post_slug)
+                request.post_type = POST_TYPE.INTERNSHIP_POST_TYPE
+            except:
+                pass
+            try:
+                request.post = Project.objects.get(slug=post_slug)
+                request.post_type = POST_TYPE.COMPETITION_POST_TYPE
+            except:
+                pass
+            try:
+                request.post = Competition.objects.get(slug=post_slug)
+                request.post_type = POST_TYPE.PROJECT_POST_TYPE
+            except:
+               pass
+
+        if request.post is None:
+            request.post_type = None
         request.user_profile = user_profile
 
 
@@ -187,26 +189,69 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
             return Response(data, status=status.HTTP_200_OK)
         return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, slug=None):
-        user=request.user
-        post=request.post
+    def update(self, request, slug=None, **kwargs):
+        user = request.user
+        post = request.post
         post_type = request.post_type
-        body= json.loads(request.body)
+        now = timezone.now()
+        body = json.loads(request.body)
         
         if post is not None:
             if post.user == user:
                 title = body.get('title') or None
                 stipend = body.get('stipend') or None
                 description = body.get('description') or None
+                expiry_timestamp = body.get('expiry_timestamp') or None
+                skill_slugs = body.get('skill_slugs') or None
+                tag_hashes = body.get('tag_hashes') or None
                 data = {}
                 if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
+                    location = body.get('location') or None
+                    duration_value = body.get('duration_value') or None
                     if title:
                         post.title = title
                     if stipend:
                         post.stipend = stipend
                     if description:
                         post.description = description
-                    
+                    if location:
+                        try:
+                            check_location = Location.objects.get(slug=location)
+                        except:
+                            return Response({"error_message": 'Location doesn\'t exists'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                        if check_location:
+                            post.location = check_location
+                    if expiry_timestamp:
+                        if datetime.datetime.fromtimestamp(expiry_timestamp) > datetime.datetime.now():
+                            post.post_expiry_date = datetime.datetime.fromtimestamp(expiry_timestamp)
+                        else:
+                            return Response({"error_message": 'Expiry date cannot be less than current timestamp'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                    if duration_value and duration_value > 1:
+                        post.duration_value = duration_value
+                    if skill_slugs:
+                        temp_slugs = []
+                        for slug in skill_slugs:
+                            try:
+                                check_slug = Skill.objects.get(slug=slug)
+                            except:
+                                return Response({"error_message": 'Skill slug doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_slug:
+                                temp_slugs.append(check_slug)
+                        post.required_skills.set(temp_slugs)
+                    if tag_hashes:
+                        temp_hashes = []
+                        for hash in tag_hashes:
+                            try:
+                                check_hash = Tag.objects.get(hash=hash)
+                            except:
+                                return Response({"error_message": 'Tag hash doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_hash:
+                                temp_hashes.append(check_hash)
+                        post.tags.set(temp_hashes)
                     post.save()
                     data = InternshipSerializer(post, context={'request': request},).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
@@ -215,13 +260,13 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     data = ProjectSerializer(post, context={'request': request},).data
 
-                return Response( data ,status=status.HTTP_200_OK)
+                return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response({"error_message": 'Not allowed to edit this post!'}, status=status.HTTP_403_FORBIDDEN)
         else:
-            return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error_message": 'Post slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, slug=None):
+    def destroy(self, request, slug=None, **kwargs):
         user = request.user
         post = request.post
 

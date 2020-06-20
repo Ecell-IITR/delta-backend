@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from utilities.models import TimestampedModel, Location
+from utilities.models import TimestampedModel, Location, Tag
 from users.models.person import Person
 
 
@@ -59,6 +59,21 @@ class AbstractPost(TimestampedModel):
         blank=True,
         null=True,
         on_delete=models.CASCADE
+    )
+
+    bookmarks = models.ManyToManyField(
+        to='users.Student',
+        related_name='%(app_label)s_%(class)s_bookmarks',
+        blank=True
+    )
+
+    tags = models.ManyToManyField(Tag, related_name='%(app_label)s_%(class)s_tags', blank=True)
+
+    required_skills = models.ManyToManyField(
+        to='utilities.Skill',
+        related_name='%(app_label)s_%(class)s_required_skills',
+        blank=True,
+        verbose_name='Required skill set'
     )
 
     start_timestamp = models.DateTimeField(

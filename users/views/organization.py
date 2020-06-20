@@ -18,7 +18,7 @@ class OrganizationList(generics.ListAPIView):
 
     def get_serializer_context(self, *args, **kwargs):
         context = super(OrganizationList, self).get_serializer_context()
-        context.update({'person': self.request.user})
+        context.update({'person': self.request.user}, )
         return context
 
     def get_queryset(self, *args, **kwargs):

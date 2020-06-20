@@ -1,8 +1,6 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-
-from utilities.models import Tag
 
 from common.field_choices import POST_FIELD_CHOICES
 
@@ -37,15 +35,6 @@ class Competition(AbstractPost):
         verbose_name='Link to apply fro competition'
     )
 
-    tags = models.ManyToManyField(Tag, related_name='competition_tags', blank=True)
-
-    required_skills = models.ManyToManyField(
-        to='utilities.Skill',
-        related_name='required_skills_competitions',
-        blank=True,
-        verbose_name='Required skill set'
-    )
-
     def __str__(self):
         """
         Return the string representation of the model
@@ -61,8 +50,21 @@ class Competition(AbstractPost):
         return POST_TYPE.COMPETITION_POST_TYPE
 
 
+@receiver(pre_save, sender=Competition)
+def competition_pre_save(instance=None, created=False, update_fields=None, **kwargs):
+    competition = None
+    if not created and update_fields is None:
+        try:
+            competition = Competition.objects.get(pk=instance.pk)
+        except Competition.DoesNotExist:
+            pass
+    instance.__old_instance = competition
+
+
 @receiver(post_save, sender=Competition)
-def create_competition(sender, instance=None, created=False, **kwargs):
-    if created or instance.slug is None:
-        instance.slug = unique_slug_generator(instance)
-        instance.save()
+def competition_post_save(update_fields, instance=None, created=False, **kwargs):
+    if update_fields is None:
+        old_inst = instance.__old_instance
+        if old_inst is None or old_inst.title != instance.title:
+            instance.slug = unique_slug_generator(instance)
+            instance.save()

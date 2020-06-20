@@ -1,11 +1,7 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericRelation
-
-from utilities.models import Tag
-
-from common.field_choices import POST_FIELD_CHOICES
 
 from post.models.post import AbstractPost
 from post.models.applied_post_entries import AppliedPostEntries
@@ -51,23 +47,8 @@ class Internship(AbstractPost):
     #     verbose_name="Type of Work"
     # )
 
-    bookmarks = models.ManyToManyField(
-        to='users.Student',
-        related_name='bookmark_internship',
-        blank=True
-    )
-
-    tags = models.ManyToManyField(Tag, related_name='internship_tags', blank=True)
-
     applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
-                                                    object_id_field='post_object_id')
-
-    required_skills = models.ManyToManyField(
-        to='utilities.Skill',
-        related_name='required_skills_internships',
-        blank=True,
-        verbose_name='Required skill set'
-    )
+                                           object_id_field='post_object_id')
 
     def __str__(self):
         """
@@ -83,8 +64,21 @@ class Internship(AbstractPost):
         return POST_TYPE.INTERNSHIP_POST_TYPE
 
 
+@receiver(pre_save, sender=Internship)
+def internship_pre_save(instance=None, created=False, update_fields=None, **kwargs):
+    internship = None
+    if not created and update_fields is None:
+        try:
+            internship = Internship.objects.get(pk=instance.pk)
+        except Internship.DoesNotExist:
+            pass
+    instance.__old_instance = internship
+
+
 @receiver(post_save, sender=Internship)
-def create_internship(sender, instance=None, created=False, **kwargs):
-    if created or instance.slug is None:
-        instance.slug = unique_slug_generator(instance)
-        instance.save()
+def internship_post_save(update_fields, instance=None, created=False, **kwargs):
+    if update_fields is None:
+        old_inst = instance.__old_instance
+        if old_inst is None or old_inst.title != instance.title:
+            instance.slug = unique_slug_generator(instance)
+            instance.save()

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from post.utils import unique_slug_generator
@@ -52,8 +52,21 @@ class Skill(AbstractSkill):
         verbose_name_plural = 'Skill'
 
 
+@receiver(pre_save, sender=Skill)
+def skill_pre_save(instance=None, created=False, update_fields=None, **kwargs):
+    location = None
+    if not created and update_fields is None:
+        try:
+            location = Skill.objects.get(pk=instance.pk)
+        except Skill.DoesNotExist:
+            pass
+    instance.__old_instance = location
+
+
 @receiver(post_save, sender=Skill)
-def create_project(sender, instance=None, created=False, **kwargs):
-    if created or instance.slug is None:
-        instance.slug = unique_slug_generator(instance, 'name')
-        instance.save()
+def skill_post_save(update_fields, instance=None, created=False, **kwargs):
+    if update_fields is None:
+        old_inst = instance.__old_instance
+        if old_inst is None or old_inst.title != instance.title:
+            instance.slug = unique_slug_generator(instance)
+            instance.save()

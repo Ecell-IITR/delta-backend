@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from users.serializers import PersonSerializer, StudentMinimumSerializer, CompanyMinimumSerializer
+from users.serializers import StudentMinimumSerializer, CompanyMinimumSerializer
 
-from post.models import Internship, AppliedPostEntries
+from post.models import Internship
 from post.constants import POST_TYPE
 
 from utilities.serializers import TagSerializer, SkillSerializer, LocationSerializer
@@ -48,13 +48,11 @@ class InternshipSerializer(serializers.ModelSerializer):
             return StudentMinimumSerializer(user_profile).data
         except: 
             pass
-        
         try:
             user_profile = person.company_profile
             return CompanyMinimumSerializer(user_profile).data
         except: 
             pass
-        
         return {}
 
     @staticmethod    

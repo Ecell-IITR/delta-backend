@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
-from utilities.serializers import SkillSerializer, LocationSerializer
+from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer
 from utilities.models import Skill, Tag, Location
 
 
@@ -106,3 +106,10 @@ class LocationsListAPI(generics.ListAPIView):
     pagination_class = None
     serializer_class = LocationSerializer
     queryset = Location.objects.all()
+
+
+class TagsListAPI(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    pagination_class = None
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
