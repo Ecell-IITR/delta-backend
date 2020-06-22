@@ -104,6 +104,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-delta/media
+delta/media/
 
 .idea
