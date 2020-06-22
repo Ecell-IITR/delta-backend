@@ -1,8 +1,12 @@
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, FileExtensionValidator
+
+from ckeditor_uploader.fields import RichTextUploadingField
+
 from users.models.person import Person
 from users.models.roles.social_link import SocialLink
-from django.core.validators import FileExtensionValidator
+
+
 
 class AbstractStudent(models.Model):
 
@@ -16,6 +20,7 @@ class AbstractStudent(models.Model):
         blank=True,
         null=True,
     )
+    current_year = models.PositiveSmallIntegerField(blank=True, null=True)
     phone_number = models.CharField(
         max_length=10,
         blank=True,
@@ -32,7 +37,11 @@ class AbstractStudent(models.Model):
     skills = models.ManyToManyField(to="utilities.Skill", related_name="student_skill", blank=True)
     interest = models.TextField(blank=True, verbose_name="Interest")
     bio = models.TextField(verbose_name="Bio", blank=True)
-    achievements = models.TextField(verbose_name="Achievements", blank=True)
+    achievements = RichTextUploadingField(
+        blank=True,
+        null=True
+    )
+    date_of_birth = models.DateField(auto_now=True, blank=True, null=True)
     resume = models.FileField(verbose_name="Resume", blank=True, validators=[
                               FileExtensionValidator(allowed_extensions=['pdf'])])
     availability_status = models.BooleanField(default=True)

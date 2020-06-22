@@ -40,13 +40,16 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         username = Person.objects.filter(username__iexact=value)
         if username.exists():
-            raise serializers.ValidationError('Username already registered ')
+            raise serializers.ValidationError('Username already registered')
         return value
 
     def get_token(self, obj):
-        user = obj
-        token = Token.objects.create(user=user)
-        return token.key
+        if obj:
+            user = obj
+            token = Token.objects.create(user=user)
+            return token.key
+        else:
+            return ''
 
     def validate(self, data):
         check = data.get('role_type') or None

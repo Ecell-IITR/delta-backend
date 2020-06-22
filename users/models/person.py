@@ -33,6 +33,10 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         default=True
     )
 
+    is_channeli_oauth = models.BooleanField(
+        default=False
+    )
+
     is_admin = models.BooleanField(
         default=False
     )
@@ -53,7 +57,8 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         upload_to=get_profile_image_path,
         help_text="If you are company,enter company icon.",
         blank=True,
-        null=True
+        null=True,
+        default='/defaults/profile-image.png'
     )
 
     role_type = models.CharField(

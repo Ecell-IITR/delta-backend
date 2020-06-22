@@ -4,7 +4,9 @@ from users.views import (
     RegisterAPIView,
     BasicUser,
     SelfProfile,
-    OrganizationList
+    OrganizationList,
+    ChanneliOAuthAPI,
+    AvatarUploadAPI
 )
 from users.views import ActionView, FollowersList, FollowingList
 
@@ -18,11 +20,13 @@ urlpatterns = [
     path('auth/register/', RegisterAPIView.as_view(), name="register"),
     path('auth/login/', LoginAPIView.as_view(), name="login"),
     path('user/', BasicUser.as_view(), name='basic-user'),
+    path('avatar_upload/', AvatarUploadAPI.as_view(), name="avatar-upload"),
     path('profile/', SelfProfile.as_view(), name='self-profile'),
     path('organization-list/', OrganizationList.as_view(), name='organization-list'),
     # path('update/<username>/', EditAPIView.as_view()),
     re_path(r'action/(?P<action_key>[0-9]+)/(?P<username>[0-9a-zA-Z]+)/', ActionView.as_view(), name="follow-user"),
     path('followers-list/', FollowersList.as_view(), name="followers-list"),
-    path('following-list/', FollowingList.as_view(), name="following-list")
+    path('following-list/', FollowingList.as_view(), name="following-list"),
+    path('oauth/channeli/', ChanneliOAuthAPI.as_view(), name="channeli-oauth")
 
 ]
