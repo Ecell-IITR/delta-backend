@@ -105,5 +105,6 @@ venv.bak/
 .mypy_cache/
 
 delta/media/
+delta/static/
 
 .idea
