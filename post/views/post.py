@@ -111,6 +111,8 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         my_post = request.GET.get('my_post') or False
         expired_post = request.GET.get('expired_post') or False
         unpublished_post = request.GET.get('unpublished_post') or False
+        expired_my_post = request.GET.get('expired_my_post') or False
+        unpublished_my_post = request.GET.get('unpublished_my_post') or False
         bookmark = request.GET.get('bookmark') or False
         applied_posts = request.GET.get('applied_posts') or False
         duration_unit = request.GET.get('duration_unit') or 0
@@ -136,8 +138,14 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
                                                                      post_expiry_date__gte=now)\
                                                 .order_by('-updated_at')
-                if expired_post:
+                if expired_my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, post_expiry_date__lte=now)\
+                                                .order_by('-updated_at')
+                if expired_post:
+                    internships_queryset = Internship.objects.filter(post_expiry_date__lte=now)\
+                                                .order_by('-updated_at')
+                if unpublished_my_post:
+                    internships_queryset = Internship.objects.filter(user=request.user, is_published=False, post_expiry_date__gte=now)\
                                                 .order_by('-updated_at')
                 if unpublished_post:
                     internships_queryset = Internship.objects.filter(is_published=False, post_expiry_date__gte=now)\
