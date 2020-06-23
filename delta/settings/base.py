@@ -13,14 +13,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 from delta.restconf.main import *
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
 
 
@@ -100,9 +95,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -126,6 +118,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # CKEDITOR media path relative to media url
 CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
+
 CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
+
 CKEDITOR_IMAGE_BACKEND = 'pillow'
+
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
