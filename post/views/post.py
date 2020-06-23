@@ -2,6 +2,7 @@ import json, datetime
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django.utils.timezone import make_aware
 
 from rest_framework import status, views
 from rest_framework.permissions import IsAuthenticated
@@ -130,17 +131,17 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
             if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now, ).exclude(user=request.user)\
-                                                .order_by('-created_at')
+                                                .order_by('-updated_at')
                 if my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
                                                                      post_expiry_date__gte=now)\
-                                                .order_by('-created_at')
+                                                .order_by('-updated_at')
                 if expired_post:
-                    internships_queryset = Internship.objects.filter(post_expiry_date__lte=now)\
-                                                .order_by('-created_at')
+                    internships_queryset = Internship.objects.filter(user=request.user, post_expiry_date__lte=now)\
+                                                .order_by('-updated_at')
                 if unpublished_post:
                     internships_queryset = Internship.objects.filter(is_published=False, post_expiry_date__gte=now)\
-                                                .order_by('-created_at')
+                                                .order_by('-updated_at')
                 if bookmark:
                     internships_queryset = internships_queryset.filter(bookmarks__person=request.user)
                 if applied_posts:
@@ -204,10 +205,12 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 expiry_timestamp = body.get('expiry_timestamp') or None
                 skill_slugs = body.get('skill_slugs') or None
                 tag_hashes = body.get('tag_hashes') or None
+                is_published = body.get('is_publish') or False
                 data = {}
                 if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
                     location = body.get('location') or None
                     duration_value = body.get('duration_value') or None
+                    duration_unit = body.get('duration_unit') or None
                     if title:
                         post.title = title
                     if stipend:
@@ -224,12 +227,13 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                             post.location = check_location
                     if expiry_timestamp:
                         if datetime.datetime.fromtimestamp(expiry_timestamp) > datetime.datetime.now():
-                            post.post_expiry_date = datetime.datetime.fromtimestamp(expiry_timestamp)
+                            post.post_expiry_date = make_aware(datetime.datetime.fromtimestamp(expiry_timestamp))
                         else:
                             return Response({"error_message": 'Expiry date cannot be less than current timestamp'},
                                             status=status.HTTP_400_BAD_REQUEST)
-                    if duration_value and duration_value > 1:
-                        post.duration_value = duration_value
+                    if duration_value and duration_unit and int(duration_value) > 1:
+                        value = get_duration_value(duration_unit)
+                        post.duration_value = int(duration_value) * value
                     if skill_slugs:
                         temp_slugs = []
                         for slug in skill_slugs:
@@ -252,11 +256,15 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                             if check_hash:
                                 temp_hashes.append(check_hash)
                         post.tags.set(temp_hashes)
+                    if is_published:
+                        post.is_published = True
+                    else:
+                        post.is_published = False
                     post.save()
                     data = InternshipSerializer(post, context={'request': request},).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
                     data = CompetitionSerializer(post, context={'request': request},).data
-                
+
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     data = ProjectSerializer(post, context={'request': request},).data
 
@@ -300,20 +308,100 @@ class CreatePost(generics.CreateAPIView):
         return None
 
     def post(self, request, *args, **kwargs):
-        if not self.request.data.get('post_type'):
-            return Response({'error_message':'post_type field required'}, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        user = request.user
+        post_type = data.get('post_type') or None
 
-        if not self.request.data.get('post_type') in ['internship', 'project', 'competition']:
-            return Response({'error_message': 'post_type field value is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+        if post_type:
+            if post_type in [POST_TYPE.INTERNSHIP_POST_TYPE, POST_TYPE.COMPETITION_POST_TYPE,
+                             POST_TYPE.PROJECT_POST_TYPE]:
+                title = data.get('title') or None
+                description = data.get('description') or None
+                expiry_timestamp = data.get('expiry_timestamp') or None
+                skill_slugs = data.get('skill_slugs') or None
+                tag_hashes = data.get('tag_hashes') or None
+                is_published = data.get('is_publish') or False
 
-        serializer = self.get_serializer_class()(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=self.request.user)
+                if expiry_timestamp:
+                    if datetime.datetime.fromtimestamp(expiry_timestamp) <= datetime.datetime.now():
+                        return Response({"error_message": 'Expiry date cannot be less than current timestamp'},
+                                        status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"error_message": 'Expiry date is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(
-            serializer.data,
-            status=status.HTTP_201_CREATED
-        )
+                if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
+                    stipend = data.get('stipend') or None
+                    location = data.get('location') or None
+                    duration_value = data.get('duration_value') or None
+                    duration_unit = data.get('duration_unit') or None
+
+                    internship = Internship.objects.create(user=user, post_expiry_date=
+                                                        make_aware(datetime.datetime.fromtimestamp(expiry_timestamp)))
+                    if title:
+                        internship.title = title
+                    if stipend:
+                        internship.stipend = stipend
+                    if description:
+                        internship.description = description
+                    if location:
+                        try:
+                            check_location = Location.objects.get(slug=location)
+                        except:
+                            return Response({"error_message": 'Location doesn\'t exists'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                        if check_location:
+                            internship.location = check_location
+
+                    if duration_value and duration_unit and int(duration_value) > 1:
+                        value = get_duration_value(duration_unit)
+                        internship.duration_value = int(duration_value) * value
+                    if skill_slugs:
+                        temp_slugs = []
+                        for slug in skill_slugs:
+                            try:
+                                check_slug = Skill.objects.get(slug=slug)
+                            except:
+                                return Response({"error_message": 'Skill slug doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_slug:
+                                temp_slugs.append(check_slug)
+                        internship.required_skills.set(temp_slugs)
+                    if tag_hashes:
+                        temp_hashes = []
+                        for hash in tag_hashes:
+                            try:
+                                check_hash = Tag.objects.get(hash=hash)
+                            except:
+                                return Response({"error_message": 'Tag hash doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_hash:
+                                temp_hashes.append(check_hash)
+                        internship.tags.set(temp_hashes)
+                    if is_published:
+                        internship.is_published = True
+                    else:
+                        internship.is_published = False
+                    internship.save()
+
+                    serializer_data = InternshipSerializer(internship, context={'request': request}, ).data
+                elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+                    competition = Competition.objects.create(user=user)
+                    serializer_data = CompetitionSerializer(competition, context={'request': request}, ).data
+
+                elif post_type == POST_TYPE.PROJECT_POST_TYPE:
+                    project = Project.objects.create(user=user)
+                    serializer_data = ProjectSerializer(project, context={'request': request}, ).data
+
+                return Response(
+                        serializer_data,
+                        status=status.HTTP_200_OK
+                    )
+            else:
+                return Response({'error_message': 'post_type field value is incorrect'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({'error_message': 'post_type field required'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ApplyPostView(PostBaseView):

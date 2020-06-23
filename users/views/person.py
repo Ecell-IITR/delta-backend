@@ -218,10 +218,10 @@ class ChanneliOAuthAPI(APIView):
         if code:
             token_url = 'https://internet.channeli.in/open_auth/token/'
             files = {
-                'client_id': os.getenv('CLIENT_ID'),
-                'client_secret': os.getenv('CLIENT_SECRET'),
-                'grant_type': os.getenv('GRANT_TYPE'),
-                'redirect_url': os.getenv('REDIRECT_URL'),
+                'client_id': os.getenv('CHANNELI_CLIENT_ID'),
+                'client_secret': os.getenv('CHANNELI_CLIENT_SECRET'),
+                'grant_type': os.getenv('CHANNELI_GRANT_TYPE'),
+                'redirect_url': os.getenv('CHANNELI_REDIRECT_URL'),
                 'code': code
             }
             encoded_data, content_type = encode_multipart_formdata(files)
