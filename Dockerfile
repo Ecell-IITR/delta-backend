@@ -33,4 +33,4 @@ RUN chown -R delta:delta $APP_HOME \
 
 USER delta
 
-ENTRYPOINT ["/usr/delta/delta-backend/entrypoint.sh"]
+ENTRYPOINT ["/home/delta/delta-backend/entrypoint.sh"]
