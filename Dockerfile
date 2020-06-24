@@ -19,3 +19,5 @@ COPY . .
 
 RUN adduser -D user
 USER user
+
+CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; gunicorn delta.wsgi -b 0.0.0.0:8000"]
