@@ -22,9 +22,6 @@ RUN mkdir -p /home/delta/delta-backend
 ENV APP_HOME=/home/delta/delta-backend
 WORKDIR $APP_HOME
 
-# copy entrypointsh
-COPY ./entrypoint.sh $APP_HOME
-
 COPY . $APP_HOME
 
 # chown all the files to the delta user
@@ -33,4 +30,4 @@ RUN chown -R delta:delta $APP_HOME \
 
 USER delta
 
-ENTRYPOINT ["/home/delta/delta-backend/entrypoint.sh"]
+CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; gunicorn delta.wsgi -b 0.0.0.0:8000"]
