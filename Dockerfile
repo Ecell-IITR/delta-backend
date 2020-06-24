@@ -19,11 +19,16 @@ COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
 RUN mkdir -p /usr/delta/delta-backend
-WORKDIR /usr/delta/delta-backend
-COPY . .
+ENV APP_HOME=/usr/delta/delta-backend
+WORKDIR $APP_HOME
+
+# copy entrypointsh
+COPY ./entrypoint.sh $APP_HOME
+
+COPY . $APP_HOME
 
 # chown all the files to the delta user
-RUN chown -R delta:delta /usr/delta/delta-backend
+RUN chown -R delta:delta APP_HOME
 
 USER delta
 
