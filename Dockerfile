@@ -4,14 +4,8 @@ LABEL maintainer="E-cell"
 
 ENV PYTHONBUFFERED 1
 
-RUN adduser -D user
-USER user
-
-ENV APP_HOME=/delta/delta-backend
-RUN mkdir $APP_HOME
-RUN mkdir $APP_HOME/static
-RUN mkdir $APP_HOME/media
-WORKDIR $APP_HOME
+RUN adduser -D delta
+USER delta
 
 # install psycopg2 dependencies
 RUN apk update \
@@ -24,16 +18,8 @@ RUN pip install --upgrade pip \
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
-# copy entrypoint.sh
-COPY ./entrypoint.sh $APP_HOME
+RUN mkdir -p /usr/delta/delta-backend
+WORKDIR /usr/delta/delta-backend
+COPY . .
 
-# copy project
-COPY . $APP_HOME
-
-# chown all the files to the app user
-RUN chown -R app:app $APP_HOME
-
-# change to the app user
-USER app
-
-ENTRYPOINT ["/delta/delta-backend/entrypoint.sh"]
+ENTRYPOINT ["/usr/delta/delta-backend/entrypoint.sh"]
