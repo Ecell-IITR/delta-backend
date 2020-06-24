@@ -4,6 +4,9 @@ LABEL maintainer="E-cell"
 
 ENV PYTHONBUFFERED 1
 
+# create the app user
+RUN addgroup -S delta && adduser -S delta -G delta
+
 # install psycopg2 dependencies
 RUN apk update \
   && apk add postgresql-dev gcc python3-dev musl-dev build-base py-pip jpeg-dev zlib-dev
@@ -19,7 +22,9 @@ RUN mkdir -p /usr/delta/delta-backend
 WORKDIR /usr/delta/delta-backend
 COPY . .
 
-RUN adduser -D delta
+# chown all the files to the delta user
+RUN chown -R delta:delta /usr/delta/delta-backend
+
 USER delta
 
 ENTRYPOINT ["/usr/delta/delta-backend/entrypoint.sh"]
