@@ -22,7 +22,7 @@ RUN mkdir -p /home/delta/delta-backend
 ENV APP_HOME=/home/delta/delta-backend
 WORKDIR $APP_HOME
 
-COPY . $APP_HOME
+COPY . .
 
 # chown all the files to the delta user
 RUN chown -R delta:delta $APP_HOME \
