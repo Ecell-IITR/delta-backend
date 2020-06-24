@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['delta.ecelliitr.org']
+ALLOWED_HOSTS = ['delta.ecelliitr.org', '*']
 
 prod_db = dj_database_url.config(conn_max_age=500)
 
