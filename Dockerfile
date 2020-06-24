@@ -6,10 +6,12 @@ ENV PYTHONBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apk update \
-  && apk add postgresql-dev gcc python3-dev musl-dev
+  && apk add postgresql-dev gcc python3-dev musl-dev build-base py-pip jpeg-dev zlib-dev
 
-# install dependencies
-RUN pip install --upgrade pip
+# Install pip packages
+RUN pip install --upgrade pip \
+  && pip install --upgrade setuptools \
+  && pip install --upgrade pipenv
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
