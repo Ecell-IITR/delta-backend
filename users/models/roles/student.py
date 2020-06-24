@@ -59,7 +59,7 @@ class AbstractStudent(models.Model):
 
     def __str__(self):
         person = self.person
-        return f"{person}"
+        return "%s" % person
 
 
 class Student(AbstractStudent):

@@ -48,7 +48,7 @@ class AbstractCompany(models.Model):
         """
 
         person = self.person
-        return f"{person}"
+        return "%s" % person
 
     def clean(self, *args, **kwargs):
         errors = {}
