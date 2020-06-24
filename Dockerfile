@@ -4,6 +4,15 @@ LABEL maintainer="E-cell"
 
 ENV PYTHONBUFFERED 1
 
+RUN adduser -D user
+USER user
+
+ENV $APP_HOME = /delta/delta-backend
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/static
+RUN mkdir $APP_HOME/media
+WORKDIR $APP_HOME
+
 # install psycopg2 dependencies
 RUN apk update \
   && apk add postgresql-dev gcc python3-dev musl-dev build-base py-pip jpeg-dev zlib-dev
@@ -15,11 +24,16 @@ RUN pip install --upgrade pip \
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
-RUN mkdir -p /usr/delta/delta-backend
-WORKDIR /usr/delta/delta-backend
-COPY . .
+# copy entrypoint.sh
+COPY ./entrypoint.sh $APP_HOME
 
-RUN adduser -D user
-USER user
+# copy project
+COPY . $APP_HOME
 
-CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; gunicorn delta.wsgi -b 0.0.0.0:8000"]
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+ENTRYPOINT ["/delta/delta-backend/entrypoint.sh"]
