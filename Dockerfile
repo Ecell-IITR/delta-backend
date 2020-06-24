@@ -30,4 +30,4 @@ RUN chown -R delta:delta $APP_HOME \
 
 USER delta
 
-CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; gunicorn delta.wsgi:application -b 0.0.0.0:8000"]
+CMD ["sh", "-c", "python3 manage.py collectstatic --no-input; python3 manage.py migrate; gunicorn delta.wsgi:application -b 0.0.0.0:8000"]
