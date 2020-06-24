@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
 
-ALLOWED_HOSTS = ['delta.ecelliitr.org', 'delta-api.ecelliitr.org', '*']
+ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
