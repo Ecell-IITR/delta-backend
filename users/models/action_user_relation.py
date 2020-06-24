@@ -14,4 +14,4 @@ class ActionUserRelation(TimestampedModel):
         choices=USER_FIELD_CHOICES.ACTIONS, default=USER_FIELD_CHOICES.FOLLOW)
 
     def __str__(self):
-        return f'{self.action_by_person.username}-{self.action}-{self.action_on_person.username}'
+        return '%s-%s-%s' % (self.action_by_person.username, self.action, self.action_on_person.username)

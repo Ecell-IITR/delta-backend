@@ -34,7 +34,7 @@ class AbstractLocation(TimestampedModel):
 
         name = self.name
         pin_code = self.pin_code
-        return f'{name} - {pin_code}'
+        return '%s - %s' % (name, pin_code)
 
     class Meta:
         """

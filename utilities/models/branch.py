@@ -26,7 +26,7 @@ class AbstractBranch(TimestampedModel):
 
         name = self.name
         code = self.code
-        return f'{name} - {code}'
+        return '%s - %s' % (name, code)
 
     class Meta:
         """

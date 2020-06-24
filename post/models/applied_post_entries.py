@@ -25,7 +25,7 @@ class AppliedPostEntries(TimestampedModel):
     def __str__(self):
         user = self.user
         post = self.post
-        return f'{user} - {post}'
+        return '%s - %s' % (user, post)
 
     class Meta:
 

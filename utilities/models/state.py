@@ -11,7 +11,7 @@ class AbstractState(TimestampedModel):
        :return: the string representation of the model
        """
         name = self.name
-        return f'{name}'
+        return '%s' % name
 
     class Meta:
         abstract = True

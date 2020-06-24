@@ -29,7 +29,7 @@ class AbstractSkill(TimestampedModel):
        """
 
         name = self.name
-        return f'{name}'
+        return '%s' % name
 
     class Meta:
         """

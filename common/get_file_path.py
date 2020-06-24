@@ -1,11 +1,11 @@
 from uuid import uuid4
 
 def get_profile_image_path(instance, filename):
-  return f'PROFILE_IMAGE/user_{instance.username}_{filename}'
+  return 'PROFILE_IMAGE/user_%s_%s' % (instance.username, filename)
 
 
 def get_website_logo_image_path(instance, filename):
-  return f'WEBSITE_LOGO_IMAGE/website_{instance.id}_{filename}'
+  return 'WEBSITE_LOGO_IMAGE/website_%s_%s' % (instance.id, filename)
 
 def get_ckeditor_filename(filename):
     ext = filename.split('.')[-1:][0]

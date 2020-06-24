@@ -37,7 +37,7 @@ class Project(AbstractPost):
 
         title = self.title
         user = self.user
-        return f'{title} - {user.username}'
+        return '%s - %s' % (title, user.username)
 
     @staticmethod
     def get_post_type():

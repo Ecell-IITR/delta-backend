@@ -146,11 +146,11 @@ class SelfProfile(generics.RetrieveUpdateAPIView):
                     profile_url = social_link.get('profile_url') or None
                     if profile_url:
                         if user_profile.social_links.filter(profile_url=profile_url, website=website).exists():
-                            return Response({'error_message': f'Already profile added for {website.name}'}, status=status.HTTP_400_BAD_REQUEST)
+                            return Response({'error_message': 'Already profile added for %s' % (website.name)}, status=status.HTTP_400_BAD_REQUEST)
                         
                         user_profile.social_links.create(website=website, profile_url=profile_url)
                     else:
-                        return Response({'error_message': f'Profile url not found for {website.name}!'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'error_message': 'Profile url not found for %s!' % (website.name)}, status=status.HTTP_400_BAD_REQUEST)
 
             if interest:
                 interest = interest.strip()

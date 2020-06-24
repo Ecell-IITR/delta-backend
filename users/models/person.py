@@ -82,7 +82,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
 
         username = self.username
         email = self.email
-        return f'{username}-{email}'
+        return '%s-%s' % (username, email)
 
     def has_perm(self, perm, obj=None):
         return True
