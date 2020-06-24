@@ -7,7 +7,7 @@ ENV PYTHONBUFFERED 1
 RUN adduser -D user
 USER user
 
-ENV $APP_HOME = /delta/delta-backend
+ENV $APP_HOME=/delta/delta-backend
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/static
 RUN mkdir $APP_HOME/media
