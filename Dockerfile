@@ -28,7 +28,8 @@ COPY ./entrypoint.sh $APP_HOME
 COPY . $APP_HOME
 
 # chown all the files to the delta user
-RUN chown -R delta:delta APP_HOME
+RUN chown -R delta:delta $APP_HOME \
+  && chmod -R o+r $APP_HOME
 
 USER delta
 
