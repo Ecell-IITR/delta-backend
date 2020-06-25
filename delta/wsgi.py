@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 from django.core.wsgi import get_wsgi_application
 
-load_dotenv(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+load_dotenv()
 
 if os.environ.get('ENVIRONMENT') == 'production':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.deployment')

@@ -106,5 +106,6 @@ venv.bak/
 
 delta/media/
 delta/static/
+delta/.env
 
 .idea
