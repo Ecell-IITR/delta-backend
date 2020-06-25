@@ -12,12 +12,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 from delta.restconf.main import *
 import os
-import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
+
+DEBUG = (os.getenv('DEBUG', 'true').lower() == 'true')
 
 ALLOWED_HOSTS = ['*']
 # Application definition
@@ -48,6 +48,17 @@ INSTALLED_APPS = [
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
+DATABASES = {
+    'default': {
+        'NAME': os.getenv('DATABASE_NAME', 'delta'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': os.getenv('DATABASE_USER', 'delta_user'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'delta_user'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': '5432',
+    }
+}
+
 MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -77,39 +88,6 @@ TEMPLATES = [
         },
     },
 ]
-
-env = os.environ.get('ENVIRONMENT')
-print('Checking working environment:', env)
-
-if env == 'production':
-    DEBUG = False
-
-    prod_db = dj_database_url.config(conn_max_age=500)
-
-    DATABASES = {
-        'default': {
-            'NAME': os.getenv('DATABASE_NAME', 'delta'),
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER': os.getenv('DATABASE_USER', 'delta_user'),
-            'PASSWORD': os.getenv('DATABASE_PASSWORD', 'delta_user'),
-            'HOST': os.getenv('DATABASE_HOST', 'localhost'),
-            'PORT': '5432',
-        }
-    }
-
-    DATABASES['default'].update(prod_db)
-
-else:
-    DEBUG = True
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-
-print('Debug mode value:', DEBUG)
 
 WSGI_APPLICATION = "delta.wsgi.application"
 
