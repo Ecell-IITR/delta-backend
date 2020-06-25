@@ -54,11 +54,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
     'default': {
-        'NAME': os.getenv('DATABASE_NAME', 'delta'),
+        'NAME': os.environ.get('DATABASE_NAME', 'delta'),
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': os.getenv('DATABASE_USER', 'delta_user'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'delta_user'),
-        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'USER': os.environ.get('DATABASE_USER', 'delta_user'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'delta_user'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
         'PORT': '5432',
     }
 }
