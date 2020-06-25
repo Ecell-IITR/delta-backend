@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 from delta.restconf.main import *
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
