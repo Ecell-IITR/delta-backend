@@ -18,15 +18,14 @@ RUN pip install --upgrade pip \
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
-RUN mkdir -p /home/delta/delta-backend
-ENV APP_HOME=/home/delta/delta-backend
-WORKDIR $APP_HOME
+RUN mkdir -p /usr/delta/delta-backend
+WORKDIR /usr/delta/delta-backend
 
 COPY . .
 
-# chown all the files to the delta user
-RUN chown -R delta:delta $APP_HOME \
-  && chmod -R o+r $APP_HOME
+# # chown all the files to the delta user
+# RUN chown -R delta:delta $APP_HOME \
+#   && chmod -R o+r $APP_HOME
 
 USER delta
 
