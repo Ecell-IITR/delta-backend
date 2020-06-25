@@ -2,10 +2,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG = True
-
-ALLOWED_HOSTS = ['localhost']
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
