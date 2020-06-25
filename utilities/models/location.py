@@ -72,6 +72,6 @@ def location_pre_save(instance=None, created=False, update_fields=None, **kwargs
 def location_post_save(update_fields, instance=None, created=False, **kwargs):
     if update_fields is None:
         old_inst = instance.__old_instance
-        if old_inst is None or old_inst.title != instance.title:
-            instance.slug = unique_slug_generator(instance)
+        if old_inst is None or old_inst.name != instance.name:
+            instance.slug = unique_slug_generator(instance, 'name')
             instance.save()

@@ -11,7 +11,7 @@ def random_string_generator(
     return ''.join(random.choice(chars) for _ in range(size))
 
 
-def unique_slug_generator(instance, check_param = 'title', new_slug=None):
+def unique_slug_generator(instance, check_param='title', new_slug=None):
 
     if new_slug is not None:
         slug = new_slug
