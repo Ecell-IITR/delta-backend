@@ -8,9 +8,14 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 """
 
 import os
-
+from dotenv import load_dotenv
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings')
+load_dotenv()
+
+if os.environ.get('ENVIRONMENT') == 'production':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.deployment')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.development')
 
 application = get_wsgi_application()
