@@ -5,7 +5,7 @@ LABEL maintainer="E-cell"
 ENV PYTHONBUFFERED 1
 
 # create the app user
-RUN addgroup -S delta && adduser -S delta -G delta
+# RUN addgroup -S delta && adduser -S delta -G delta
 
 # install psycopg2 dependencies
 RUN apk update \
@@ -26,7 +26,5 @@ COPY . .
 # # chown all the files to the delta user
 # RUN chown -R delta:delta $APP_HOME \
 #   && chmod -R o+r $APP_HOME
-
-USER delta
 
 CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; gunicorn delta.wsgi:application -b 0.0.0.0:8000"]
