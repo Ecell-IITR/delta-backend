@@ -14,3 +14,9 @@ class PersonSerializer(serializers.ModelSerializer):
             'secondary_email',
             'role_type'
         ]
+
+    def to_representation(self, instance):
+        response = super(PersonSerializer, self).to_representation(instance)
+        if instance.profile_image:
+            response['profile_image'] = instance.profile_image.url
+        return response
