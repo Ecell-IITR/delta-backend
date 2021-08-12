@@ -22,13 +22,9 @@ class AbstractStudent(models.Model):
     )
     current_year = models.PositiveSmallIntegerField(blank=True, null=True)
     phone_number = models.CharField(
-        max_length=10,
+        max_length=20,
         blank=True,
-        null=True,
-        validators=[
-            RegexValidator(regex="^[6-9]\d{9}$",
-                           message="Phone Number Not Valid",)
-        ],
+        null=True
     )
     enrollment_number = models.CharField(max_length=20, blank=True, verbose_name="Enrollment number")
     course = models.CharField(max_length=55, blank=True, verbose_name="Course")
