@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
@@ -9,9 +9,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 
 from users.models import Person
+from users.serializers.auth.login import LoginSerializer
 
 class LoginAPIView(generics.GenericAPIView):
     permission_classes = [AllowAny, ]
+    serializer_class=LoginSerializer
 
     def post(self, request):
         data = request.data

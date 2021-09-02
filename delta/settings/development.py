@@ -32,11 +32,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles", # required for serving swagger ui's css/js files
     # Installed packages
     "rest_framework",
     "rest_framework.authtoken",
-    "corsheaders",
+    "corsheaders",  
+    'drf_yasg',
     # Docs
     "rest_framework_swagger",
     "ckeditor",
@@ -142,3 +143,7 @@ CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
