@@ -36,6 +36,6 @@ urlpatterns = [
     path('api/v1/', include('users.urls')),
     path('api/v1/post/', include('post.urls')),
     path('api/v1/utilities/', include('utilities.urls')),
-    path('docs',schema_view.with_ui('redoc', cache_timeout=0)),
+    path('docs/',schema_view.with_ui('redoc', cache_timeout=0)),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
