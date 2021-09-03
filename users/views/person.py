@@ -30,6 +30,7 @@ from users.models import (
     Person,
     Company
 )
+from users.utils import get_channeli_oauth_redirect_url
 
 
 class BasicUser(generics.RetrieveAPIView):
@@ -212,7 +213,7 @@ class ChanneliOAuthAPI(APIView):
     permission_classes = [AllowAny, ]
 
     @staticmethod
-    def post(request, *args, **kwargs):
+    def post(request, redirect_uri_type=None, *args, **kwargs):
         code = request.data.get('code') or None
 
         if code:
@@ -221,7 +222,7 @@ class ChanneliOAuthAPI(APIView):
                 'client_id': os.getenv('CHANNELI_CLIENT_ID'),
                 'client_secret': os.getenv('CHANNELI_CLIENT_SECRET'),
                 'grant_type': os.getenv('CHANNELI_GRANT_TYPE'),
-                'redirect_uri': os.getenv('CHANNELI_REDIRECT_URL'),
+                'redirect_uri': get_channeli_oauth_redirect_url(redirect_uri_type),
                 'code': code
             }
             encoded_data, content_type = encode_multipart_formdata(files)

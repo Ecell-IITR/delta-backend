@@ -27,6 +27,7 @@ urlpatterns = [
     re_path(r'action/(?P<action_key>[0-9]+)/(?P<username>[0-9a-zA-Z]+)/', ActionView.as_view(), name="follow-user"),
     path('followers-list/', FollowersList.as_view(), name="followers-list"),
     path('following-list/', FollowingList.as_view(), name="following-list"),
-    path('oauth/channeli/', ChanneliOAuthAPI.as_view(), name="channeli-oauth")
+    path('oauth/channeli/', ChanneliOAuthAPI.as_view(), name="channeli-oauth"),
+    path('oauth/channeli/<str:redirect_uri_type>/', ChanneliOAuthAPI.as_view(), name="channeli-oauth-mobile"),
 
 ]

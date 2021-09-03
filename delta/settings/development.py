@@ -55,14 +55,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
     'default': {
-        'NAME': os.environ.get('DATABASE_NAME', 'delta'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': os.environ.get('DATABASE_USER', 'delta_user'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'delta_user'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
