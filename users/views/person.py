@@ -1,5 +1,5 @@
 import requests, os
-
+from rest_framework import serializers
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -303,3 +303,26 @@ class ChanneliOAuthAPI(APIView):
                 return Response({'error_message': 'Invalid code type'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'error_message': 'OAuth code is missing!'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StudentProfileUpdateAPI(APIView):
+
+    permission_classes = [IsAuthenticated, ]
+
+    class InputSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Student
+            fields = "__all__"
+            read_only_fields = ('id', 'person', 'enrollment_number')
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        if user.role_type != GET_ROLE_TYPE.STUDENT:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        student_profile = user.student_profile
+        serializer = self.InputSerializer(student_profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(status=status.HTTP_200_OK)
