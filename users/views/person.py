@@ -257,8 +257,9 @@ class ChanneliOAuthAPI(APIView):
                                 user = Person.objects.create(username=username, email=email,
                                                              role_type=GET_ROLE_TYPE.STUDENT, is_channeli_oauth=True)
                                 profile_image = person_info.get('displayPicture') or None
-                                if profile_image:
-                                    user.profile_image = profile_image
+                                #TODO: Save profile image from channeli
+                                # if profile_image:
+                                #     user.profile_image = profile_image
                                 user.save()
 
                                 student_profile = Student.objects.create(person=user)
