@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "users",
     "post",
     "utilities",
+    "storages"
 ]
 
 # CORS Settings
@@ -142,3 +143,17 @@ CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
 CKEDITOR_IMAGE_BACKEND = 'pillow'
 
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
+
+########S3 Bucket
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', None)
+
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+DEFAULT_FILE_STORAGE = 'delta.storage_backends.MediaStorage'  # <-- here is where we reference it
