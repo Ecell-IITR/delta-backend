@@ -58,7 +58,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         help_text="If you are company,enter company icon.",
         blank=True,
         null=True,
-        default='/defaults/profile-image.png'
+        default='defaults/profile-image.png'
     )
 
     role_type = models.CharField(

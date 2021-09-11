@@ -3,8 +3,8 @@ class POST_FIELD_CHOICES:
     ONSPOT = 2
 
     COMPETITION_TYPE = (
-        (ONLINE, 'Online'),
-        (ONSPOT, 'Onspot'),
+        (str(ONLINE), 'Online'),
+        (str(ONSPOT), 'Onspot'),
     )
 
     FULL_TIME = 1

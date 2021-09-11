@@ -17,7 +17,7 @@ class Competition(AbstractPost):
     competition_type = models.CharField(
         max_length=255,
         choices=POST_FIELD_CHOICES.COMPETITION_TYPE,
-        default=POST_FIELD_CHOICES.ONLINE,
+        default='1',
         verbose_name="Competition type"
     )
 
