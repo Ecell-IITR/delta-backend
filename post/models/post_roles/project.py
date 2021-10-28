@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-
+from post.models.applied_post_entries import AppliedPostEntries
+from django.contrib.contenttypes.fields import GenericRelation
 from post.models.post import AbstractPost
 from post.utils import unique_slug_generator
 from post.constants import POST_TYPE
@@ -28,6 +29,8 @@ class Project(AbstractPost):
         blank=True,
         verbose_name='Approximate Duration'
     )
+    applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
+                                           object_id_field='post_object_id')
 
     def __str__(self):
         """
