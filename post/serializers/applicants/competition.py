@@ -18,8 +18,7 @@ class ApplicantCompeteSerializer(serializers.ModelSerializer):
         try:
             return StudentSerializer(person).data
         except:
-            pass
-        return {}
+            return None
 
 
 class CompetitionMinimumSerializer(serializers.ModelSerializer):
@@ -43,8 +42,7 @@ class CompetitionMinimumSerializer(serializers.ModelSerializer):
         try:
             return ApplicantCompeteSerializer(person, many=True).data
         except:
-            pass
-        return {}
+            return None
 
     @staticmethod
     def get_author_profile(obj):
@@ -53,10 +51,5 @@ class CompetitionMinimumSerializer(serializers.ModelSerializer):
             user_profile = person.student_profile
             return StudentMinimumSerializer(user_profile).data
         except:
-            pass
-        try:
             user_profile = person.company_profile
             return CompanyMinimumSerializer(user_profile).data
-        except:
-            pass
-        return {}

@@ -1,7 +1,3 @@
-import json
-import datetime
-from django.contrib.auth.models import User
-
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware
@@ -484,50 +480,11 @@ class ApplicantsPostView(PostBaseView, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
     lookup_field = 'slug'
 
-    def get_queryset(self):
-        slug = self.kwargs['slug']
-
-        if self.action in ['retrieve', 'update']:
-            if Internship.objects.filter(slug=slug):
-                return Internship.objects.filter(user=self.request.user,
-                                                 slug=slug
-                                                 )
-            if Project.objects.filter(slug=slug):
-                return Project.objects.filter(user=self.request.user,
-                                              slug=slug
-                                              )
-            if Competition.objects.filter(slug=slug):
-                return Competition.objects.filter(user=self.request.user,
-                                                  slug=slug
-                                                  )
-
-            return Response({"error_message": 'slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
-
-    def get_serializer_class(self):
-        slug = self.kwargs['slug']
-
-        if self.action in ['retrieve', 'update']:
-
-            if Internship.objects.filter(slug=slug):
-                return InternMinimumSerializer
-
-            if Project.objects.filter(slug=slug):
-                return ProjectMinimumSerializer
-
-            if Competition.objects.filter(slug=slug):
-                return CompetitionMinimumSerializer
-
-            return Response(
-                {
-                    "error_message": 'slug doesn\'t exists'
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
     def list(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
         post_type = request.GET.get('post_type') or None
-        obj = {}
+        obj = None
+        data = None
         if slug:
             if post_type:
                 if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
@@ -539,11 +496,6 @@ class ApplicantsPostView(PostBaseView, viewsets.ModelViewSet):
                         context={'request': request},
                         many=True
                     ).data
-                    if data:
-                        obj = data[0]
-                        return Response(obj, status=status.HTTP_200_OK)
-                    else:
-                        return Response({"error_message": 'param or slug doesn\'t match'}, status=status.HTTP_400_BAD_REQUEST)
 
                 elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
                     competition_queryset = Competition.objects.filter(
@@ -554,11 +506,6 @@ class ApplicantsPostView(PostBaseView, viewsets.ModelViewSet):
                         context={'request': request},
                         many=True
                     ).data
-                    if data:
-                        obj = data[0]
-                        return Response(obj, status=status.HTTP_200_OK)
-                    else:
-                        return Response({"error_message": 'param or slug doesn\'t match'}, status=status.HTTP_400_BAD_REQUEST)
 
                 elif int(post_type) == POST_TYPE.PROJECT_POST_TYPE:
                     project_queryset = Project.objects.filter(
@@ -569,11 +516,11 @@ class ApplicantsPostView(PostBaseView, viewsets.ModelViewSet):
                         context={'request': request},
                         many=True
                     ).data
-                    if data:
-                        obj = data[0]
-                        return Response(obj, status=status.HTTP_200_OK)
-                    else:
-                        return Response({"error_message": 'param or slug doesn\'t match'}, status=status.HTTP_400_BAD_REQUEST)
 
+                if data:
+                    obj = data[0]
+                    return Response(obj, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error_message": 'param or slug doesn\'t match'}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error_message": 'slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)

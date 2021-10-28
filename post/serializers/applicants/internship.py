@@ -19,8 +19,7 @@ class ApplicantsInternSerializers(serializers.ModelSerializer):
         try:
             return StudentSerializer(person).data
         except:
-            pass
-        return {}
+            return None
 
 
 class InternMinimumSerializer(serializers.ModelSerializer):
@@ -44,8 +43,7 @@ class InternMinimumSerializer(serializers.ModelSerializer):
         try:
             return ApplicantsInternSerializers(person, many=True).data
         except:
-            pass
-        return {}
+            return None
 
     @staticmethod
     def get_author_profile(obj):
@@ -54,10 +52,5 @@ class InternMinimumSerializer(serializers.ModelSerializer):
             user_profile = person.student_profile
             return StudentMinimumSerializer(user_profile).data
         except:
-            pass
-        try:
             user_profile = person.company_profile
             return CompanyMinimumSerializer(user_profile).data
-        except:
-            pass
-        return {}
