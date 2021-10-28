@@ -19,6 +19,14 @@ class Project(AbstractPost):
         verbose_name='Stipend'
     )
 
+    stipend_max = models.CharField(
+        max_length=55,
+        blank=True,
+        null=True,
+        default=None,
+        verbose_name='Stipend Max'
+    )
+
     project_file = models.FileField(
         verbose_name='Project file',
         blank=True

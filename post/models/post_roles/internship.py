@@ -21,6 +21,14 @@ class Internship(AbstractPost):
         help_text="Stipend should be in rupees."
     )
 
+    stipend_max = models.CharField(
+        max_length=55,
+        blank=True,
+        null=True,
+        default=None,
+        verbose_name='Stipend Max'
+    )
+
     position = models.CharField(
         max_length=55,
         blank=True,
