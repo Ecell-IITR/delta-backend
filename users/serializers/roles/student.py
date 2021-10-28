@@ -1,9 +1,10 @@
+from django.db.models import fields
 from rest_framework import serializers
 
 from common.field_choices import USER_FIELD_CHOICES
 
 from users.serializers import PersonSerializer, SocialLinkSerializer
-from users.models import Student
+from users.models import Student, person
 
 from utilities.serializers import BranchSerializer, SkillSerializer
 
@@ -48,3 +49,11 @@ class StudentMinInfoSerializer(serializers.ModelSerializer):
   
     def get_followers_count(self, obj):
         return obj.person.action_on_person.filter(action=USER_FIELD_CHOICES.FOLLOW).count()
+
+
+class StudentDataSerializer(serializers.ModelSerializer):
+    person = PersonSerializer(read_only=True)
+    class Meta:
+        model = Student
+        # fields = '__all__'
+        exclude = ('resume', 'phone_number')

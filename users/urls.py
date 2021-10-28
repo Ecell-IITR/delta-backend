@@ -10,7 +10,7 @@ from users.views import (
     AvatarUploadAPI
 )
 from users.views import ActionView, FollowersList, FollowingList
-
+from users.views.student import StudentAPI
 # User = WhoAmIViewSet.as_view({
 #     'get': 'list',
 #     'put': 'update'
@@ -31,5 +31,5 @@ urlpatterns = [
     path('following-list/', FollowingList.as_view(), name="following-list"),
     path('oauth/channeli/', ChanneliOAuthAPI.as_view(), name="channeli-oauth"),
     path('oauth/channeli/<str:redirect_uri_type>/', ChanneliOAuthAPI.as_view(), name="channeli-oauth-mobile"),
-
+    path('student/<int:pk>/', StudentAPI.as_view())
 ]
