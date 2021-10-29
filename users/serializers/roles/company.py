@@ -1,9 +1,8 @@
-from django.db.models import fields
 from rest_framework import serializers
 
 from common.field_choices import USER_FIELD_CHOICES
 
-from users.serializers import PersonSerializer, person
+from users.serializers import PersonSerializer
 from users.models import Company
 
 
