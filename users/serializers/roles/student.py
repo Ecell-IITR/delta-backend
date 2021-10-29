@@ -1,10 +1,9 @@
-from django.db.models import fields
 from rest_framework import serializers
 
 from common.field_choices import USER_FIELD_CHOICES
 
 from users.serializers import PersonSerializer, SocialLinkSerializer
-from users.models import Student, person
+from users.models import Student
 
 from utilities.serializers import BranchSerializer, SkillSerializer
 
