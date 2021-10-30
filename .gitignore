@@ -109,3 +109,4 @@ delta/static/
 delta/.env
 
 .idea
+.vscode/settings.json
