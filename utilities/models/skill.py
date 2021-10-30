@@ -20,15 +20,11 @@ class AbstractSkill(TimestampedModel):
     name = models.CharField(
         max_length=255,
         verbose_name="Skill",
+        unique=True,
         help_text="Type the skill name you want to add"
     )
-    Type = models.CharField(
-        max_length=255,
-        default="tech",
-        help_text="Type of skill you want to add"
-        )
-    # = models.ForeignKey(Type, on_delete=models.CASCADE)
-    
+ 
+   
     def __str__(self):
         """
        Return the string representation of the model

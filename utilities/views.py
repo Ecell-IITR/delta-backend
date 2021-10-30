@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
 from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer, TypeSerializer
-from utilities.models import Skill, Tag, Location
+from utilities.models import Skill, Tag, Location,Type
 
 
 class SkillBaseView(APIView):
@@ -133,6 +133,6 @@ class TypeSkillsAPIView(SkillBaseView, generics.ListAPIView):
         user = self.request.user
         user_profile = self.request.user_profile
         
-        user_skills_queryset = user_profile.skills.all()
-        total_skills_queryset = Skill.objects.all()
+        user_skills_queryset = user_profile.type.all()
+        total_skills_queryset = Type.objects.all()
         return total_skills_queryset.difference(user_skills_queryset)
