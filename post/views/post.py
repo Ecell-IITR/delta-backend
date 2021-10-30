@@ -209,6 +209,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
             if post.user == user:
                 title = body.get('title') or None
                 stipend = body.get('stipend') or None
+                stipend_max = body.get('stipend_max') or None
                 description = body.get('description') or None
                 expiry_timestamp = body.get('expiry_timestamp') or None
                 skill_slugs = body.get('skill_slugs') or None
@@ -223,6 +224,8 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                         post.title = title
                     if stipend:
                         post.stipend = stipend
+                    if stipend_max:
+                        post.stipend_max = stipend_max
                     if description:
                         post.description = description
                     if location:
@@ -339,6 +342,7 @@ class CreatePost(generics.CreateAPIView):
 
                 if post_type == POST_TYPE.INTERNSHIP_POST_TYPE:
                     stipend = data.get('stipend') or None
+                    stipend_max = data.get('stipend_max') or None
                     location = data.get('location') or None
                     duration_value = data.get('duration_value') or None
                     duration_unit = data.get('duration_unit') or None
@@ -349,6 +353,8 @@ class CreatePost(generics.CreateAPIView):
                         internship.title = title
                     if stipend:
                         internship.stipend = stipend
+                    if stipend_max:
+                        internship.stipend_max = stipend_max
                     if description:
                         internship.description = description
                     if location:
