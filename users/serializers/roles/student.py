@@ -48,3 +48,11 @@ class StudentMinInfoSerializer(serializers.ModelSerializer):
   
     def get_followers_count(self, obj):
         return obj.person.action_on_person.filter(action=USER_FIELD_CHOICES.FOLLOW).count()
+
+
+class StudentDataSerializer(serializers.ModelSerializer):
+    person = PersonSerializer(read_only=True)
+    class Meta:
+        model = Student
+        # fields = '__all__'
+        exclude = ('resume', 'phone_number')
