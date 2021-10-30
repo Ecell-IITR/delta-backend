@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -21,7 +22,13 @@ class AbstractSkill(TimestampedModel):
         verbose_name="Skill",
         help_text="Type the skill name you want to add"
     )
-
+    Type = models.CharField(
+        max_length=255,
+        default="tech",
+        help_text="Type of skill you want to add"
+        )
+    # = models.ForeignKey(Type, on_delete=models.CASCADE)
+    
     def __str__(self):
         """
        Return the string representation of the model
@@ -50,8 +57,6 @@ class Skill(AbstractSkill):
         """
 
         verbose_name_plural = 'Skill'
-
-
 @receiver(pre_save, sender=Skill)
 def skill_pre_save(instance=None, created=False, update_fields=None, **kwargs):
     skill = None
@@ -61,8 +66,6 @@ def skill_pre_save(instance=None, created=False, update_fields=None, **kwargs):
         except Skill.DoesNotExist:
             pass
     instance.__old_instance = skill
-
-
 @receiver(post_save, sender=Skill)
 def skill_post_save(update_fields, instance=None, created=False, **kwargs):
     if update_fields is None:

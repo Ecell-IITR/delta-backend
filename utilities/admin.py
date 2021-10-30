@@ -1,8 +1,9 @@
+
 from django.contrib import admin
 
-from utilities.models import Skill, Branch, Location, Website, State, Country, Tag
+from utilities.models import Skill, Branch, Location, Website, State, Country, Tag 
 
-models = [ Branch, Website, State, Country]
+models = [Branch, Website, State, Country]
 
 for model in models:
     admin.site.register(model)
@@ -17,7 +18,7 @@ admin.site.register(Tag, TagAdmin)
 
 
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'name')
+    list_display = ('slug', 'name', 'Type')
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
 admin.site.register(Skill, SkillAdmin)
