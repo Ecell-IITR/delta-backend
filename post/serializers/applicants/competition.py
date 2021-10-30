@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from post.models.post_roles.competition import Competition
-from users.serializers import StudentMinimumSerializer, StudentSerializer, CompanyMinimumSerializer
+from users.serializers import StudentMinimumSerializer, StudentSerializer, CompanyMinimumSerializer, PersonSerializer
 from post.models import AppliedPostEntries
+from users.constants import GET_ROLE_TYPE
 
 
 class ApplicantCompeteSerializer(serializers.ModelSerializer):
@@ -48,8 +49,14 @@ class CompetitionMinimumSerializer(serializers.ModelSerializer):
     def get_author_profile(obj):
         person = obj.user
         try:
-            user_profile = person.student_profile
-            return StudentMinimumSerializer(user_profile).data
+            if person.role_type == GET_ROLE_TYPE.STUDENT:
+                user_profile = person.student_profile
+                return StudentMinimumSerializer(user_profile).data
+            elif person.role_type == GET_ROLE_TYPE.COMPANY:
+                user_profile = person.company_profile
+                return CompanyMinimumSerializer(user_profile).data
+            else:
+                user_profile = person.person_profile
+                return PersonSerializer(user_profile).data
         except:
-            user_profile = person.company_profile
-            return CompanyMinimumSerializer(user_profile).data
+            return None

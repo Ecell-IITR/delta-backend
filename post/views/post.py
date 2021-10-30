@@ -23,8 +23,6 @@ from post.models import (
     Competition,
     Internship,
     AppliedPostEntries,
-    applied_post_entries,
-    post
 )
 from utilities.models import Location, Skill, Tag
 from post.permissions import IsStudent
@@ -36,10 +34,15 @@ class PostBaseView(views.APIView):
         user = request.user
         post_slug = self.kwargs.get('slug') or None
 
-        if user.student_profile:
-            user_profile = user.student_profile
-        elif user.company_profile:
-            user_profile = user.company_profile
+        try:
+            if user.student_profile:
+                user_profile = user.student_profile
+            elif user.company_profile:
+                user_profile = user.company_profile
+            else:
+                user_profile = user.person_profile
+        except:
+            return None
 
         request.post = None
         if post_slug:
