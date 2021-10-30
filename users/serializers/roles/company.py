@@ -29,3 +29,13 @@ class CompanyMinimumSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_followers_count(obj):
         return obj.person.action_on_person.filter(action=USER_FIELD_CHOICES.FOLLOW).count()
+
+
+class CompanyDataSerializer(serializers.ModelSerializer):
+    person = PersonSerializer(
+        read_only=True
+    )
+    
+    class Meta:
+        model = Company
+        fields = '__all__'

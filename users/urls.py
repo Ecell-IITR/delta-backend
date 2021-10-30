@@ -1,3 +1,4 @@
+from users.views.company import CompanyAPI
 from users.views.person import StudentProfileUpdateAPI
 from django.urls import path, include, re_path
 from users.views import (
@@ -31,5 +32,6 @@ urlpatterns = [
     path('following-list/', FollowingList.as_view(), name="following-list"),
     path('oauth/channeli/', ChanneliOAuthAPI.as_view(), name="channeli-oauth"),
     path('oauth/channeli/<str:redirect_uri_type>/', ChanneliOAuthAPI.as_view(), name="channeli-oauth-mobile"),
+    path('company/<int:pk>', CompanyAPI.as_view()),
     path('student/<int:pk>/', StudentAPI.as_view())
 ]
