@@ -4,8 +4,6 @@ from utilities.models import TimestampedModel
 
 class AbstractSkillType(TimestampedModel):
 
-   
-
     type = models.CharField(
         max_length=255,
         help_text="Type of skill you want to add",
@@ -41,4 +39,4 @@ class SkillType(AbstractSkillType):
         Meta class for Skill
         """
 
-        verbose_name_plural = 'Type'
+        verbose_name_plural = 'Skill Type'

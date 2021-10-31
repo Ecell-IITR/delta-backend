@@ -19,11 +19,11 @@ class AbstractSkill(TimestampedModel):
 
     name = models.CharField(
         max_length=255,
-        verbose_name="Skill",     
+        verbose_name="Skill",
         help_text="Type the skill name you want to add"
     )
-    type = models.ForeignKey(SkillType,default=None, null=True, blank=True, on_delete=models.SET_NULL)
-   
+    type = models.ForeignKey(SkillType, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+
     def __str__(self):
         """
        Return the string representation of the model
@@ -52,6 +52,7 @@ class Skill(AbstractSkill):
         """
 
         verbose_name_plural = 'Skill'
+
 @receiver(pre_save, sender=Skill)
 def skill_pre_save(instance=None, created=False, update_fields=None, **kwargs):
     skill = None
@@ -61,11 +62,12 @@ def skill_pre_save(instance=None, created=False, update_fields=None, **kwargs):
         except Skill.DoesNotExist:
             pass
     instance.__old_instance = skill
+
 @receiver(post_save, sender=Skill)
 def skill_post_save(update_fields, instance=None, created=False, **kwargs):
     if update_fields is None:
         old_inst = instance.__old_instance
         if old_inst is None or old_inst.name != instance.name:
             instance.slug = unique_slug_generator(instance, 'name')
-            
+
             instance.save()

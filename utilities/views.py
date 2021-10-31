@@ -128,12 +128,3 @@ class TagsListAPI(generics.ListAPIView):
     pagination_class = None
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
-
-
-
-
-
-
-
-
-
