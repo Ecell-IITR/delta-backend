@@ -4,7 +4,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from post.utils import unique_slug_generator
-from utilities.models import TimestampedModel
+from utilities.models import TimestampedModel, Type
 
 
 class AbstractSkill(TimestampedModel):
@@ -19,11 +19,10 @@ class AbstractSkill(TimestampedModel):
 
     name = models.CharField(
         max_length=255,
-        verbose_name="Skill",
-        unique=True,
+        verbose_name="Skill",     
         help_text="Type the skill name you want to add"
     )
- 
+    type = models.ForeignKey(Type, to_field='type', on_delete=models.DO_NOTHING)
    
     def __str__(self):
         """

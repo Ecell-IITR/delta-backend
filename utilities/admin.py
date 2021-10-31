@@ -18,7 +18,7 @@ admin.site.register(Tag, TagAdmin)
 
 
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'name')
+    list_display = ('slug', 'name','type')
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
 admin.site.register(Skill, SkillAdmin)
@@ -31,7 +31,7 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 class TypeAdmin(admin.ModelAdmin):
-    list_display = ( 'name', 'type')
+    list_display = ('type',)
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
 admin.site.register(Type, TypeAdmin)

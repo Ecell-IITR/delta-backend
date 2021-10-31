@@ -1,11 +1,11 @@
 
 from rest_framework import serializers
 
-from utilities.models import Type
+from utilities.models import Skill
 
 
 class TypeSerializer (serializers.ModelSerializer):
     class Meta:
-        model = Type
-        exclude = ('id', 'created_at', 'updated_at')
+        model = Skill
+        exclude = ('id', 'created_at', 'updated_at', 'slug')
         

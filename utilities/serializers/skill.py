@@ -6,7 +6,7 @@ from utilities.models import Skill
 class SkillSerializer (serializers.ModelSerializer):
     class Meta:
         model = Skill
-        exclude = ('id', 'created_at', 'updated_at')
+        exclude = ('id', 'created_at', 'updated_at','type')
 
 
 
