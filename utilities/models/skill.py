@@ -67,4 +67,5 @@ def skill_post_save(update_fields, instance=None, created=False, **kwargs):
         old_inst = instance.__old_instance
         if old_inst is None or old_inst.name != instance.name:
             instance.slug = unique_slug_generator(instance, 'name')
+            
             instance.save()

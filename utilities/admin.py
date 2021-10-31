@@ -32,6 +32,6 @@ admin.site.register(Location, LocationAdmin)
 
 class SkillTypeAdmin(admin.ModelAdmin):
     list_display = ('type',)
-    readonly_fields = ('slug', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
 
 admin.site.register(SkillType, SkillTypeAdmin)

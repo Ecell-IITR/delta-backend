@@ -4,13 +4,7 @@ from utilities.models import TimestampedModel
 
 class AbstractSkillType(TimestampedModel):
 
-    slug = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        unique=True,
-        db_index=True
-    )
+   
 
     type = models.CharField(
         max_length=255,
