@@ -17,11 +17,14 @@ from post.serializers import (
     InternshipSerializer,
     ProjectSerializer
 )
+from post.serializers.applicants.internship import InternMinimumSerializer
+from post.serializers.applicants.competition import CompetitionMinimumSerializer
+from post.serializers.applicants.project import ProjectMinimumSerializer
 from post.models import (
     Project,
     Competition,
     Internship,
-    AppliedPostEntries
+    AppliedPostEntries,
 )
 from utilities.models import Location, Skill, Tag
 from post.permissions import IsStudent
@@ -33,10 +36,15 @@ class PostBaseView(views.APIView):
         user = request.user
         post_slug = self.kwargs.get('slug') or None
 
-        if user.student_profile:
-            user_profile = user.student_profile
-        elif user.company_profile:
-            user_profile = user.company_profile
+        try:
+            if user.student_profile:
+                user_profile = user.student_profile
+            elif user.company_profile:
+                user_profile = user.company_profile
+            else:
+                user_profile = user.person_profile
+        except:
+            return None
 
         request.post = None
         if post_slug:
@@ -54,7 +62,7 @@ class PostBaseView(views.APIView):
                 request.post = Competition.objects.get(slug=post_slug)
                 request.post_type = POST_TYPE.PROJECT_POST_TYPE
             except:
-               pass
+                pass
 
         if request.post is None:
             request.post_type = None
@@ -133,45 +141,54 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
             if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now, ).exclude(user=request.user)\
-                                                .order_by('-updated_at')
+                    .order_by('-updated_at')
                 if my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
                                                                      post_expiry_date__gte=now)\
-                                                .order_by('-updated_at')
+                        .order_by('-updated_at')
                 if expired_my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, post_expiry_date__lte=now)\
-                                                .order_by('-updated_at')
+                        .order_by('-updated_at')
                 if expired_post:
                     internships_queryset = Internship.objects.filter(post_expiry_date__lte=now)\
-                                                .order_by('-updated_at')
+                        .order_by('-updated_at')
                 if unpublished_my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=False, post_expiry_date__gte=now)\
-                                                .order_by('-updated_at')
+                        .order_by('-updated_at')
                 if unpublished_post:
                     internships_queryset = Internship.objects.filter(is_published=False, post_expiry_date__gte=now)\
-                                                .order_by('-updated_at')
+                        .order_by('-updated_at')
                 if bookmark:
-                    internships_queryset = internships_queryset.filter(bookmarks__person=request.user)
+                    internships_queryset = internships_queryset.filter(
+                        bookmarks__person=request.user)
                 if applied_posts:
                     post_ids = AppliedPostEntries.objects.filter(user_object_id=request.user_profile.id)\
-                                        .values_list('post_object_id', flat=True).distinct()
-                    internships_queryset = internships_queryset.filter(id__in=post_ids)
+                        .values_list('post_object_id', flat=True).distinct()
+                    internships_queryset = internships_queryset.filter(
+                        id__in=post_ids)
                 if stipend_ll:
-                    internships_queryset = internships_queryset.filter(stipend__gte=int(stipend_ll))
+                    internships_queryset = internships_queryset.filter(
+                        stipend__gte=int(stipend_ll))
                 if stipend_ul:
-                    internships_queryset = internships_queryset.filter(stipend__lte=int(stipend_ul))
+                    internships_queryset = internships_queryset.filter(
+                        stipend__lte=int(stipend_ul))
                 if duration_unit:
                     value = get_duration_value(duration_unit)
                     if duration_value_ll:
-                        internships_queryset = internships_queryset.filter(duration_value__gte=int(duration_value_ll)*value)
+                        internships_queryset = internships_queryset.filter(
+                            duration_value__gte=int(duration_value_ll)*value)
                     if duration_value_ul:
-                        internships_queryset = internships_queryset.filter(duration_value__lte=int(duration_value_ul)*value)
+                        internships_queryset = internships_queryset.filter(
+                            duration_value__lte=int(duration_value_ul)*value)
                 if location:
-                    internships_queryset = internships_queryset.filter(location__slug=location)
+                    internships_queryset = internships_queryset.filter(
+                        location__slug=location)
                 if tag_hash:
-                    internships_queryset = internships_queryset.filter(tags__hash__in=tag_hash)
+                    internships_queryset = internships_queryset.filter(
+                        tags__hash__in=tag_hash)
                 if skill_slug:
-                    internships_queryset = internships_queryset.filter(required_skills__slug__in=skill_slug)
+                    internships_queryset = internships_queryset.filter(
+                        required_skills__slug__in=skill_slug)
 
                 data = InternshipSerializer(
                     internships_queryset,
@@ -181,16 +198,18 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
 
             elif int(post_type) == POST_TYPE.PROJECT_POST_TYPE:
                 data = ProjectSerializer(
-                    Project.objects.filter(is_verified=True, is_published=True, post_expiry_date__gte=now)
-                        .order_by('-created_at'),
+                    Project.objects.filter(
+                        is_verified=True, is_published=True, post_expiry_date__gte=now)
+                    .order_by('-created_at'),
                     context={'request': request},
                     many=True
                 ).data
 
             elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
                 data = CompetitionSerializer(
-                    Competition.objects.filter(is_verified=True, is_published=True, post_expiry_date__gte=now)
-                        .order_by('-created_at'),
+                    Competition.objects.filter(
+                        is_verified=True, is_published=True, post_expiry_date__gte=now)
+                    .order_by('-created_at'),
                     context={'request': request},
                     many=True
                 ).data
@@ -204,7 +223,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         post_type = request.post_type
         now = timezone.now()
         body = json.loads(request.body)
-        
+
         if post is not None:
             if post.user == user:
                 title = body.get('title') or None
@@ -230,7 +249,8 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                         post.description = description
                     if location:
                         try:
-                            check_location = Location.objects.get(slug=location)
+                            check_location = Location.objects.get(
+                                slug=location)
                         except:
                             return Response({"error_message": 'Location doesn\'t exists'},
                                             status=status.HTTP_400_BAD_REQUEST)
@@ -238,7 +258,8 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                             post.location = check_location
                     if expiry_timestamp:
                         if datetime.datetime.fromtimestamp(expiry_timestamp) > datetime.datetime.now():
-                            post.post_expiry_date = make_aware(datetime.datetime.fromtimestamp(expiry_timestamp))
+                            post.post_expiry_date = make_aware(
+                                datetime.datetime.fromtimestamp(expiry_timestamp))
                         else:
                             return Response({"error_message": 'Expiry date cannot be less than current timestamp'},
                                             status=status.HTTP_400_BAD_REQUEST)
@@ -272,12 +293,15 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     else:
                         post.is_published = False
                     post.save()
-                    data = InternshipSerializer(post, context={'request': request},).data
+                    data = InternshipSerializer(
+                        post, context={'request': request},).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
-                    data = CompetitionSerializer(post, context={'request': request},).data
+                    data = CompetitionSerializer(
+                        post, context={'request': request},).data
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
-                    data = ProjectSerializer(post, context={'request': request},).data
+                    data = ProjectSerializer(
+                        post, context={'request': request},).data
 
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -347,8 +371,8 @@ class CreatePost(generics.CreateAPIView):
                     duration_value = data.get('duration_value') or None
                     duration_unit = data.get('duration_unit') or None
 
-                    internship = Internship.objects.create(user=user, post_expiry_date=
-                                                        make_aware(datetime.datetime.fromtimestamp(expiry_timestamp)))
+                    internship = Internship.objects.create(user=user, post_expiry_date=make_aware(
+                        datetime.datetime.fromtimestamp(expiry_timestamp)))
                     if title:
                         internship.title = title
                     if stipend:
@@ -359,7 +383,8 @@ class CreatePost(generics.CreateAPIView):
                         internship.description = description
                     if location:
                         try:
-                            check_location = Location.objects.get(slug=location)
+                            check_location = Location.objects.get(
+                                slug=location)
                         except:
                             return Response({"error_message": 'Location doesn\'t exists'},
                                             status=status.HTTP_400_BAD_REQUEST)
@@ -397,19 +422,22 @@ class CreatePost(generics.CreateAPIView):
                         internship.is_published = False
                     internship.save()
 
-                    serializer_data = InternshipSerializer(internship, context={'request': request}, ).data
+                    serializer_data = InternshipSerializer(
+                        internship, context={'request': request}, ).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
                     competition = Competition.objects.create(user=user)
-                    serializer_data = CompetitionSerializer(competition, context={'request': request}, ).data
+                    serializer_data = CompetitionSerializer(
+                        competition, context={'request': request}, ).data
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     project = Project.objects.create(user=user)
-                    serializer_data = ProjectSerializer(project, context={'request': request}, ).data
+                    serializer_data = ProjectSerializer(
+                        project, context={'request': request}, ).data
 
                 return Response(
-                        serializer_data,
-                        status=status.HTTP_200_OK
-                    )
+                    serializer_data,
+                    status=status.HTTP_200_OK
+                )
             else:
                 return Response({'error_message': 'post_type field value is incorrect'},
                                 status=status.HTTP_400_BAD_REQUEST)
@@ -450,3 +478,54 @@ class ApplyPostView(PostBaseView):
                 return Response({"error_message": 'Unable to apply'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ApplicantsPostView(PostBaseView, viewsets.ModelViewSet):
+
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = 'slug'
+
+    def list(self, request, *args, **kwargs):
+        slug = self.kwargs['slug']
+        post_type = request.GET.get('post_type') or None
+        obj = None
+        data = None
+        if slug:
+            if post_type:
+                if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
+                    internships_queryset = Internship.objects.filter(
+                        user=request.user, slug=slug)
+
+                    data = InternMinimumSerializer(
+                        internships_queryset,
+                        context={'request': request},
+                        many=True
+                    ).data
+
+                elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
+                    competition_queryset = Competition.objects.filter(
+                        user=request.user, slug=slug)
+
+                    data = CompetitionMinimumSerializer(
+                        competition_queryset,
+                        context={'request': request},
+                        many=True
+                    ).data
+
+                elif int(post_type) == POST_TYPE.PROJECT_POST_TYPE:
+                    project_queryset = Project.objects.filter(
+                        user=request.user, slug=slug)
+
+                    data = ProjectMinimumSerializer(
+                        project_queryset,
+                        context={'request': request},
+                        many=True
+                    ).data
+
+                if data:
+                    obj = data[0]
+                    return Response(obj, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error_message": 'param or slug doesn\'t match'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error_message": 'slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
