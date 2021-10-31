@@ -1,10 +1,11 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-from rest_framework.exceptions import ValidationError 
+from rest_framework.exceptions import ValidationError
 
 from users.models.person import Person
 from users.constants import GET_ROLE_TYPE
+
 
 class AbstractCompany(models.Model):
     """
@@ -25,7 +26,10 @@ class AbstractCompany(models.Model):
         blank=True,
         null=True,
         validators=[
-            RegexValidator(regex="^[6-9]\d{9}$", message="Phone Number Not Valid",)
+            RegexValidator(
+                regex="^[6-9]\d{9}$",
+                message="Phone Number Not Valid",
+            )
         ],
     )
     category_of_company = models.CharField(
@@ -52,16 +56,16 @@ class AbstractCompany(models.Model):
 
     def clean(self, *args, **kwargs):
         errors = {}
-        if hasattr(self, 'person') and self.person:
+        if hasattr(self, "person") and self.person:
             if self.person.role_type != GET_ROLE_TYPE.COMPANY:
-                errors.setdefault('person', []).append(
-                    'Person object has role_type equal to company.')
+                errors.setdefault("person", []).append(
+                    "Person object has role_type equal to company."
+                )
 
         if len(errors) > 0:
             raise ValidationError(errors)
 
         super(AbstractCompany, self).clean(*args, **kwargs)
-
 
 
 class Company(AbstractCompany):
@@ -73,5 +77,5 @@ class Company(AbstractCompany):
         """
         Meta class for Company
         """
-        verbose_name_plural = "Company"
 
+        verbose_name_plural = "Company"

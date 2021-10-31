@@ -15,7 +15,9 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+load_dotenv(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +25,7 @@ SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,20 +49,20 @@ INSTALLED_APPS = [
     "users",
     "post",
     "utilities",
-    "storages"
+    "storages",
 ]
 
 # CORS Settings
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
-    'default': {
-        'NAME': os.environ.get('DATABASE_NAME', 'delta'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': os.environ.get('DATABASE_USER', 'delta_user'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'delta_user'),
-        'HOST': os.environ.get('DATABASE_HOST', 'database'),
-        'PORT': '5432',
+    "default": {
+        "NAME": os.environ.get("DATABASE_NAME", "delta"),
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "USER": os.environ.get("DATABASE_USER", "delta_user"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD", "delta_user"),
+        "HOST": os.environ.get("DATABASE_HOST", "database"),
+        "PORT": "5432",
     }
 }
 
@@ -106,9 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 
@@ -138,22 +146,24 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # CKEDITOR media path relative to media url
 CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
 
-CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
+CKEDITOR_FILENAME_GENERATOR = "common.get_file_path.get_ckeditor_filename"
 
-CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_IMAGE_BACKEND = "pillow"
 
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_JQUERY_URL = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"
 
 
 ########S3 Bucket
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', None)
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', None)
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", None)
+AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", None)
 
 AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
+    "CacheControl": "max-age=86400",
 }
-DEFAULT_FILE_STORAGE = 'delta.storage_backends.MediaStorage'  # <-- here is where we reference it
+DEFAULT_FILE_STORAGE = (
+    "delta.storage_backends.MediaStorage"  # <-- here is where we reference it
+)

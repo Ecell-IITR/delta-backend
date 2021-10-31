@@ -8,25 +8,22 @@ class AbstractBranch(TimestampedModel):
     name = models.CharField(
         max_length=255,
         verbose_name="Branch",
-        help_text="Type the branch name to be added.."
+        help_text="Type the branch name to be added..",
     )
 
     code = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="Branch Code"
+        max_length=255, blank=True, null=True, verbose_name="Branch Code"
     )
 
     def __str__(self):
         """
-       Return the string representation of the model
-       :return: the string representation of the model
-       """
+        Return the string representation of the model
+        :return: the string representation of the model
+        """
 
         name = self.name
         code = self.code
-        return '%s - %s' % (name, code)
+        return "%s - %s" % (name, code)
 
     class Meta:
         """
@@ -46,4 +43,4 @@ class Branch(AbstractBranch):
         Meta class for Branch
         """
 
-        verbose_name_plural = 'Branch'
+        verbose_name_plural = "Branch"

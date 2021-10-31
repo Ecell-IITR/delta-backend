@@ -8,37 +8,56 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0031_auto_20200604_1543'),
+        ("post", "0031_auto_20200604_1543"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='internship',
-            name='duration_unit',
+            model_name="internship",
+            name="duration_unit",
         ),
         migrations.AlterField(
-            model_name='competition',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='post_competition', to=settings.AUTH_USER_MODEL),
+            model_name="competition",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="post_competition",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='duration_value',
-            field=models.PositiveIntegerField(blank=True, null=True, verbose_name='Duration value in days'),
+            model_name="internship",
+            name="duration_value",
+            field=models.PositiveIntegerField(
+                blank=True, null=True, verbose_name="Duration value in days"
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='stipend',
-            field=models.BigIntegerField(blank=True, help_text='Stipend should be in rupees.', null=True, verbose_name='Stipend'),
+            model_name="internship",
+            name="stipend",
+            field=models.BigIntegerField(
+                blank=True,
+                help_text="Stipend should be in rupees.",
+                null=True,
+                verbose_name="Stipend",
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='post_internship', to=settings.AUTH_USER_MODEL),
+            model_name="internship",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="post_internship",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='post_project', to=settings.AUTH_USER_MODEL),
+            model_name="project",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="post_project",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

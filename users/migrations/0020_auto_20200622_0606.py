@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0019_person_is_channeli_oauth'),
+        ("users", "0019_person_is_channeli_oauth"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student',
-            name='current_year',
+            model_name="student",
+            name="current_year",
             field=models.PositiveSmallIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='student',
-            name='date_of_birth',
+            model_name="student",
+            name="date_of_birth",
             field=models.DateField(auto_now=True, null=True),
         ),
     ]

@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0015_auto_20200430_2319'),
+        ("users", "0015_auto_20200430_2319"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='sociallink',
-            options={'verbose_name_plural': 'Social Links'},
+            name="sociallink",
+            options={"verbose_name_plural": "Social Links"},
         ),
     ]

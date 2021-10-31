@@ -17,34 +17,22 @@ class Internship(AbstractPost):
     stipend = models.BigIntegerField(
         blank=True,
         null=True,
-        verbose_name='Stipend',
-        help_text="Stipend should be in rupees."
+        verbose_name="Stipend",
+        help_text="Stipend should be in rupees.",
     )
 
     stipend_max = models.CharField(
-        max_length=55,
-        blank=True,
-        null=True,
-        default=None,
-        verbose_name='Stipend Max'
+        max_length=55, blank=True, null=True, default=None, verbose_name="Stipend Max"
     )
 
-    position = models.CharField(
-        max_length=55,
-        blank=True,
-        verbose_name='Position'
-    )
+    position = models.CharField(max_length=55, blank=True, verbose_name="Position")
 
     duration_value = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        verbose_name='Duration value in days'
+        blank=True, null=True, verbose_name="Duration value in days"
     )
 
     product_details = models.CharField(
-        max_length=55,
-        blank=True,
-        verbose_name='Product Details'
+        max_length=55, blank=True, verbose_name="Product Details"
     )
 
     # work_type = models.PositiveIntegerField(
@@ -55,8 +43,11 @@ class Internship(AbstractPost):
     #     verbose_name="Type of Work"
     # )
 
-    applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
-                                           object_id_field='post_object_id')
+    applied_post_entries = GenericRelation(
+        AppliedPostEntries,
+        content_type_field="post_content_type",
+        object_id_field="post_object_id",
+    )
 
     def __str__(self):
         """
@@ -65,7 +56,7 @@ class Internship(AbstractPost):
         """
         title = self.title
         user = self.user
-        return '%s - %s' % (title, user.username)
+        return "%s - %s" % (title, user.username)
 
     @staticmethod
     def get_post_type():

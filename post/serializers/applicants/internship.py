@@ -1,9 +1,15 @@
 from rest_framework import serializers
 from post.models.post_roles.internship import Internship
 from users.managers import user
-from users.serializers import StudentMinimumSerializer, StudentSerializer, CompanyMinimumSerializer, PersonSerializer
+from users.serializers import (
+    StudentMinimumSerializer,
+    StudentSerializer,
+    CompanyMinimumSerializer,
+    PersonSerializer,
+)
 from post.models import AppliedPostEntries
 from users.constants import GET_ROLE_TYPE
+
 
 class ApplicantsInternSerializers(serializers.ModelSerializer):
 
@@ -11,7 +17,9 @@ class ApplicantsInternSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = AppliedPostEntries
-        fields = ['applicant_profile', ]
+        fields = [
+            "applicant_profile",
+        ]
 
     @staticmethod
     def get_applicant_profile(obj):
@@ -31,8 +39,20 @@ class InternMinimumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Internship
-        fields = ['id', 'author_profile', 'slug', 'title', 'description', 'location',
-                  'duration_value', 'stipend', 'is_published', 'is_verified', 'applicants_count', "applicants"]
+        fields = [
+            "id",
+            "author_profile",
+            "slug",
+            "title",
+            "description",
+            "location",
+            "duration_value",
+            "stipend",
+            "is_published",
+            "is_verified",
+            "applicants_count",
+            "applicants",
+        ]
 
     @staticmethod
     def get_applicants_count(obj):

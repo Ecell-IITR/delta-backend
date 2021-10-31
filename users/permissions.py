@@ -16,9 +16,9 @@ from rest_framework import permissions
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
-    '''
+    """
     Object level permission
-    '''
+    """
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
@@ -28,9 +28,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
 
 class UserIsOwnerOrReadOnly(permissions.BasePermission):
-    '''
+    """
     User level permission
-    '''
+    """
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:

@@ -6,18 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0035_alter_competition_competition_type'),
+        ("post", "0035_alter_competition_competition_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='internship',
-            name='stipend_max',
-            field=models.CharField(blank=True, default=None, max_length=55, null=True, verbose_name='Stipend Max'),
+            model_name="internship",
+            name="stipend_max",
+            field=models.CharField(
+                blank=True,
+                default=None,
+                max_length=55,
+                null=True,
+                verbose_name="Stipend Max",
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='stipend_max',
-            field=models.CharField(blank=True, default=None, max_length=55, null=True, verbose_name='Stipend Max'),
+            model_name="project",
+            name="stipend_max",
+            field=models.CharField(
+                blank=True,
+                default=None,
+                max_length=55,
+                null=True,
+                verbose_name="Stipend Max",
+            ),
         ),
     ]

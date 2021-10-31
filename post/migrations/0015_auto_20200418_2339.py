@@ -7,23 +7,37 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0014_auto_20200418_2333'),
+        ("post", "0014_auto_20200418_2333"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='appliedpostentries',
-            old_name='entity_object_id',
-            new_name='post_object_id',
+            model_name="appliedpostentries",
+            old_name="entity_object_id",
+            new_name="post_object_id",
         ),
         migrations.AlterField(
-            model_name='appliedpostentries',
-            name='user_content_type',
-            field=models.ForeignKey(limit_choices_to=models.Q(models.Q(('app_label', 'users'), ('model', 'student')), models.Q(('app_label', 'users'), ('model', 'company')), _connector='OR'), on_delete=django.db.models.deletion.CASCADE, related_name='applied_user_entries_post', to='contenttypes.ContentType'),
+            model_name="appliedpostentries",
+            name="user_content_type",
+            field=models.ForeignKey(
+                limit_choices_to=models.Q(
+                    models.Q(("app_label", "users"), ("model", "student")),
+                    models.Q(("app_label", "users"), ("model", "company")),
+                    _connector="OR",
+                ),
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="applied_user_entries_post",
+                to="contenttypes.ContentType",
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='work_type',
-            field=models.CharField(choices=[('Part time', 'Part time'), ('Full time', 'Full time')], default='part time', max_length=255, verbose_name='Type of Work'),
+            model_name="internship",
+            name="work_type",
+            field=models.CharField(
+                choices=[("Part time", "Part time"), ("Full time", "Full time")],
+                default="part time",
+                max_length=255,
+                verbose_name="Type of Work",
+            ),
         ),
     ]

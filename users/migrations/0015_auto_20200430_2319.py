@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0014_auto_20200430_2317'),
+        ("users", "0014_auto_20200430_2317"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='actionuserrelation',
-            name='action',
-            field=models.PositiveIntegerField(choices=[(1, 'Follow'), (2, 'UnFollow')], default=1),
+            model_name="actionuserrelation",
+            name="action",
+            field=models.PositiveIntegerField(
+                choices=[(1, "Follow"), (2, "UnFollow")], default=1
+            ),
         ),
     ]

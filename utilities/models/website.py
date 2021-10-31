@@ -17,10 +17,16 @@ class Website(TimestampedModel):
 
     name = models.CharField(max_length=155, verbose_name="Website Name")
     website_url = models.URLField(
-        max_length=200, null=True, blank=True, validators=[URLValidator],
+        max_length=200,
+        null=True,
+        blank=True,
+        validators=[URLValidator],
     )
     website_logo = models.ImageField(
-        upload_to=get_website_logo_image_path, validators=[validate_image], blank=True, null=True
+        upload_to=get_website_logo_image_path,
+        validators=[validate_image],
+        blank=True,
+        null=True,
     )
 
     class Meta:

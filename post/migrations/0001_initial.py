@@ -9,80 +9,259 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-      
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Competition',
+            name="Competition",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('slug', models.SlugField(max_length=255, unique=True)),
-                ('title', models.CharField(default='title', max_length=100, verbose_name='Title')),
-                ('description', models.TextField(blank=True, verbose_name='Description')),
-                ('post_expiry_date', models.DateTimeField(auto_now_add=True, verbose_name='Post expiry date')),
-                ('required_skill', models.TextField(blank=True, verbose_name='Required skill Set')),
-                ('is_public', models.BooleanField(default=False, verbose_name='Published')),
-                ('is_verified', models.BooleanField(default=False, verbose_name='Verified')),
-                ('competition_type', models.CharField(choices=[('Online', 'Online'), ('Onspot', 'Onspot')], default='onspot', max_length=255, verbose_name='Competition type')),
-                ('competition_file', models.FileField(upload_to='', verbose_name='Competition file')),
-                ('link_to_apply', models.URLField(verbose_name='Link to apply fro competition')),
-                ('bookmarks', models.ManyToManyField(blank=True, related_name='bookmark_competition', to='users.Student')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("slug", models.SlugField(max_length=255, unique=True)),
+                (
+                    "title",
+                    models.CharField(
+                        default="title", max_length=100, verbose_name="Title"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Description"),
+                ),
+                (
+                    "post_expiry_date",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Post expiry date"
+                    ),
+                ),
+                (
+                    "required_skill",
+                    models.TextField(blank=True, verbose_name="Required skill Set"),
+                ),
+                (
+                    "is_public",
+                    models.BooleanField(default=False, verbose_name="Published"),
+                ),
+                (
+                    "is_verified",
+                    models.BooleanField(default=False, verbose_name="Verified"),
+                ),
+                (
+                    "competition_type",
+                    models.CharField(
+                        choices=[("Online", "Online"), ("Onspot", "Onspot")],
+                        default="onspot",
+                        max_length=255,
+                        verbose_name="Competition type",
+                    ),
+                ),
+                (
+                    "competition_file",
+                    models.FileField(upload_to="", verbose_name="Competition file"),
+                ),
+                (
+                    "link_to_apply",
+                    models.URLField(verbose_name="Link to apply fro competition"),
+                ),
+                (
+                    "bookmarks",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="bookmark_competition",
+                        to="users.Student",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Competition',
+                "verbose_name_plural": "Competition",
             },
         ),
         migrations.CreateModel(
-            name='Internship',
+            name="Internship",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('slug', models.SlugField(max_length=255, unique=True)),
-                ('title', models.CharField(default='title', max_length=100, verbose_name='Title')),
-                ('description', models.TextField(blank=True, verbose_name='Description')),
-                ('post_expiry_date', models.DateTimeField(auto_now_add=True, verbose_name='Post expiry date')),
-                ('required_skill', models.TextField(blank=True, verbose_name='Required skill Set')),
-                ('is_public', models.BooleanField(default=False, verbose_name='Published')),
-                ('is_verified', models.BooleanField(default=False, verbose_name='Verified')),
-                ('stipend', models.CharField(blank=True, max_length=55, verbose_name='Stipend')),
-                ('position', models.CharField(blank=True, max_length=55, verbose_name='Position')),
-                ('duration', models.CharField(blank=True, max_length=55, verbose_name='Duration')),
-                ('product_details', models.CharField(blank=True, max_length=55, verbose_name='Product Details')),
-                ('work_type', models.CharField(choices=[('Part time', 'Part time'), ('Full time', 'Full time')], default='part time', max_length=255, verbose_name='Type of Work')),
-                ('bookmarks', models.ManyToManyField(blank=True, related_name='bookmark_internship', to='users.Student')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("slug", models.SlugField(max_length=255, unique=True)),
+                (
+                    "title",
+                    models.CharField(
+                        default="title", max_length=100, verbose_name="Title"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Description"),
+                ),
+                (
+                    "post_expiry_date",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Post expiry date"
+                    ),
+                ),
+                (
+                    "required_skill",
+                    models.TextField(blank=True, verbose_name="Required skill Set"),
+                ),
+                (
+                    "is_public",
+                    models.BooleanField(default=False, verbose_name="Published"),
+                ),
+                (
+                    "is_verified",
+                    models.BooleanField(default=False, verbose_name="Verified"),
+                ),
+                (
+                    "stipend",
+                    models.CharField(blank=True, max_length=55, verbose_name="Stipend"),
+                ),
+                (
+                    "position",
+                    models.CharField(
+                        blank=True, max_length=55, verbose_name="Position"
+                    ),
+                ),
+                (
+                    "duration",
+                    models.CharField(
+                        blank=True, max_length=55, verbose_name="Duration"
+                    ),
+                ),
+                (
+                    "product_details",
+                    models.CharField(
+                        blank=True, max_length=55, verbose_name="Product Details"
+                    ),
+                ),
+                (
+                    "work_type",
+                    models.CharField(
+                        choices=[
+                            ("Part time", "Part time"),
+                            ("Full time", "Full time"),
+                        ],
+                        default="part time",
+                        max_length=255,
+                        verbose_name="Type of Work",
+                    ),
+                ),
+                (
+                    "bookmarks",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="bookmark_internship",
+                        to="users.Student",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Internship',
+                "verbose_name_plural": "Internship",
             },
         ),
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('slug', models.SlugField(max_length=255, unique=True)),
-                ('title', models.CharField(default='title', max_length=100, verbose_name='Title')),
-                ('description', models.TextField(blank=True, verbose_name='Description')),
-                ('post_expiry_date', models.DateTimeField(auto_now_add=True, verbose_name='Post expiry date')),
-                ('required_skill', models.TextField(blank=True, verbose_name='Required skill Set')),
-                ('is_public', models.BooleanField(default=False, verbose_name='Published')),
-                ('is_verified', models.BooleanField(default=False, verbose_name='Verified')),
-                ('stipend', models.CharField(blank=True, max_length=55, verbose_name='Stipend')),
-                ('project_file', models.FileField(upload_to='', verbose_name='Project file')),
-                ('approx_duration', models.CharField(blank=True, max_length=55, verbose_name='Approximate Duration')),
-                ('bookmarks', models.ManyToManyField(blank=True, related_name='bookmark_project', to='users.Student')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("slug", models.SlugField(max_length=255, unique=True)),
+                (
+                    "title",
+                    models.CharField(
+                        default="title", max_length=100, verbose_name="Title"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, verbose_name="Description"),
+                ),
+                (
+                    "post_expiry_date",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Post expiry date"
+                    ),
+                ),
+                (
+                    "required_skill",
+                    models.TextField(blank=True, verbose_name="Required skill Set"),
+                ),
+                (
+                    "is_public",
+                    models.BooleanField(default=False, verbose_name="Published"),
+                ),
+                (
+                    "is_verified",
+                    models.BooleanField(default=False, verbose_name="Verified"),
+                ),
+                (
+                    "stipend",
+                    models.CharField(blank=True, max_length=55, verbose_name="Stipend"),
+                ),
+                (
+                    "project_file",
+                    models.FileField(upload_to="", verbose_name="Project file"),
+                ),
+                (
+                    "approx_duration",
+                    models.CharField(
+                        blank=True, max_length=55, verbose_name="Approximate Duration"
+                    ),
+                ),
+                (
+                    "bookmarks",
+                    models.ManyToManyField(
+                        blank=True, related_name="bookmark_project", to="users.Student"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Project',
+                "verbose_name_plural": "Project",
             },
         ),
     ]

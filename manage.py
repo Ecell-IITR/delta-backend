@@ -5,11 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-if __name__ == '__main__':
-    if os.environ.get('ENVIRONMENT') == 'production':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.deployment')
+if __name__ == "__main__":
+    if os.environ.get("ENVIRONMENT") == "production":
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delta.settings.deployment")
     else:
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.development')
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delta.settings.development")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

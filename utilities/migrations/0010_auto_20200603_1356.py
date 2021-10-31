@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('utilities', '0009_location_slug'),
+        ("utilities", "0009_location_slug"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='skill',
-            name='slug',
-            field=models.CharField(blank=True, db_index=True, max_length=255, null=True, unique=True),
+            model_name="skill",
+            name="slug",
+            field=models.CharField(
+                blank=True, db_index=True, max_length=255, null=True, unique=True
+            ),
         ),
     ]

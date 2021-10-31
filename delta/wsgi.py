@@ -13,9 +13,9 @@ from django.core.wsgi import get_wsgi_application
 
 load_dotenv()
 
-if os.environ.get('ENVIRONMENT') == 'production':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.deployment')
+if os.environ.get("ENVIRONMENT") == "production":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delta.settings.deployment")
 else:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'delta.settings.development')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "delta.settings.development")
 
 application = get_wsgi_application()

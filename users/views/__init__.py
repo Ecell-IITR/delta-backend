@@ -1,7 +1,4 @@
-from users.views.auth import (
-    LoginAPIView,
-    RegisterAPIView
-)
+from users.views.auth import LoginAPIView, RegisterAPIView
 from users.views.person import SelfProfile, BasicUser, ChanneliOAuthAPI, AvatarUploadAPI
 from users.views.organization import OrganizationList
 from users.views.action_user_relation import ActionView

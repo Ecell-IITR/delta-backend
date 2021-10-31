@@ -6,28 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0007_auto_20200416_2209'),
+        ("post", "0007_auto_20200416_2209"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='competition',
-            old_name='is_public',
-            new_name='is_published',
+            model_name="competition",
+            old_name="is_public",
+            new_name="is_published",
         ),
         migrations.RenameField(
-            model_name='internship',
-            old_name='is_public',
-            new_name='is_published',
+            model_name="internship",
+            old_name="is_public",
+            new_name="is_published",
         ),
         migrations.RenameField(
-            model_name='project',
-            old_name='is_public',
-            new_name='is_published',
+            model_name="project",
+            old_name="is_public",
+            new_name="is_published",
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='work_type',
-            field=models.CharField(choices=[('Part time', 'Part time'), ('Full time', 'Full time')], default='part time', max_length=255, verbose_name='Type of Work'),
+            model_name="internship",
+            name="work_type",
+            field=models.CharField(
+                choices=[("Part time", "Part time"), ("Full time", "Full time")],
+                default="part time",
+                max_length=255,
+                verbose_name="Type of Work",
+            ),
         ),
     ]

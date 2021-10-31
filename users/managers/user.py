@@ -18,17 +18,18 @@ class UserManager(auth_models.BaseUserManager):
         """
 
         if not password:
-            raise ValueError('Password is required')
+            raise ValueError("Password is required")
         user = self.model(
             username=username,
             email=email,
             is_admin=is_admin,
-            role_type=GET_ROLE_TYPE.ADMIN)
+            role_type=GET_ROLE_TYPE.ADMIN,
+        )
         user.set_password(password)
         user.save()
         return user
 
-    def create_user(self, username='', email='', password=None):
+    def create_user(self, username="", email="", password=None):
         """
         Create a standard user with the given password
         :param username: the username for the standard user
@@ -37,13 +38,10 @@ class UserManager(auth_models.BaseUserManager):
         """
 
         return self._create_instance(
-            username=username,
-            email=email,
-            password=password,
-            is_admin=False
+            username=username, email=email, password=password, is_admin=False
         )
 
-    def create_superuser(self, username='', email='', password=None):
+    def create_superuser(self, username="", email="", password=None):
         """
         Create an administrative user with the given password
         :param username: the username that will be ignored
@@ -52,8 +50,5 @@ class UserManager(auth_models.BaseUserManager):
         """
 
         return self._create_instance(
-            username=username,
-            email=email,
-            password=password,
-            is_admin=True
+            username=username, email=email, password=password, is_admin=True
         )
