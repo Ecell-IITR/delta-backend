@@ -6,29 +6,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('utilities', '0004_skill_slug'),
-        ('post', '0017_auto_20200425_2256'),
+        ("utilities", "0004_skill_slug"),
+        ("post", "0017_auto_20200425_2256"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='competition',
-            name='tags',
-            field=models.ManyToManyField(blank=True, related_name='competition_tags', to='utilities.Tag'),
+            model_name="competition",
+            name="tags",
+            field=models.ManyToManyField(
+                blank=True, related_name="competition_tags", to="utilities.Tag"
+            ),
         ),
         migrations.AddField(
-            model_name='internship',
-            name='tags',
-            field=models.ManyToManyField(blank=True, related_name='internship_tags', to='utilities.Tag'),
+            model_name="internship",
+            name="tags",
+            field=models.ManyToManyField(
+                blank=True, related_name="internship_tags", to="utilities.Tag"
+            ),
         ),
         migrations.AddField(
-            model_name='project',
-            name='tags',
-            field=models.ManyToManyField(blank=True, related_name='project_tags', to='utilities.Tag'),
+            model_name="project",
+            name="tags",
+            field=models.ManyToManyField(
+                blank=True, related_name="project_tags", to="utilities.Tag"
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='work_type',
-            field=models.CharField(choices=[('Full time', 'Full time'), ('Part time', 'Part time')], default='part time', max_length=255, verbose_name='Type of Work'),
+            model_name="internship",
+            name="work_type",
+            field=models.CharField(
+                choices=[("Full time", "Full time"), ("Part time", "Part time")],
+                default="part time",
+                max_length=255,
+                verbose_name="Type of Work",
+            ),
         ),
     ]

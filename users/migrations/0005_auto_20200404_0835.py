@@ -7,13 +7,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0004_auto_20200402_1902'),
+        ("users", "0004_auto_20200402_1902"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='student',
-            name='resume',
-            field=models.FileField(blank=True, upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf'])], verbose_name='Resume'),
+            model_name="student",
+            name="resume",
+            field=models.FileField(
+                blank=True,
+                upload_to="",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["pdf"]
+                    )
+                ],
+                verbose_name="Resume",
+            ),
         ),
     ]

@@ -1,14 +1,4 @@
-from users.models.roles.company import (
-    AbstractCompany,
+from users.models.roles.company import AbstractCompany, Company
+from users.models.roles.student import AbstractStudent, Student
 
-    Company
-)
-from users.models.roles.student import (
-    AbstractStudent,
-
-    Student
-)
-
-from users.models.roles.social_link import (
-    SocialLink
-)
+from users.models.roles.social_link import SocialLink

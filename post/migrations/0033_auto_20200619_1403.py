@@ -7,23 +7,29 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0032_auto_20200618_1910'),
+        ("post", "0032_auto_20200618_1910"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='competition',
-            name='description',
-            field=ckeditor_uploader.fields.RichTextUploadingField(blank=True, null=True),
+            model_name="competition",
+            name="description",
+            field=ckeditor_uploader.fields.RichTextUploadingField(
+                blank=True, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='description',
-            field=ckeditor_uploader.fields.RichTextUploadingField(blank=True, null=True),
+            model_name="internship",
+            name="description",
+            field=ckeditor_uploader.fields.RichTextUploadingField(
+                blank=True, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='description',
-            field=ckeditor_uploader.fields.RichTextUploadingField(blank=True, null=True),
+            model_name="project",
+            name="description",
+            field=ckeditor_uploader.fields.RichTextUploadingField(
+                blank=True, null=True
+            ),
         ),
     ]

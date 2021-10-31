@@ -9,17 +9,17 @@ class AbstractSkillType(TimestampedModel):
         help_text="Type of skill you want to add",
         default=None,
         blank=True,
-        null=True
-        )
+        null=True,
+    )
 
     def __str__(self):
         """
-       Return the string representation of the model
-       :return: the string representation of the model
-       """
+        Return the string representation of the model
+        :return: the string representation of the model
+        """
 
         type = self.type
-        return '%s' % type
+        return "%s" % type
 
     class Meta:
         """
@@ -39,4 +39,4 @@ class SkillType(AbstractSkillType):
         Meta class for Skill
         """
 
-        verbose_name_plural = 'Skill Type'
+        verbose_name_plural = "Skill Type"

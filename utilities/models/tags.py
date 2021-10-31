@@ -8,15 +8,18 @@ from utilities.models import TimestampedModel
 
 class Tag(TimestampedModel):
     title = models.CharField(max_length=128, db_index=True)
-    hash = models.CharField(max_length=255, unique=True,
-                            null=True, blank=True, db_index=True)
+    hash = models.CharField(
+        max_length=255, unique=True, null=True, blank=True, db_index=True
+    )
 
     def __str__(self):
         return self.title
 
     def get_admin_url(self, absolute=False):
-        url = reverse('admin:%s_%s_change' % (
-            self._meta.app_label, self._meta.model_name), args=[self.id])
+        url = reverse(
+            "admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name),
+            args=[self.id],
+        )
         if absolute:
             url = settings.ADMIN_URL + url
         return url

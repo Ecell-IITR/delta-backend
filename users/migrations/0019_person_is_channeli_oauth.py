@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0018_auto_20200621_1037'),
+        ("users", "0018_auto_20200621_1037"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='person',
-            name='is_channeli_oauth',
+            model_name="person",
+            name="is_channeli_oauth",
             field=models.BooleanField(default=False),
         ),
     ]

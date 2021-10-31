@@ -17,8 +17,8 @@ class PersonChangeForm(forms.ModelForm):
 
     password = auth_forms.ReadOnlyPasswordHashField(
         help_text="Raw passwords are not stored, so there is no way to see "
-                  "this user's password, but you can change the password "
-                  "using <a href=\"../password/\">this form</a>.",
+        "this user's password, but you can change the password "
+        'using <a href="../password/">this form</a>.',
     )
 
     class Meta:
@@ -27,13 +27,13 @@ class PersonChangeForm(forms.ModelForm):
         """
 
         model = Person
-        fields = '__all__'
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super(PersonChangeForm, self).__init__(*args, **kwargs)
-        f = self.fields.get('user_permissions', None)
+        f = self.fields.get("user_permissions", None)
         if f is not None:
-            f.queryset = f.queryset.select_related('content_type')
+            f.queryset = f.queryset.select_related("content_type")
 
     def clean_password(self):
         return self.initial["password"]
@@ -44,57 +44,44 @@ class PersonAdmin(auth_admin.UserAdmin):
     form = PersonChangeForm
 
     fieldsets = (
-        ('Authentication', {
-            'fields': (
-                'username',
-                'password',
-                'email'
-            )
-        }),
-        ('Important dates', {
-            'fields': (
-                'last_login',
-            )
-        }),
-        ('Permissions', {
-            'fields': (
-                'is_superuser',
-                'user_permissions',
-            )
-        }),
-        ('Information', {
-            'fields': (
-                'role_type',
-                'secondary_email',
-                'profile_image'
-            )
-        }),
+        ("Authentication", {"fields": ("username", "password", "email")}),
+        ("Important dates", {"fields": ("last_login",)}),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_superuser",
+                    "user_permissions",
+                )
+            },
+        ),
+        ("Information", {"fields": ("role_type", "secondary_email", "profile_image")}),
     )
 
     list_display = (
-        'username',
-        'email',
-        'last_login',
-        'role_type',
+        "username",
+        "email",
+        "last_login",
+        "role_type",
     )
-    readonly_fields = ('role_type', )
+    readonly_fields = ("role_type",)
     list_filter = tuple()
 
-    search_fields = ['id', 'email', 'username']
+    search_fields = ["id", "email", "username"]
 
 
 admin.site.register(Person, PersonAdmin)
 
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'availability_status')
+    list_display = ("first_name", "last_name", "availability_status")
 
 
 admin.site.register(Student, StudentAdmin)
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('company_domain', 'phone_number')
+    list_display = ("company_domain", "phone_number")
 
 
 admin.site.register(Company, CompanyAdmin)
@@ -105,13 +92,19 @@ admin.site.register(Company, CompanyAdmin)
 
 
 class ActionUserRelationAdmin(admin.ModelAdmin):
-    list_display = ('action_by_person', 'action', 'action_on_person',)
-    readonly_fields = ('created_at',)
+    list_display = (
+        "action_by_person",
+        "action",
+        "action_on_person",
+    )
+    readonly_fields = ("created_at",)
 
 
 admin.site.register(ActionUserRelation, ActionUserRelationAdmin)
 
-models = [SocialLink, ]
+models = [
+    SocialLink,
+]
 
 for model in models:
     admin.site.register(model)

@@ -15,7 +15,9 @@ import os
 
 from dotenv import load_dotenv
 
-load_dotenv(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+load_dotenv(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +25,7 @@ SECRET_KEY = "*yw0)r$l96pfky+khaf%z$&a=pr2o%asf$au-u(1_rmwm0g^zq"
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -32,12 +34,12 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles", # required for serving swagger ui's css/js files
+    "django.contrib.staticfiles",  # required for serving swagger ui's css/js files
     # Installed packages
     "rest_framework",
     "rest_framework.authtoken",
-    "corsheaders",  
-    'drf_yasg',
+    "corsheaders",
+    "drf_yasg",
     # Docs
     "rest_framework_swagger",
     "ckeditor",
@@ -54,9 +56,9 @@ INSTALLED_APPS = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
@@ -103,9 +105,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 
@@ -135,12 +143,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # CKEDITOR media path relative to media url
 CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
 
-CKEDITOR_FILENAME_GENERATOR = 'common.get_file_path.get_ckeditor_filename'
+CKEDITOR_FILENAME_GENERATOR = "common.get_file_path.get_ckeditor_filename"
 
-CKEDITOR_IMAGE_BACKEND = 'pillow'
+CKEDITOR_IMAGE_BACKEND = "pillow"
 
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_JQUERY_URL = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }

@@ -5,7 +5,6 @@ from rest_framework.utils.urls import remove_query_param, replace_query_param
 
 
 class CustomLimitOffsetPagination(LimitOffsetPagination):
-
     def get_next_link(self):
         if self.offset + self.limit >= self.count:
             return None

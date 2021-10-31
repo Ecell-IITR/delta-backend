@@ -7,11 +7,11 @@ class AbstractState(TimestampedModel):
 
     def __str__(self):
         """
-       Return the string representation of the model
-       :return: the string representation of the model
-       """
+        Return the string representation of the model
+        :return: the string representation of the model
+        """
         name = self.name
-        return '%s' % name
+        return "%s" % name
 
     class Meta:
         abstract = True

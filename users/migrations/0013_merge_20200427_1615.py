@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0006_followuser'),
-        ('users', '0012_student_availability_status'),
+        ("users", "0006_followuser"),
+        ("users", "0012_student_availability_status"),
     ]
 
-    operations = [
-    ]
+    operations = []

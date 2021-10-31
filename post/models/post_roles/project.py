@@ -13,32 +13,22 @@ class Project(AbstractPost):
     This model holds information pertaining to a Project
     """
 
-    stipend = models.CharField(
-        max_length=55,
-        blank=True,
-        verbose_name='Stipend'
-    )
+    stipend = models.CharField(max_length=55, blank=True, verbose_name="Stipend")
 
     stipend_max = models.CharField(
-        max_length=55,
-        blank=True,
-        null=True,
-        default=None,
-        verbose_name='Stipend Max'
+        max_length=55, blank=True, null=True, default=None, verbose_name="Stipend Max"
     )
 
-    project_file = models.FileField(
-        verbose_name='Project file',
-        blank=True
-    )
+    project_file = models.FileField(verbose_name="Project file", blank=True)
 
     approx_duration = models.CharField(
-        max_length=55,
-        blank=True,
-        verbose_name='Approximate Duration'
+        max_length=55, blank=True, verbose_name="Approximate Duration"
     )
-    applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
-                                           object_id_field='post_object_id')
+    applied_post_entries = GenericRelation(
+        AppliedPostEntries,
+        content_type_field="post_content_type",
+        object_id_field="post_object_id",
+    )
 
     def __str__(self):
         """
@@ -48,7 +38,7 @@ class Project(AbstractPost):
 
         title = self.title
         user = self.user
-        return '%s - %s' % (title, user.username)
+        return "%s - %s" % (title, user.username)
 
     @staticmethod
     def get_post_type():

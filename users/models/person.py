@@ -1,8 +1,6 @@
 from django.db import models
 from utilities.models import TimestampedModel
-from django.contrib.auth.models import (
-    AbstractUser
-)
+from django.contrib.auth.models import AbstractUser
 
 from common.get_file_path import get_profile_image_path
 
@@ -14,6 +12,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
     """
     This model describes a person who uses Delta
     """
+
     username = models.CharField(
         db_index=True,
         max_length=50,
@@ -26,31 +25,22 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         max_length=50,
         unique=True,
         verbose_name="Email/Company email",
-        help_text="If you are company,enter Company email."
+        help_text="If you are company,enter Company email.",
     )
 
-    is_active = models.BooleanField(
-        default=True
-    )
+    is_active = models.BooleanField(default=True)
 
-    is_channeli_oauth = models.BooleanField(
-        default=False
-    )
+    is_channeli_oauth = models.BooleanField(default=False)
 
-    is_admin = models.BooleanField(
-        default=False
-    )
+    is_admin = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     objects = user.UserManager()
 
     secondary_email = models.CharField(
-        blank=True,
-        db_index=True,
-        max_length=50,
-        verbose_name='Secondary Email'
+        blank=True, db_index=True, max_length=50, verbose_name="Secondary Email"
     )
 
     profile_image = models.ImageField(
@@ -58,13 +48,11 @@ class AbstractPerson(AbstractUser, TimestampedModel):
         help_text="If you are company,enter company icon.",
         blank=True,
         null=True,
-        default='defaults/profile-image.png'
+        default="defaults/profile-image.png",
     )
 
     role_type = models.CharField(
-        max_length=255,
-        default=GET_ROLE_TYPE.STUDENT,
-        verbose_name="User role"
+        max_length=255, default=GET_ROLE_TYPE.STUDENT, verbose_name="User role"
     )
 
     class Meta:
@@ -82,7 +70,7 @@ class AbstractPerson(AbstractUser, TimestampedModel):
 
         username = self.username
         email = self.email
-        return '%s-%s' % (username, email)
+        return "%s-%s" % (username, email)
 
     def has_perm(self, perm, obj=None):
         return True
@@ -105,4 +93,4 @@ class Person(AbstractPerson):
         Meta class for Person
         """
 
-        verbose_name_plural = 'User'
+        verbose_name_plural = "User"

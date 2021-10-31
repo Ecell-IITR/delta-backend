@@ -19,18 +19,20 @@ from utilities.models.website import Website
 from utilities.serializers.website import WebsiteSerializer
 
 
-
 class SkillBaseView(APIView):
     def initial(self, request, *args, **kwargs):
         super().initial(request, *args, **kwargs)
         user = request.user
-        skill_slug = kwargs.get('slug')
+        skill_slug = kwargs.get("slug")
 
         if skill_slug:
             try:
                 skill = get_object_or_404(Skill, slug=skill_slug)
             except:
-                return Response({"error_message": 'Slug doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error_message": "Slug doesn't exists"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             request.skill = skill
 
         if user.student_profile:
@@ -42,27 +44,34 @@ class SkillBaseView(APIView):
 
 
 class SkillsAPIView(SkillBaseView, generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     pagination_class = None
     serializer_class = SkillSerializer
 
     def get_queryset(self, *args, **kwargs):
         user = self.request.user
         user_profile = self.request.user_profile
-        
+
         user_skills_queryset = user_profile.skills.all()
         total_skills_queryset = Skill.objects.all()
         return total_skills_queryset.difference(user_skills_queryset)
 
+
 class SocialLinksWebsitesAPIView(SkillBaseView, generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     pagination_class = None
     serializer_class = WebsiteSerializer
     queryset = Website.objects.all()
 
 
 class SkillAddAPI(SkillBaseView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -70,8 +79,11 @@ class SkillAddAPI(SkillBaseView):
         user_profile = request.user_profile
 
         if skill in user_profile.skills.all():
-            return Response({"error_message": 'Skill already added!'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response(
+                {"error_message": "Skill already added!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         user_profile.skills.add(skill)
         user_profile.save()
 
@@ -79,7 +91,9 @@ class SkillAddAPI(SkillBaseView):
 
 
 class SkillRemoveAPI(SkillBaseView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -87,24 +101,31 @@ class SkillRemoveAPI(SkillBaseView):
         user_profile = request.user_profile
 
         if not skill in user_profile.skills.all():
-            return Response({"error_message": 'Skill already removed!'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response(
+                {"error_message": "Skill already removed!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         user_profile.skills.remove(skill)
         user_profile.save()
 
         return Response(status=status.HTTP_202_ACCEPTED)
 
+
 class SkillRemoveAllAPI(SkillBaseView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
 
     def post(self, request, *args, **kwargs):
         user = request.user
         user_profile = request.user_profile
-        
+
         user_profile.skills.clear()
         user_profile.save()
 
         return Response(status=status.HTTP_202_ACCEPTED)
+
 
 # class TagsAutoComplete(autocomplete.Select2QuerySetView):
 
@@ -117,14 +138,18 @@ class SkillRemoveAllAPI(SkillBaseView):
 
 
 class LocationsListAPI(generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     pagination_class = None
     serializer_class = LocationSerializer
     queryset = Location.objects.all()
 
 
 class TagsListAPI(generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
     pagination_class = None
     serializer_class = TagSerializer
     queryset = Tag.objects.all()

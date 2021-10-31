@@ -6,18 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0026_auto_20200603_1400'),
+        ("post", "0026_auto_20200603_1400"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='internship',
-            name='duration_unit',
-            field=models.CharField(blank=True, choices=[(1, 'day'), (2, 'week'), (3, 'month'), (4, 'year')], default=3, max_length=1),
+            model_name="internship",
+            name="duration_unit",
+            field=models.CharField(
+                blank=True,
+                choices=[(1, "day"), (2, "week"), (3, "month"), (4, "year")],
+                default=3,
+                max_length=1,
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='work_type',
-            field=models.CharField(choices=[(1, 'Full time'), (2, 'Part time')], default=2, max_length=255, verbose_name='Type of Work'),
+            model_name="internship",
+            name="work_type",
+            field=models.CharField(
+                choices=[(1, "Full time"), (2, "Part time")],
+                default=2,
+                max_length=255,
+                verbose_name="Type of Work",
+            ),
         ),
     ]

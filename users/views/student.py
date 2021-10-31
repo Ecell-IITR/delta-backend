@@ -15,5 +15,6 @@ class StudentAPI(APIView):
             serializer = StudentDataSerializer(student)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Student.DoesNotExist:
-            return Response({"error_message": 'id doesn\'t exist'}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(
+                {"error_message": "id doesn't exist"}, status=status.HTTP_404_NOT_FOUND
+            )

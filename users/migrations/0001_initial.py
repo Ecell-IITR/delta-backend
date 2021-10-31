@@ -12,80 +12,287 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0009_alter_user_last_name_max_length'),
-        ('utilities', '0001_initial'),
+        ("auth", "0009_alter_user_last_name_max_length"),
+        ("utilities", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Person',
+            name="Person",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('first_name', models.CharField(blank=True, max_length=30, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('username', models.CharField(db_index=True, help_text='If you are company,enter Company name.', max_length=50, unique=True, verbose_name='Username/Company Name')),
-                ('email', models.CharField(db_index=True, help_text='If you are company,enter Company email.', max_length=50, unique=True, verbose_name='Email/Company email')),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_admin', models.BooleanField(default=False)),
-                ('secondary_email', models.CharField(blank=True, db_index=True, max_length=50, verbose_name='Secondary Email')),
-                ('profile_image', models.ImageField(default='null', help_text='If you are company,enter company icon.', upload_to='profile_image/')),
-                ('is_company', models.BooleanField(default=False)),
-                ('is_student', models.BooleanField(default=False)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=30, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="date joined"
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "username",
+                    models.CharField(
+                        db_index=True,
+                        help_text="If you are company,enter Company name.",
+                        max_length=50,
+                        unique=True,
+                        verbose_name="Username/Company Name",
+                    ),
+                ),
+                (
+                    "email",
+                    models.CharField(
+                        db_index=True,
+                        help_text="If you are company,enter Company email.",
+                        max_length=50,
+                        unique=True,
+                        verbose_name="Email/Company email",
+                    ),
+                ),
+                ("is_active", models.BooleanField(default=True)),
+                ("is_admin", models.BooleanField(default=False)),
+                (
+                    "secondary_email",
+                    models.CharField(
+                        blank=True,
+                        db_index=True,
+                        max_length=50,
+                        verbose_name="Secondary Email",
+                    ),
+                ),
+                (
+                    "profile_image",
+                    models.ImageField(
+                        default="null",
+                        help_text="If you are company,enter company icon.",
+                        upload_to="profile_image/",
+                    ),
+                ),
+                ("is_company", models.BooleanField(default=False)),
+                ("is_student", models.BooleanField(default=False)),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.Group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.Permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'User',
+                "verbose_name_plural": "User",
             },
         ),
         migrations.CreateModel(
-            name='Company',
+            name="Company",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('company_domain', models.CharField(blank=True, max_length=55, verbose_name='Company Domain')),
-                ('phone_number', models.CharField(blank=True, max_length=10, null=True, validators=[django.core.validators.RegexValidator(message='Phone Number Not Valid', regex='^[6-9]\\d{9}$')])),
-                ('category_of_company', models.CharField(blank=True, max_length=50, verbose_name='Category of Company')),
-                ('team_size', models.CharField(blank=True, max_length=100, verbose_name='Team size')),
-                ('address', models.TextField(blank=True, verbose_name='Address')),
-                ('person', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='company', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "company_domain",
+                    models.CharField(
+                        blank=True, max_length=55, verbose_name="Company Domain"
+                    ),
+                ),
+                (
+                    "phone_number",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        null=True,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="Phone Number Not Valid", regex="^[6-9]\\d{9}$"
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "category_of_company",
+                    models.CharField(
+                        blank=True, max_length=50, verbose_name="Category of Company"
+                    ),
+                ),
+                (
+                    "team_size",
+                    models.CharField(
+                        blank=True, max_length=100, verbose_name="Team size"
+                    ),
+                ),
+                ("address", models.TextField(blank=True, verbose_name="Address")),
+                (
+                    "person",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="company",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Company',
+                "verbose_name_plural": "Company",
             },
         ),
         migrations.CreateModel(
-            name='SocialLink',
+            name="SocialLink",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('profile_url', models.URLField(validators=[django.core.validators.URLValidator])),
-                ('website', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='utilities.Website')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "profile_url",
+                    models.URLField(validators=[django.core.validators.URLValidator]),
+                ),
+                (
+                    "website",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="utilities.Website",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Student',
+            name="Student",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone_number', models.CharField(blank=True, max_length=10, null=True, validators=[django.core.validators.RegexValidator(message='Phone Number Not Valid', regex='^[6-9]\\d{9}$')])),
-                ('enrollment_number', models.CharField(blank=True, max_length=20, verbose_name='Enrollment number')),
-                ('course', models.CharField(blank=True, max_length=55, verbose_name='Course')),
-                ('year', models.CharField(blank=True, max_length=55, verbose_name='Year')),
-                ('interest', models.TextField(blank=True, verbose_name='Interest')),
-                ('bio', models.TextField(blank=True, verbose_name='Bio')),
-                ('achievements', models.TextField(blank=True, verbose_name='Achievements')),
-                ('resume', models.FileField(upload_to='', verbose_name='Resume')),
-                ('branch', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='student_branch', to='utilities.Branch')),
-                ('person', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='student', to=settings.AUTH_USER_MODEL)),
-                ('skills', models.ManyToManyField(blank=True, related_name='student_skill', to='utilities.Skill')),
-                ('social_links', models.ManyToManyField(related_name='social_links', to='users.SocialLink')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "phone_number",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        null=True,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="Phone Number Not Valid", regex="^[6-9]\\d{9}$"
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "enrollment_number",
+                    models.CharField(
+                        blank=True, max_length=20, verbose_name="Enrollment number"
+                    ),
+                ),
+                (
+                    "course",
+                    models.CharField(blank=True, max_length=55, verbose_name="Course"),
+                ),
+                (
+                    "year",
+                    models.CharField(blank=True, max_length=55, verbose_name="Year"),
+                ),
+                ("interest", models.TextField(blank=True, verbose_name="Interest")),
+                ("bio", models.TextField(blank=True, verbose_name="Bio")),
+                (
+                    "achievements",
+                    models.TextField(blank=True, verbose_name="Achievements"),
+                ),
+                ("resume", models.FileField(upload_to="", verbose_name="Resume")),
+                (
+                    "branch",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="student_branch",
+                        to="utilities.Branch",
+                    ),
+                ),
+                (
+                    "person",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="student",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "skills",
+                    models.ManyToManyField(
+                        blank=True, related_name="student_skill", to="utilities.Skill"
+                    ),
+                ),
+                (
+                    "social_links",
+                    models.ManyToManyField(
+                        related_name="social_links", to="users.SocialLink"
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Student',
+                "verbose_name_plural": "Student",
             },
         ),
     ]

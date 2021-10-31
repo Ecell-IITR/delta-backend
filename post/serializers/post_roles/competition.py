@@ -17,13 +17,13 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Competition
-        exclude = ('bookmarks', )
-    
+        exclude = ("bookmarks",)
+
     @staticmethod
     def get_post_type(obj):
         return POST_TYPE.COMPETITION_POST_TYPE
 
     def get_is_bookmark(self, obj):
-        person = self.context['request'].user
+        person = self.context["request"].user
         starred_posts = obj.bookmarks.all()
         return starred_posts.filter(person=person).exists()

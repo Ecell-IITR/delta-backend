@@ -6,18 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0028_remove_internship_work_type'),
+        ("post", "0028_remove_internship_work_type"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='internship',
-            name='duration_unit',
-            field=models.PositiveIntegerField(blank=True, choices=[(1, 'Day'), (2, 'Week'), (3, 'Month'), (4, 'Year')], default=3),
+            model_name="internship",
+            name="duration_unit",
+            field=models.PositiveIntegerField(
+                blank=True,
+                choices=[(1, "Day"), (2, "Week"), (3, "Month"), (4, "Year")],
+                default=3,
+            ),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='duration_value',
-            field=models.PositiveIntegerField(blank=True, null=True, verbose_name='Duration'),
+            model_name="internship",
+            name="duration_value",
+            field=models.PositiveIntegerField(
+                blank=True, null=True, verbose_name="Duration"
+            ),
         ),
     ]

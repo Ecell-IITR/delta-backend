@@ -8,13 +8,18 @@ import utilities.models.website
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('utilities', '0005_auto_20200427_1449'),
+        ("utilities", "0005_auto_20200427_1449"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='website',
-            name='website_logo',
-            field=models.ImageField(blank=True, null=True, upload_to=common.get_file_path.get_website_logo_image_path, validators=[utilities.models.website.validate_image]),
+            model_name="website",
+            name="website_logo",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to=common.get_file_path.get_website_logo_image_path,
+                validators=[utilities.models.website.validate_image],
+            ),
         ),
     ]

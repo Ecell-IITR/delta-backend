@@ -21,23 +21,25 @@ class InternshipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Internship
-        exclude = ('bookmarks', )
-    
+        exclude = ("bookmarks",)
+
     @staticmethod
     def get_post_type(obj):
         return POST_TYPE.INTERNSHIP_POST_TYPE
 
     def get_is_bookmark(self, obj):
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
         person = request.user
         starred_posts = obj.bookmarks.all()
         return starred_posts.filter(person=person).exists()
 
     def get_is_applied(self, obj):
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
         person = request.user
         if person.student_profile:
-            return obj.applied_post_entries.filter(user_object_id=person.student_profile.id).exists()
+            return obj.applied_post_entries.filter(
+                user_object_id=person.student_profile.id
+            ).exists()
         return False
 
     @staticmethod
@@ -46,15 +48,15 @@ class InternshipSerializer(serializers.ModelSerializer):
         try:
             user_profile = person.student_profile
             return StudentMinimumSerializer(user_profile).data
-        except: 
+        except:
             pass
         try:
             user_profile = person.company_profile
             return CompanyMinimumSerializer(user_profile).data
-        except: 
+        except:
             pass
         return {}
 
-    @staticmethod    
+    @staticmethod
     def get_applicants_count(obj):
         return obj.applied_post_entries.count()

@@ -34,16 +34,24 @@ class FollowersList(BaseListView, generics.ListAPIView):
         user = request.user
 
         student_queryset = user.action_on_person.filter(
-            action_by_person__role_type=GET_ROLE_TYPE.STUDENT, action=USER_FIELD_CHOICES.FOLLOW)\
-            .values_list('action_by_person__username', flat=True)
+            action_by_person__role_type=GET_ROLE_TYPE.STUDENT,
+            action=USER_FIELD_CHOICES.FOLLOW,
+        ).values_list("action_by_person__username", flat=True)
         student_data = StudentMinInfoSerializer(
-            Student.objects.filter(person__username__in=student_queryset), context={'person': request.user}, many=True).data
+            Student.objects.filter(person__username__in=student_queryset),
+            context={"person": request.user},
+            many=True,
+        ).data
 
         company_queryset = user.action_on_person.filter(
-            action_by_person__role_type=GET_ROLE_TYPE.COMPANY, action=USER_FIELD_CHOICES.FOLLOW)\
-            .values_list('action_by_person__username', flat=True)
+            action_by_person__role_type=GET_ROLE_TYPE.COMPANY,
+            action=USER_FIELD_CHOICES.FOLLOW,
+        ).values_list("action_by_person__username", flat=True)
         company_data = OrganizationListSerializer(
-            Company.objects.filter(person__username__in=company_queryset), context={'person': request.user}, many=True).data
+            Company.objects.filter(person__username__in=company_queryset),
+            context={"person": request.user},
+            many=True,
+        ).data
 
         return Response(student_data + company_data, status=status.HTTP_200_OK)
 
@@ -55,15 +63,23 @@ class FollowingList(BaseListView, generics.ListAPIView):
         user = request.user
 
         student_queryset = user.action_by_person.filter(
-            action_on_person__role_type=GET_ROLE_TYPE.STUDENT, action=USER_FIELD_CHOICES.FOLLOW)\
-            .values_list('action_on_person__username', flat=True)
+            action_on_person__role_type=GET_ROLE_TYPE.STUDENT,
+            action=USER_FIELD_CHOICES.FOLLOW,
+        ).values_list("action_on_person__username", flat=True)
         student_data = StudentMinInfoSerializer(
-            Student.objects.filter(person__username__in=student_queryset), context={'person': request.user}, many=True).data
+            Student.objects.filter(person__username__in=student_queryset),
+            context={"person": request.user},
+            many=True,
+        ).data
 
         company_queryset = user.action_by_person.filter(
-            action_on_person__role_type=GET_ROLE_TYPE.COMPANY, action=USER_FIELD_CHOICES.FOLLOW)\
-            .values_list('action_on_person__username', flat=True)
+            action_on_person__role_type=GET_ROLE_TYPE.COMPANY,
+            action=USER_FIELD_CHOICES.FOLLOW,
+        ).values_list("action_on_person__username", flat=True)
         company_data = OrganizationListSerializer(
-            Company.objects.filter(person__username__in=company_queryset), context={'person': request.user}, many=True).data
+            Company.objects.filter(person__username__in=company_queryset),
+            context={"person": request.user},
+            many=True,
+        ).data
 
         return Response(student_data + company_data, status=status.HTTP_200_OK)

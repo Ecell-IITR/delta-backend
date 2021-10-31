@@ -17,25 +17,22 @@ class Competition(AbstractPost):
     competition_type = models.CharField(
         max_length=255,
         choices=POST_FIELD_CHOICES.COMPETITION_TYPE,
-        default='1',
-        verbose_name="Competition type"
+        default="1",
+        verbose_name="Competition type",
     )
 
     bookmarks = models.ManyToManyField(
-        to='users.Student',
-        related_name='bookmark_competition',
-        blank=True
+        to="users.Student", related_name="bookmark_competition", blank=True
     )
 
-    competition_file = models.FileField(
-        verbose_name='Competition file'
-    )
+    competition_file = models.FileField(verbose_name="Competition file")
 
-    link_to_apply = models.URLField(
-        verbose_name='Link to apply fro competition'
+    link_to_apply = models.URLField(verbose_name="Link to apply fro competition")
+    applied_post_entries = GenericRelation(
+        AppliedPostEntries,
+        content_type_field="post_content_type",
+        object_id_field="post_object_id",
     )
-    applied_post_entries = GenericRelation(AppliedPostEntries, content_type_field='post_content_type',
-                                           object_id_field='post_object_id')
 
     def __str__(self):
         """
@@ -45,7 +42,7 @@ class Competition(AbstractPost):
 
         title = self.title
         user = self.user
-        return '%s - %s' % (title, user.username)
+        return "%s - %s" % (title, user.username)
 
     @staticmethod
     def get_post_type():

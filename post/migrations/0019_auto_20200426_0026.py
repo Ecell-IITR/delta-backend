@@ -6,28 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0018_auto_20200426_0015'),
+        ("post", "0018_auto_20200426_0015"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='competition',
-            name='post_expiry_date',
-            field=models.DateTimeField(blank=True, verbose_name='Post expiry date'),
+            model_name="competition",
+            name="post_expiry_date",
+            field=models.DateTimeField(blank=True, verbose_name="Post expiry date"),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='post_expiry_date',
-            field=models.DateTimeField(blank=True, verbose_name='Post expiry date'),
+            model_name="internship",
+            name="post_expiry_date",
+            field=models.DateTimeField(blank=True, verbose_name="Post expiry date"),
         ),
         migrations.AlterField(
-            model_name='internship',
-            name='work_type',
-            field=models.CharField(choices=[('Part time', 'Part time'), ('Full time', 'Full time')], default='part time', max_length=255, verbose_name='Type of Work'),
+            model_name="internship",
+            name="work_type",
+            field=models.CharField(
+                choices=[("Part time", "Part time"), ("Full time", "Full time")],
+                default="part time",
+                max_length=255,
+                verbose_name="Type of Work",
+            ),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='post_expiry_date',
-            field=models.DateTimeField(blank=True, verbose_name='Post expiry date'),
+            model_name="project",
+            name="post_expiry_date",
+            field=models.DateTimeField(blank=True, verbose_name="Post expiry date"),
         ),
     ]

@@ -7,18 +7,26 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('utilities', '0007_remove_state_country'),
+        ("utilities", "0007_remove_state_country"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='location',
-            name='country',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='country', to='utilities.Country'),
+            model_name="location",
+            name="country",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="country",
+                to="utilities.Country",
+            ),
         ),
         migrations.AlterField(
-            model_name='location',
-            name='state',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='state', to='utilities.State'),
+            model_name="location",
+            name="state",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="state",
+                to="utilities.State",
+            ),
         ),
     ]

@@ -17,13 +17,13 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        exclude = ('bookmarks', )
+        exclude = ("bookmarks",)
 
     @staticmethod
     def get_post_type(obj):
         return POST_TYPE.INTERNSHIP_POST_TYPE
 
     def get_is_bookmark(self, obj):
-        person = self.context['request'].user
+        person = self.context["request"].user
         starred_posts = obj.bookmarks.all()
         return starred_posts.filter(person=person).exists()
