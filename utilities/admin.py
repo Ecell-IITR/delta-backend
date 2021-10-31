@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 
-from utilities.models import Skill, Branch, Location, Website, State, Country, Tag , Type
+from utilities.models import Skill, Branch, Location, Website, State, Country, Tag ,SkillType
 
 models = [Branch, Website, State, Country]
 
@@ -30,8 +30,8 @@ class LocationAdmin(admin.ModelAdmin):
 
 admin.site.register(Location, LocationAdmin)
 
-class TypeAdmin(admin.ModelAdmin):
+class SkillTypeAdmin(admin.ModelAdmin):
     list_display = ('type',)
     readonly_fields = ('slug', 'created_at', 'updated_at')
 
-admin.site.register(Type, TypeAdmin)
+admin.site.register(SkillType, SkillTypeAdmin)

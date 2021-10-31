@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
 
-from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer, TypeSerializer
-from utilities.models import Skill, Tag, Location,Type
+from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer
+from utilities.models import Skill, Tag, Location
 
 from users.models.roles import social_link
 from users.serializers.social_link import SocialLinkSerializer
@@ -137,17 +137,3 @@ class TagsListAPI(generics.ListAPIView):
 
 
 
-
-
-class TypeSkillsAPIView(SkillBaseView, generics.ListAPIView):
-    permission_classes = [IsAuthenticated, ]
-    pagination_class = None
-    serializer_class = TypeSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        user = self.request.user
-        user_profile = self.request.user_profile
-        
-        user_skills_queryset = user_profile.type.all()
-        total_skills_queryset = Type.objects.all()
-        return total_skills_queryset.difference(user_skills_queryset)
