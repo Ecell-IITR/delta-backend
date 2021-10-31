@@ -7,12 +7,17 @@ from rest_framework.response import Response
 
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
+
+from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer
+from utilities.models import Skill, Tag, Location
+
 from users.models.roles import social_link
 from users.serializers.social_link import SocialLinkSerializer
 from utilities.models.website import Website
-from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer
-from utilities.models import Skill, Tag, Location
+
+
 from utilities.serializers.website import WebsiteSerializer
+
 
 
 class SkillBaseView(APIView):
