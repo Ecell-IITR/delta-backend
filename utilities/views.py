@@ -7,8 +7,17 @@ from rest_framework.response import Response
 
 from users.constants import GET_ROLE_TYPE
 from users.models import Student, Company
+
 from utilities.serializers import SkillSerializer, LocationSerializer, TagSerializer, TypeSerializer
 from utilities.models import Skill, Tag, Location,Type
+
+from users.models.roles import social_link
+from users.serializers.social_link import SocialLinkSerializer
+from utilities.models.website import Website
+
+
+from utilities.serializers.website import WebsiteSerializer
+
 
 
 class SkillBaseView(APIView):
@@ -44,6 +53,12 @@ class SkillsAPIView(SkillBaseView, generics.ListAPIView):
         user_skills_queryset = user_profile.skills.all()
         total_skills_queryset = Skill.objects.all()
         return total_skills_queryset.difference(user_skills_queryset)
+
+class SocialLinksWebsitesAPIView(SkillBaseView, generics.ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    pagination_class = None
+    serializer_class = WebsiteSerializer
+    queryset = Website.objects.all()
 
 
 class SkillAddAPI(SkillBaseView):
