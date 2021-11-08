@@ -59,7 +59,7 @@ class AbstractStudent(models.Model):
 
 
 class Student(AbstractStudent):
-
+    
     class Meta:
         """
         Meta class for Student
