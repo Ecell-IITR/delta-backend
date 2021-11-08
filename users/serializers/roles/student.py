@@ -52,7 +52,7 @@ class StudentMinInfoSerializer(serializers.ModelSerializer):
 
 class StudentDataSerializer(serializers.ModelSerializer):
     person = PersonSerializer(read_only=True)
-    skill= SkillSerializer(many=True)
+    skills = SkillSerializer(many=True)
     class Meta:
         model = Student
         # fields = '__all__'
