@@ -49,11 +49,24 @@ class StudentMinInfoSerializer(serializers.ModelSerializer):
     def get_followers_count(self, obj):
         return obj.person.action_on_person.filter(action=USER_FIELD_CHOICES.FOLLOW).count()
 
+class StudentSkillSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Student
+            fields = ("skills",)
 
+class StudentSocialLinkSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Student
+            fields = ("social_links",)
+        
 class StudentDataSerializer(serializers.ModelSerializer):
     person = PersonSerializer(read_only=True)
-    skills = SkillSerializer(many=True)
+    skills = StudentSkillSerializer(many=True)
+    social_links = StudentSocialLinkSerializer(many=True)
     class Meta:
         model = Student
         # fields = '__all__'
         exclude = ('resume', 'phone_number')
+
+"""social_links = models.ManyToManyField(to=SocialLink, related_name="social_links", blank=True)
+    skills """
