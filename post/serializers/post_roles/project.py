@@ -21,7 +21,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_post_type(obj):
-        return POST_TYPE.INTERNSHIP_POST_TYPE
+        return POST_TYPE.PROJECT_POST_TYPE
 
     def get_is_bookmark(self, obj):
         person = self.context['request'].user
