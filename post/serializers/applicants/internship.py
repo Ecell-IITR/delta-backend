@@ -4,6 +4,7 @@ from users.managers import user
 from users.serializers import StudentMinimumSerializer, StudentSerializer, CompanyMinimumSerializer, PersonSerializer
 from post.models import AppliedPostEntries
 from users.constants import GET_ROLE_TYPE
+from post.serializers.post_roles import InternshipSerializer
 
 class ApplicantsInternSerializers(serializers.ModelSerializer):
 
@@ -23,16 +24,12 @@ class ApplicantsInternSerializers(serializers.ModelSerializer):
             return None
 
 
-class InternMinimumSerializer(serializers.ModelSerializer):
+class InternMinimumSerializer(InternshipSerializer):
 
     author_profile = serializers.SerializerMethodField()
     applicants_count = serializers.SerializerMethodField()
     applicants = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Internship
-        fields = ['id', 'author_profile', 'slug', 'title', 'description', 'location',
-                  'duration_value', 'stipend', 'is_published', 'is_verified', 'applicants_count', "applicants"]
 
     @staticmethod
     def get_applicants_count(obj):
