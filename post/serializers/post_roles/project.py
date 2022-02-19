@@ -5,7 +5,7 @@ from users.serializers import PersonSerializer
 from post.models import Project
 from post.constants import POST_TYPE
 
-from utilities.serializers import TagSerializer
+from utilities.serializers import TagSerializer, SkillSerializer, LocationSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -14,6 +14,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     post_type = serializers.SerializerMethodField()
     is_bookmark = serializers.SerializerMethodField()
+    location = LocationSerializer()
+    required_skills = SkillSerializer(many=True)
 
     class Meta:
         model = Project
