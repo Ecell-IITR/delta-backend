@@ -117,6 +117,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         post_type = request.GET.get('post_type') or None
         my_post = request.GET.get('my_post') or False
+        user_id = request.GET.get('user_id') or False
         expired_post = request.GET.get('expired_post') or False
         unpublished_post = request.GET.get('unpublished_post') or False
         expired_my_post = request.GET.get('expired_my_post') or False
@@ -144,6 +145,10 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     .order_by('-updated_at')
                 if my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
+                                                                     post_expiry_date__gte=now)\
+                        .order_by('-updated_at')
+                if user_id:
+                    internships_queryset = Internship.objects.filter(user__id=user_id, is_published=True,
                                                                      post_expiry_date__gte=now)\
                         .order_by('-updated_at')
                 if expired_my_post:
