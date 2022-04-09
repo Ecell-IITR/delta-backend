@@ -375,7 +375,6 @@ class CreatePost(generics.CreateAPIView):
                     location = data.get('location') or None
                     duration_value = data.get('duration_value') or None
                     duration_unit = data.get('duration_unit') or None
-
                     internship = Internship.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
                     if title:
@@ -430,12 +429,14 @@ class CreatePost(generics.CreateAPIView):
                     serializer_data = InternshipSerializer(
                         internship, context={'request': request}, ).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
-                    competition = Competition.objects.create(user=user)
+                    competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
+                        datetime.datetime.fromtimestamp(expiry_timestamp)))
                     serializer_data = CompetitionSerializer(
                         competition, context={'request': request}, ).data
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
-                    project = Project.objects.create(user=user)
+                    project = Project.objects.create(user=user, post_expiry_date=make_aware(
+                        datetime.datetime.fromtimestamp(expiry_timestamp)))
                     serializer_data = ProjectSerializer(
                         project, context={'request': request}, ).data
 
