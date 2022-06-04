@@ -24,7 +24,7 @@ class CompanyMinimumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = ('person', 'company_domain', 'phone_number', 'followers_count')
+        fields = ('person', 'company_domain', 'phone_number', 'followers_count', 'id')
     
     @staticmethod
     def get_followers_count(obj):
