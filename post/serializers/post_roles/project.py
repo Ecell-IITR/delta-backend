@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from users.serializers import PersonSerializer
+from users.serializers import StudentMinimumSerializer, CompanyMinimumSerializer
 
 from post.models import Project
 from post.constants import POST_TYPE
