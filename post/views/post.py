@@ -353,7 +353,7 @@ class CreatePost(generics.CreateAPIView):
         post_type = data.get('post_type') or None
 
         if post_type:
-            if post_type in [POST_TYPE.INTERNSHIP_POST_TYPE, POST_TYPE.COMPETITION_POST_TYPE,
+            if int(post_type) in [POST_TYPE.INTERNSHIP_POST_TYPE, POST_TYPE.COMPETITION_POST_TYPE,
                              POST_TYPE.PROJECT_POST_TYPE]:
                 title = data.get('title') or None
                 description = data.get('description') or None
