@@ -5,7 +5,7 @@
 # Create Super User
 ```python manage.py createsuperuser```
 ### Remeber the password and username for logging in
-# Sart the server
+# Start the server
 ```python manage.py runserver ```
 ### To acess admin panel go to
 ``` http://localhost:8000/admin```
