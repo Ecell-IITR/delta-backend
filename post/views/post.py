@@ -1,4 +1,5 @@
-import json, datetime
+import json
+import datetime
 
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -138,7 +139,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         data = []
 
         if post_type:
-            if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
+            if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:  
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now, ).exclude(user=request.user)\
                     .order_by('-updated_at')
@@ -206,6 +207,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 ).data
 
             elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
+               
                 data = CompetitionSerializer(
                     Competition.objects.filter(
                         is_verified=True, is_published=True, post_expiry_date__gte=now)
@@ -296,6 +298,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     data = InternshipSerializer(
                         post, context={'request': request},).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+                   
                     data = CompetitionSerializer(
                         post, context={'request': request},).data
 
@@ -425,12 +428,14 @@ class CreatePost(generics.CreateAPIView):
                     serializer_data = InternshipSerializer(
                         internship, context={'request': request}, ).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
-                    competition = Competition.objects.create(user=user)
+                    competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
+                        datetime.datetime.fromtimestamp(expiry_timestamp)))
                     serializer_data = CompetitionSerializer(
                         competition, context={'request': request}, ).data
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
-                    project = Project.objects.create(user=user)
+                    project = Project.objects.create(user=user, post_expiry_date=make_aware(
+                        datetime.datetime.fromtimestamp(expiry_timestamp)))
                     serializer_data = ProjectSerializer(
                         project, context={'request': request}, ).data
 
