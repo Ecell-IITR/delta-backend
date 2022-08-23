@@ -3,6 +3,7 @@ from post.models.post_roles.competition import Competition
 from users.serializers import StudentMinimumSerializer, StudentSerializer, CompanyMinimumSerializer, PersonSerializer
 from post.models import AppliedPostEntries
 from users.constants import GET_ROLE_TYPE
+from post.serializers.post_roles import CompetitionSerializer, InternshipSerializer
 
 
 class ApplicantCompeteSerializer(serializers.ModelSerializer):
@@ -22,16 +23,12 @@ class ApplicantCompeteSerializer(serializers.ModelSerializer):
             return None
 
 
-class CompetitionMinimumSerializer(serializers.ModelSerializer):
+class CompetitionMinimumSerializer(CompetitionSerializer):
 
     author_profile = serializers.SerializerMethodField()
     applicants_count = serializers.SerializerMethodField()
     applicants = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Competition
-        fields = ['id', 'author_profile', 'slug', 'title', 'description', 'location',
-                  'is_published', 'is_verified', 'applicants_count', "applicants"]
 
     @staticmethod
     def get_applicants_count(obj):

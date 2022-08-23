@@ -31,7 +31,7 @@ class StudentMinimumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ('person', 'first_name', 'last_name', 'enrollment_number', )
+        fields = ('person', 'first_name', 'last_name', 'enrollment_number', 'id' )
 
 
 class StudentMinInfoSerializer(serializers.ModelSerializer):
@@ -52,6 +52,7 @@ class StudentMinInfoSerializer(serializers.ModelSerializer):
 
 class StudentDataSerializer(serializers.ModelSerializer):
     person = PersonSerializer(read_only=True)
+    skills = SkillSerializer(many=True)
     class Meta:
         model = Student
         # fields = '__all__'

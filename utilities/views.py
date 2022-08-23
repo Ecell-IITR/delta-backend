@@ -14,6 +14,7 @@ from utilities.models import Skill, Tag, Location
 from users.models.roles import social_link
 from users.serializers.social_link import SocialLinkSerializer
 from utilities.models.website import Website
+from rest_framework import filters
 
 
 from utilities.serializers.website import WebsiteSerializer
@@ -53,6 +54,15 @@ class SkillsAPIView(SkillBaseView, generics.ListAPIView):
         user_skills_queryset = user_profile.skills.all()
         total_skills_queryset = Skill.objects.all()
         return total_skills_queryset.difference(user_skills_queryset)
+
+class SkillSearchsAPIView(SkillBaseView, generics.ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    pagination_class = None
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'type__type']
+
 
 class SocialLinksWebsitesAPIView(SkillBaseView, generics.ListAPIView):
     permission_classes = [IsAuthenticated, ]

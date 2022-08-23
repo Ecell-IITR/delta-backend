@@ -77,7 +77,7 @@ class PersonAdmin(auth_admin.UserAdmin):
         'last_login',
         'role_type',
     )
-    readonly_fields = ('role_type', )
+    # readonly_fields = ('role_type', )
     list_filter = tuple()
 
     search_fields = ['id', 'email', 'username']
