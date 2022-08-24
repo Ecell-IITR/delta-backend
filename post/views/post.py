@@ -435,13 +435,22 @@ class CreatePost(generics.CreateAPIView):
                     location = data.get('location') or None
                     duration_value = data.get('duration_value') or None
                     duration_unit = data.get('duration_unit') or None
+                    link_to_apply = data.get('link_to_apply') or None
+                    competition_type = data.get('competition_type') or "Online"
+                    competition_file = data.get('competition_file') or None
                     competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
-                    
+
                     if title:
                         competition.title = title
                     if description:
                         competition.description = description
+                    if link_to_apply:
+                        competition.link_to_apply = link_to_apply
+                    if competition_type:
+                        competition.competition_type = competition_type
+                    if competition_file:
+                        competition.competition_file = competition_file
                     if location:
                         try:
                             check_location = Location.objects.get(
@@ -454,7 +463,8 @@ class CreatePost(generics.CreateAPIView):
 
                     if duration_value and duration_unit and int(duration_value) > 1:
                         value = get_duration_value(duration_unit)
-                        competition.duration_value = int(duration_value) * value
+                        competition.duration_value = int(
+                            duration_value) * value
                     if skill_slugs:
                         temp_slugs = []
                         for slug in skill_slugs:
@@ -484,7 +494,7 @@ class CreatePost(generics.CreateAPIView):
                     competition.save()
                     serializer_data = CompetitionSerializer(
                         competition, context={'request': request}, ).data
-                    
+
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     project = Project.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
