@@ -140,7 +140,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         data = []
 
         if post_type:
-            if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:  
+            if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now, ).exclude(user=request.user)\
                     .order_by('-updated_at')
@@ -212,7 +212,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 ).data
 
             elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
-               
+
                 data = CompetitionSerializer(
                     Competition.objects.filter(
                         is_verified=True, is_published=True, post_expiry_date__gte=now)
@@ -303,7 +303,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     data = InternshipSerializer(
                         post, context={'request': request},).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
-                   
+
                     data = CompetitionSerializer(
                         post, context={'request': request},).data
 
@@ -357,7 +357,7 @@ class CreatePost(generics.CreateAPIView):
 
         if post_type:
             if int(post_type) in [POST_TYPE.INTERNSHIP_POST_TYPE, POST_TYPE.COMPETITION_POST_TYPE,
-                             POST_TYPE.PROJECT_POST_TYPE]:
+                                  POST_TYPE.PROJECT_POST_TYPE]:
                 title = data.get('title') or None
                 description = data.get('description') or None
                 expiry_timestamp = data.get('expiry_timestamp') or None
@@ -432,8 +432,66 @@ class CreatePost(generics.CreateAPIView):
                     serializer_data = InternshipSerializer(
                         internship, context={'request': request}, ).data
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
+                    location = data.get('location') or None
+                    duration_value = data.get('duration_value') or None
+                    duration_unit = data.get('duration_unit') or None
+                    link_to_apply = data.get('link_to_apply') or None
+                    competition_type = data.get('competition_type') or "Online"
+                    competition_file = data.get('competition_file') or None
                     competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
+
+                    if title:
+                        competition.title = title
+                    if description:
+                        competition.description = description
+                    if link_to_apply:
+                        competition.link_to_apply = link_to_apply
+                    if competition_type:
+                        competition.competition_type = competition_type
+                    if competition_file:
+                        competition.competition_file = competition_file
+                    if location:
+                        try:
+                            check_location = Location.objects.get(
+                                slug=location)
+                        except:
+                            return Response({"error_message": 'Location doesn\'t exists'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                        if check_location:
+                            competition.location = check_location
+
+                    if duration_value and duration_unit and int(duration_value) > 1:
+                        value = get_duration_value(duration_unit)
+                        competition.duration_value = int(
+                            duration_value) * value
+                    if skill_slugs:
+                        temp_slugs = []
+                        for slug in skill_slugs:
+                            try:
+                                check_slug = Skill.objects.get(slug=slug)
+                            except:
+                                return Response({"error_message": 'Skill slug doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_slug:
+                                temp_slugs.append(check_slug)
+                        competition.required_skills.set(temp_slugs)
+                    if tag_hashes:
+                        temp_hashes = []
+                        for hash in tag_hashes:
+                            try:
+                                check_hash = Tag.objects.get(hash=hash)
+                            except:
+                                return Response({"error_message": 'Tag hash doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_hash:
+                                temp_hashes.append(check_hash)
+                        competition.tags.set(temp_hashes)
+                    if is_published:
+                        competition.is_published = True
+                    else:
+                        competition.is_published = False
+                    competition.save()
                     serializer_data = CompetitionSerializer(
                         competition, context={'request': request}, ).data
 
@@ -442,7 +500,7 @@ class CreatePost(generics.CreateAPIView):
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
                     serializer_data = ProjectSerializer(
                         project, context={'request': request}, ).data
-
+                    project.save()
                 return Response(
                     serializer_data,
                     status=status.HTTP_200_OK
