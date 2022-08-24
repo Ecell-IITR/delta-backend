@@ -496,8 +496,62 @@ class CreatePost(generics.CreateAPIView):
                         competition, context={'request': request}, ).data
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
+                    location = data.get('location') or None
+                    stipend = data.get('stipend') or None
+                    stipend_max = data.get('stipend_max') or None
+                    project_file = data.get('project_file') or None
+                    approx_duration = data.get('approx_duration') or None
                     project = Project.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
+                    if project_file:
+                        project.project_file = project_file
+                    if approx_duration:
+                        project.approx_duration = approx_duration
+                    if title:
+                        project.title = title
+                    if stipend:
+                        project.stipend = stipend
+                    if stipend_max:
+                        project.stipend_max = stipend_max
+                    if description:
+                        project.description = description
+                    if location:
+                        try:
+                            check_location = Location.objects.get(
+                                slug=location)
+                        except:
+                            return Response({"error_message": 'Location doesn\'t exists'},
+                                            status=status.HTTP_400_BAD_REQUEST)
+                        if check_location:
+                            project.location = check_location
+
+                    if skill_slugs:
+                        temp_slugs = []
+                        for slug in skill_slugs:
+                            try:
+                                check_slug = Skill.objects.get(slug=slug)
+                            except:
+                                return Response({"error_message": 'Skill slug doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_slug:
+                                temp_slugs.append(check_slug)
+                        project.required_skills.set(temp_slugs)
+                    if tag_hashes:
+                        temp_hashes = []
+                        for hash in tag_hashes:
+                            try:
+                                check_hash = Tag.objects.get(hash=hash)
+                            except:
+                                return Response({"error_message": 'Tag hash doesn\'t exists'},
+                                                status=status.HTTP_400_BAD_REQUEST)
+                            if check_hash:
+                                temp_hashes.append(check_hash)
+                        project.tags.set(temp_hashes)
+                    if is_published:
+                        project.is_published = True
+                    else:
+                        project.is_published = False
+
                     serializer_data = ProjectSerializer(
                         project, context={'request': request}, ).data
                     project.save()
