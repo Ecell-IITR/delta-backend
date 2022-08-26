@@ -353,14 +353,14 @@ class CreatePost(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         user = request.user
-        post_type = data.get('post_type') or None
+        post_type = int(data.get('post_type')) or None
 
         if post_type:
             if int(post_type) in [POST_TYPE.INTERNSHIP_POST_TYPE, POST_TYPE.COMPETITION_POST_TYPE,
                                   POST_TYPE.PROJECT_POST_TYPE]:
                 title = data.get('title') or None
                 description = data.get('description') or None
-                expiry_timestamp = data.get('expiry_timestamp') or None
+                expiry_timestamp = int(data.get('expiry_timestamp')) or None
                 skill_slugs = data.get('skill_slugs') or None
                 tag_hashes = data.get('tag_hashes') or None
                 is_published = data.get('is_publish') or False
@@ -434,12 +434,12 @@ class CreatePost(generics.CreateAPIView):
                 elif post_type == POST_TYPE.COMPETITION_POST_TYPE:
                     location = data.get('location') or None
                     duration_value = data.get('duration_value') or None
-                    duration_unit = data.get('duration_unit') or None
+                    duration_unit = int(data.get('duration_unit')) or None
                     link_to_apply = data.get('link_to_apply') or None
                     competition_type = data.get('competition_type') or "Online"
                     competition_file = data.get('competition_file') or None
                     competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
-                        datetime.datetime.fromtimestamp(expiry_timestamp)))
+                        datetime.datetime.fromtimestamp(int(expiry_timestamp))))
 
                     if title:
                         competition.title = title
@@ -497,8 +497,8 @@ class CreatePost(generics.CreateAPIView):
 
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     location = data.get('location') or None
-                    stipend = data.get('stipend') or None
-                    stipend_max = data.get('stipend_max') or None
+                    stipend = int(data.get('stipend')) or None
+                    stipend_max = int(data.get('stipend_max')) or None
                     project_file = data.get('project_file') or None
                     approx_duration = data.get('approx_duration') or None
                     project = Project.objects.create(user=user, post_expiry_date=make_aware(
