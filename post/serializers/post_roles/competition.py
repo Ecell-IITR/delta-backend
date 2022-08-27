@@ -18,7 +18,7 @@ class CompetitionSerializer(serializers.ModelSerializer):
     is_bookmark = serializers.SerializerMethodField()
     location = LocationSerializer()
     required_skills = SkillSerializer(many=True)
-
+    
     class Meta:
         model = Competition
         exclude = ('bookmarks', )

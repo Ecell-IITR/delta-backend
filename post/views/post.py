@@ -436,7 +436,8 @@ class CreatePost(generics.CreateAPIView):
                     duration_value = data.get('duration_value') or None
                     duration_unit = int(data.get('duration_unit')) or None
                     link_to_apply = data.get('link_to_apply') or None
-                    competition_type = data.get('competition_type') or "Online"
+                    competition_type = int(data.get('competition_type')) or "Online"
+                    print("competition_type", competition_type)
                     competition_file = data.get('competition_file') or None
                     competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(int(expiry_timestamp))))
