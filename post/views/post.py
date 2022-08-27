@@ -437,7 +437,7 @@ class CreatePost(generics.CreateAPIView):
                     duration_unit = int(data.get('duration_unit')) or None
                     link_to_apply = data.get('link_to_apply') or None
                     competition_type = int(data.get('competition_type')) or "Online"
-                    print("competition_type", competition_type)
+                    
                     competition_file = data.get('competition_file') or None
                     competition = Competition.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(int(expiry_timestamp))))
@@ -499,7 +499,7 @@ class CreatePost(generics.CreateAPIView):
                 elif post_type == POST_TYPE.PROJECT_POST_TYPE:
                     location = data.get('location') or None
                     stipend = int(data.get('stipend')) or None
-                    stipend_max = int(data.get('stipend_max')) or None
+                    stipend_max = data.get('stipend_max') or None
                     project_file = data.get('project_file') or None
                     approx_duration = data.get('approx_duration') or None
                     project = Project.objects.create(user=user, post_expiry_date=make_aware(
@@ -513,7 +513,7 @@ class CreatePost(generics.CreateAPIView):
                     if stipend:
                         project.stipend = stipend
                     if stipend_max:
-                        project.stipend_max = stipend_max
+                        project.stipend_max = int(stipend_max)
                     if description:
                         project.description = description
                     if location:
