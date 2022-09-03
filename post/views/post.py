@@ -137,13 +137,14 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
 
         if (duration_unit and duration_value_ll is None and duration_value_ul is None) or (duration_unit is None and (duration_value_ll or duration_value_ul)):
             return Response({"error_message": 'Duration param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
-        data = []
+        
 
         if post_type:
             if int(post_type) == POST_TYPE.INTERNSHIP_POST_TYPE:
                 internships_queryset = Internship.objects.filter(is_verified=True, is_published=True,
                                                                  post_expiry_date__gte=now, ).exclude(user=request.user)\
                     .order_by('-updated_at')
+                
                 if my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, is_published=True,
                                                                      post_expiry_date__gte=now)\
@@ -178,14 +179,14 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 if stipend_ul:
                     internships_queryset = internships_queryset.filter(
                         stipend__lte=int(stipend_ul))
-                if duration_unit:
-                    value = get_duration_value(duration_unit)
-                    if duration_value_ll:
-                        internships_queryset = internships_queryset.filter(
-                            duration_value__gte=int(duration_value_ll)*value)
-                    if duration_value_ul:
-                        internships_queryset = internships_queryset.filter(
-                            duration_value__lte=int(duration_value_ul)*value)
+                # if duration_unit:
+                #     value = get_duration_value(duration_unit)
+                #     if duration_value_ll:
+                #         internships_queryset = internships_queryset.filter(
+                #             duration_value__gte=int(duration_value_ll)*value)
+                #     if duration_value_ul:
+                #         internships_queryset = internships_queryset.filter(
+                #             duration_value__lte=int(duration_value_ul)*value)
                 if location:
                     internships_queryset = internships_queryset.filter(
                         location__slug=location)
@@ -195,13 +196,15 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                 if skill_slug:
                     internships_queryset = internships_queryset.filter(
                         required_skills__slug__in=skill_slug)
-
+                
                 data = InternshipSerializer(
                     internships_queryset,
                     context={'request': request},
                     many=True
                 ).data
-
+            
+                
+              
             elif int(post_type) == POST_TYPE.PROJECT_POST_TYPE:
                 data = ProjectSerializer(
                     Project.objects.filter(
@@ -210,6 +213,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     context={'request': request},
                     many=True
                 ).data
+                
 
             elif int(post_type) == POST_TYPE.COMPETITION_POST_TYPE:
 
@@ -220,7 +224,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     context={'request': request},
                     many=True
                 ).data
-
+            
             return Response(data, status=status.HTTP_200_OK)
         return Response({"error_message": 'Post type param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
 
