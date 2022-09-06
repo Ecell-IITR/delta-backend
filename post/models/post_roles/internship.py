@@ -20,6 +20,11 @@ class Internship(AbstractPost):
         verbose_name='Stipend',
         help_text="Stipend should be in rupees."
     )
+    google_form_link = models.URLField(max_length=55,
+                                       blank=True,
+                                       null=True,
+                                       default=None,
+                                       verbose_name='Google Form Link')
 
     stipend_max = models.CharField(
         max_length=55,

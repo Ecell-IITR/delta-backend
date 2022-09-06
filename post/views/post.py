@@ -134,7 +134,6 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
         location = request.GET.get('location') or None
         skill_slug = request.GET.getlist('skill_slug') or None
         now = timezone.now()
-
         if (duration_unit and duration_value_ll is None and duration_value_ul is None) or (duration_unit is None and (duration_value_ll or duration_value_ul)):
             return Response({"error_message": 'Duration param doesn\'t exists'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -153,6 +152,7 @@ class PostViewSet(PostBaseView, viewsets.ModelViewSet):
                     internships_queryset = Internship.objects.filter(user__id=user_id, is_published=True,
                                                                      post_expiry_date__gte=now)\
                         .order_by('-updated_at')
+                
                 if expired_my_post:
                     internships_queryset = Internship.objects.filter(user=request.user, post_expiry_date__lte=now)\
                         .order_by('-updated_at')
@@ -368,7 +368,8 @@ class CreatePost(generics.CreateAPIView):
                 skill_slugs = data.get('skill_slugs') or None
                 tag_hashes = data.get('tag_hashes') or None
                 is_published = data.get('is_publish') or False
-
+                
+        
                 if expiry_timestamp:
                     if datetime.datetime.fromtimestamp(expiry_timestamp) <= datetime.datetime.now():
                         return Response({"error_message": 'Expiry date cannot be less than current timestamp'},
@@ -384,8 +385,11 @@ class CreatePost(generics.CreateAPIView):
                     duration_unit = data.get('duration_unit') or None
                     internship = Internship.objects.create(user=user, post_expiry_date=make_aware(
                         datetime.datetime.fromtimestamp(expiry_timestamp)))
+                    google_form_link = data.get('google_form_link') or None
                     if title:
                         internship.title = title
+                    if google_form_link:
+                        internship.google_form_link = google_form_link
                     if stipend:
                         internship.stipend = stipend
                     if stipend_max:
