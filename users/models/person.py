@@ -24,9 +24,10 @@ class AbstractPerson(AbstractUser, TimestampedModel):
     email = models.CharField(
         db_index=True,
         max_length=50,
-        unique=True,
         verbose_name="Email/Company email",
-        help_text="If you are company,enter Company email."
+        help_text="If you are company,enter Company email.",
+        null=True,
+        blank=True,
     )
 
     is_active = models.BooleanField(
